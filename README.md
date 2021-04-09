@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Travelport Repository for Documentation
 
 Read in [the book format](https://pages.github.com/Travelport-Rail/tvpt-docs)
@@ -10,8 +9,8 @@ The content of this repository is written with markdown files, packaged with [Mk
 
 1. Install MkDocs locally following the [official documentation instructions](https://www.mkdocs.org/#installation).
 1. Install Material plugin for mkdocs:  `pip install mkdocs-material` 
-2. `git clone https://github.com/jbcodeforce/jbcodeforce.github.io.git` _(or your forked repository if you plan to edit)_
-3. `cd jbcodeforce.github.io`
+2. `git clone https://github.com/` _(or your forked repository if you plan to edit)_
+3. `cd tvpt-docs`
 4. `mkdocs serve`
 5. Go to `http://127.0.0.1:8000/` in your browser.
 
@@ -25,8 +24,4 @@ In some cases you might not want to alter your Python setup and rather go with a
 ### Pushing the book to GitHub Pages
 
 1. Ensure that all your local changes to the `master` branch have been committed and pushed to the remote repository. `git push origin code`
-1. Run `mkdocs gh-deploy --remote-branch master` from the root directory.
-=======
-# tvpt-docs
-Documentation for Travelport Event-Driven Microservices practices
->>>>>>> 69a15d3ed93f559f605a4febea643851cffbf67b
+1. Run `mkdocs gh-deploy --remote-branch pages` from the root directory.
