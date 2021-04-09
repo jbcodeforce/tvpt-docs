@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Travelport Repository for Documentation
 
 Read in [the book format](https://pages.github.com/Travelport-Rail/tvpt-docs)
@@ -25,3 +26,7 @@ In some cases you might not want to alter your Python setup and rather go with a
 
 1. Ensure that all your local changes to the `master` branch have been committed and pushed to the remote repository. `git push origin code`
 1. Run `mkdocs gh-deploy --remote-branch master` from the root directory.
+=======
+# tvpt-docs
+Documentation for Travelport Event-Driven Microservices practices
+>>>>>>> 69a15d3ed93f559f605a4febea643851cffbf67b
