@@ -198,6 +198,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../../concepts/terms-and-definitions/" title="EDA Concepts" class="md-nav__link">
+      EDA Concepts
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
     <a href="../../concepts/fit-for-purpose/" title="Fit for purpose" class="md-nav__link">
       Fit for purpose
     </a>
@@ -211,14 +223,14 @@
 
   <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3">
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-4" type="checkbox" id="nav-4">
     
-    <label class="md-nav__link" for="nav-3">
+    <label class="md-nav__link" for="nav-4">
       Design Patterns
       <span class="md-nav__icon md-icon"></span>
     </label>
     <nav class="md-nav" aria-label="Design Patterns" data-md-level="1">
-      <label class="md-nav__title" for="nav-3">
+      <label class="md-nav__title" for="nav-4">
         <span class="md-nav__icon md-icon"></span>
         Design Patterns
       </label>
@@ -245,6 +257,30 @@
   <li class="md-nav__item">
     <a href="../cqrs/" title="CQRS" class="md-nav__link">
       CQRS
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../transactional-outbox/" title="Outbox" class="md-nav__link">
+      Outbox
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../saga/" title="SAGA" class="md-nav__link">
+      SAGA
     </a>
   </li>
 
@@ -319,13 +355,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#code-repository" class="md-nav__link">
-    Code repository
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#compendium" class="md-nav__link">
     Compendium
   </a>
@@ -381,9 +410,8 @@ Traditional domain oriented implementation builds a domain data model and map it
 <h3 id="considerations">Considerations</h3>
 <p>When replaying the events, it may be important to avoid generating side effects. A common side effect is to send a notification on state change to other consumers. So the consumer of events need to be adapted to the query and business requirements. For example, if the code needs to answer to the question: "what happened to the order ID 75 over time?" then there is no side effect, only a report can be created each time the consumer runs.</p>
 <p>Sometime it may be too long to replay hundreds of events. In that case we can use snapshot, to capture the current state of an entity, and then replay events from the most recent snapshot. This is an optimization technique not needed for all event sourcing implementations. When state change events are in low volume there is no need for snapshots.</p>
-<p>Kafka is supporting the event sourcing pattern with <a href="../../technology/kafka-overview/#topics">the topic and partition</a>. In our <a href="https://ibm-cloud-architecture.github.io/refarch-kc">reference implementation</a> we are validating event sourcing with Kafka in the <a href="https://github.com/ibm-cloud-architecture/refarch-kc-order-ms">Order microservices</a> demonstrate in <a href="https://ibm-cloud-architecture.github.io/refarch-kc/itg-tests/itgtests">this set of test cases.</a></p>
+<p>Kafka is supporting the event sourcing pattern with <a href="../../technology/kafka-overview/#topics">the topic and partition</a>. In our <a href="https://ibm-cloud-architecture.github.io/refarch-kc">reference implementation</a> we are validating event sourcing with Kafka in the <a href="https://github.com/ibm-cloud-architecture/refarch-kc-order-ms">Order microservice</a>.</p>
 <p>The event sourcing pattern is well described in <a href="https://microservices.io/patterns/data/event-sourcing.html">this article on microservices.io</a>. It is a very important pattern to support eventual data consistency between microservices and for data synchronization between system as the event store becomes the source of truth.</p>
-<p>See also this <a href="https://martinfowler.com/eaaDev/EventSourcing.html">event sourcing article</a> from Martin Fowler, where he is also using ship movement examples. <a href="https://github.com/ibm-cloud-architecture/refarch-kc">Our implementation</a> differs as we are using Kafka topic as event store and use different entities to support the container shipping process: the Order, the Container and Voyage entities...</p>
 <p>Another common use case, where event sourcing helps, is when developers push a new code version that corrupts the data: being able to see what was done on the data, and being able to reload from a previous state helps fixing problems.</p>
 <h3 id="command-sourcing">Command sourcing</h3>
 <p>Command sourcing is a similar pattern as the event sourcing one, but the commands that modify the states are persisted instead of the events. This allows commands to be processed asynchronously, which can be relevant when the command execution takes a lot of time.
@@ -394,8 +422,6 @@ One derived challenge is that the command may be executed multiple times, especi
 <li>At the microservice level, updating data and emitting event needs to be an atomic operation, to avoid inconsistency if the service crashes after the update to the datasource and before emitting the event. This can be done with an eventTable added to the microservice datasource and an event publisher that reads this table on a regular basis and change the state of the event once published. Another solution is to have a database transaction log reader or miner responsible to publish event on new row added to the log.</li>
 <li>One other approach to avoid the two-phase commit and inconsistency is to use an Event Store or Event Sourcing pattern to keep track of what is done on the business entity with enough information to rebuild the data state. Events are becoming facts describing state changes done on the business entity.</li>
 </ul>
-<h2 id="code-repository">Code repository</h2>
-<p>All the microservices implementing the Reefer management solution is using event sourcing, as we use kafka with long persistence. The order management service is using CQRS combined with event sourcing: <a href="https://github.com/ibm-cloud-architecture/refarch-kc-order-ms">https://github.com/ibm-cloud-architecture/refarch-kc-order-ms</a> and an integration test validate the pattern <a href="https://ibm-cloud-architecture.github.io/refarch-kc/itg-tests/#how-to-proof-the-event-sourcing">here</a>.</p>
 <h2 id="compendium">Compendium</h2>
 <ul>
 <li><a href="https://martinfowler.com/eaaDev/EventSourcing.html">Martin Fowler - event sourcing pattern</a></li>

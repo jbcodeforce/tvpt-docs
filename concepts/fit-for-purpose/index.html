@@ -198,6 +198,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../terms-and-definitions/" title="EDA Concepts" class="md-nav__link">
+      EDA Concepts
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
     <a href="./" title="Fit for purpose" class="md-nav__link">
       Fit for purpose
     </a>
@@ -211,14 +223,14 @@
 
   <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3">
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-4" type="checkbox" id="nav-4">
     
-    <label class="md-nav__link" for="nav-3">
+    <label class="md-nav__link" for="nav-4">
       Design Patterns
       <span class="md-nav__icon md-icon"></span>
     </label>
     <nav class="md-nav" aria-label="Design Patterns" data-md-level="1">
-      <label class="md-nav__title" for="nav-3">
+      <label class="md-nav__title" for="nav-4">
         <span class="md-nav__icon md-icon"></span>
         Design Patterns
       </label>
@@ -245,6 +257,30 @@
   <li class="md-nav__item">
     <a href="../../patterns/cqrs/" title="CQRS" class="md-nav__link">
       CQRS
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../patterns/transactional-outbox/" title="Outbox" class="md-nav__link">
+      Outbox
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../patterns/saga/" title="SAGA" class="md-nav__link">
+      SAGA
     </a>
   </li>
 
@@ -318,13 +354,6 @@
   
 </li>
       
-        <li class="md-nav__item">
-  <a href="#kafka-streams-vs-apache-flink" class="md-nav__link">
-    Kafka Streams vs Apache Flink
-  </a>
-  
-</li>
-      
     </ul>
   
 </nav>
@@ -343,7 +372,7 @@
                 
                 <h1 id="fit-for-purpose">Fit for purpose</h1>
 <p>In this note we want to list some of the criteria to consider and assess during an event-driven architecture establishment work and as part of a continuous application governance. This is not fully exhaustive, but give good foundations for analysis and study.
-Fit for purpose practices should be done under a bigger program about application development governance and data governance. 
+Fit for purpose practices should be done under a bigger program about application development governance and data governance.
 We can look at least to the following major subject:</p>
 <h2 id="cloud-native-applications">Cloud native applications</h2>
 <p>With the adoption of cloud native and microservice applications (12 factors app), the following needs to be addressed:</p>
@@ -370,14 +399,14 @@ We can look at least to the following major subject:</p>
 <ul>
 <li>Publish events as immutable facts of what happen in an application</li>
 <li>Get continuous visibility of the data Streams</li>
-<li>Keep data once consumed, for future consumers, for replayability</li>
+<li>Keep data once consumed, for future consumers, for replay-ability</li>
 <li>Scale horizontally the message consumption</li>
 </ul>
 <h3 id="events-and-messages">Events and Messages</h3>
 <p>There is a long history of <em>messaging</em> in IT systems.  You can easily see an event driven solution and events in the context of messaging systems and messages. However, there are different characteristics that are worth considering:</p>
 <ul>
 <li><strong>Messaging:</strong> Messages transport a payload and messages are persisted until consumed. Message consumers are typically directly targeted and related to the producer who cares that the message has been delivered and processed.</li>
-<li><strong>Events:</strong> Events are persisted as a replayable stream history. Event consumers are not tied to the producer. An event is a record of something that has happened and so can't be changed. (You can't change history.)</li>
+<li><strong>Events:</strong> Events are persisted as a replay-able stream history. Event consumers are not tied to the producer. An event is a record of something that has happened and so can't be changed. (You can't change history.)</li>
 </ul>
 <p><img alt="" src="images/evt-msg.png" /></p>
 <h3 id="messaging-versus-event-streaming">Messaging versus event streaming</h3>
@@ -396,14 +425,6 @@ We can look at least to the following major subject:</p>
 <li><strong>Immutable Data</strong></li>
 <li><strong>Loosely coupled / decoupled</strong> producers and consumers</li>
 </ul>
-<h2 id="kafka-streams-vs-apache-flink">Kafka Streams vs Apache Flink</h2>
-<p>Once we have setup data streams, we need technology to support real-time analytics and complex event processing. Historically, analytics performed on static data was done using batch reporting techniques. However, if
-insights have to be derived in real-time, event-driven architectures help to analyze and look for patterns within events.</p>
-<p><a href="https://flink.apache.org">Apache Flink</a> (2016) is a framework and <strong>distributed processing</strong> engine for stateful computations over unbounded and bounded data streams. It is considered to be superior to Apache Spark and Hadoop. It supports batch and graph processing and complex event processing. </p>
-<p>Here is simple diagram of Flink architecture.</p>
-<p><img alt="Flink components" src="images/arch.png" /></p>
-<p>The run time can run on any common resource manager like Hadoop Yarn, Mesos, or Kubernetes. It can run on its own with two majors cluster types: Job manager and task manager. Two types of processing: data set or data stream. For development purpose we can use the docker images to deploy a <strong>Session</strong> or <strong>Job cluster</strong> in a containerized environment. </p>
-<p>See also <a href="https://www.confluent.io/blog/apache-flink-apache-kafka-streams-comparison-guideline-users">this article from Confluent</a></p>
                 
               
               
