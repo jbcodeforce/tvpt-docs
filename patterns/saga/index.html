@@ -8,6 +8,8 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
+        <meta name="description" content="Saga pattern">
+      
       
       
       <link rel="shortcut icon" href="../../assets/images/favicon.png">
@@ -15,7 +17,7 @@
     
     
       
-        <title>Fit for purpose - Travelport Event-Driven Microservice practices</title>
+        <title>Patterns in Event-Driven Architectures - Travelport Event-Driven Microservice practices</title>
       
     
     
@@ -60,7 +62,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#fit-for-purpose" class="md-skip">
+        <a href="#saga" class="md-skip">
           Skip to content
         </a>
       
@@ -87,7 +89,7 @@
           </span>
           <span class="md-header-nav__topic md-ellipsis">
             
-              Fit for purpose
+              Patterns in Event-Driven Architectures
             
           </span>
         </div>
@@ -198,7 +200,7 @@
 
 
   <li class="md-nav__item">
-    <a href="./" title="Fit for purpose" class="md-nav__link">
+    <a href="../../concepts/fit-for-purpose/" title="Fit for purpose" class="md-nav__link">
       Fit for purpose
     </a>
   </li>
@@ -231,7 +233,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../patterns/event-sourcing/" title="Event Sourcing" class="md-nav__link">
+    <a href="../event-sourcing/" title="Event Sourcing" class="md-nav__link">
       Event Sourcing
     </a>
   </li>
@@ -243,7 +245,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../patterns/cqrs/" title="CQRS" class="md-nav__link">
+    <a href="../cqrs/" title="CQRS" class="md-nav__link">
       CQRS
     </a>
   </li>
@@ -278,49 +280,29 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#cloud-native-applications" class="md-nav__link">
-    Cloud native applications
+  <a href="#problems-and-constraints" class="md-nav__link">
+    Problems and Constraints
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#modern-data-pipeline" class="md-nav__link">
-    Modern data pipeline
+  <a href="#solution-and-pattern" class="md-nav__link">
+    Solution and Pattern
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#mq-versus-kafka" class="md-nav__link">
-    MQ Versus Kafka
+  <a href="#services-choreography" class="md-nav__link">
+    Services choreography
   </a>
-  
-    <nav class="md-nav" aria-label="MQ Versus Kafka">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#events-and-messages" class="md-nav__link">
-    Events and Messages
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#messaging-versus-event-streaming" class="md-nav__link">
-    Messaging versus event streaming
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#kafka-streams-vs-apache-flink" class="md-nav__link">
-    Kafka Streams vs Apache Flink
+  <a href="#services-orchestration" class="md-nav__link">
+    Services orchestration
   </a>
   
 </li>
@@ -341,69 +323,37 @@
                   
                 
                 
-                <h1 id="fit-for-purpose">Fit for purpose</h1>
-<p>In this note we want to list some of the criteria to consider and assess during an event-driven architecture establishment work and as part of a continuous application governance. This is not fully exhaustive, but give good foundations for analysis and study.
-Fit for purpose practices should be done under a bigger program about application development governance and data governance. 
-We can look at least to the following major subject:</p>
-<h2 id="cloud-native-applications">Cloud native applications</h2>
-<p>With the adoption of cloud native and microservice applications (12 factors app), the following needs to be addressed:</p>
-<ul>
-<li>Responsiveness with elastic scaling and resilience to failure. Which leads to adopt the '<a href="/advantages/reactive/">reactive</a> manifesto' and consider messaging as a way to communicate between apps. Elastic also may lead to multi cloud deployment practice.</li>
-<li>Address data sharing using a push model to improve decoupling, and performance. Instead of having each service using REST end point to pull the data from other services, each service push the change to their main business entity to a event backbone. Each future service which needs those data, pull from the messaging system.</li>
-<li>Adopting common pattern like <a href="../../patterns/cqrs/">command query responsibility segregation</a> to help implementing complex queries, joining different business entities owned by different microservices, <a href="../../patterns/event-sourcing/">event sourcing</a>, <a href="../../patterns/transactional-outbox">transactional outbox</a> and <a href="../../patterns/saga/">SAGA</a>.</li>
-<li>Addressing data eventual consistency to propagate change to other components versus ACID transaction.</li>
-<li>Support always-on approach with the deployment to multiple data centers (at least three) being active/active and being able to propagate data in all data centers.</li>
-</ul>
-<p>So the net: <strong>do we need to implement event-driven microservices because of those needs?</strong></p>
-<h2 id="modern-data-pipeline">Modern data pipeline</h2>
-<p>As new business applications need to react to events in real time, the adoption of <a href="/concepts/terms-and-definitions/#event-backbone">event backbone</a> is really part of the IT toolbox. Some existing deployment consider this to be their new data hub, where all the data about the 'customer' is accessible. Therefore, it is natural to assess the data movement strategy and offload some of those ETL jobs running at night, as most of those works are done already inside of the applications generating those data, but not those data are visible inside the backbone.</p>
-<p>We detailed the new architecture in <a href="introduction/reference-architecture/#modern-data-lake">this modern data lake</a> discussion, so from a <em>fit for purpose</em> point of view, we need to assess what those ETL jobs were doing and how much of those data is now visible to other to consume.</p>
-<p>With Event Backbone like Kafka, any consumer can join the consumption at any point of time, within the retention period. So if new data is kept like 10 days, within those 10 days a consumer can continuously get the data, no more wait for the next morning, just connected to the topic you need to.</p>
-<h2 id="mq-versus-kafka">MQ Versus Kafka</h2>
-<p>Consider queue system. like IBM MQ, for:</p>
-<ul>
-<li>Exactly once delivery, and to participate into two phase commit transaction</li>
-<li>Asynchronous request / reply communication: the semantic of the communication is for one component to ask a second command to do something on its data. This is a command pattern with delay on the response.</li>
-<li>Recall messages in queue are kept until consumer(s) got them.</li>
-</ul>
-<p>Consider Kafka as pub/sub and persistence system for:</p>
-<ul>
-<li>Publish events as immutable facts of what happen in an application</li>
-<li>Get continuous visibility of the data Streams</li>
-<li>Keep data once consumed, for future consumers, for replayability</li>
-<li>Scale horizontally the message consumption</li>
-</ul>
-<h3 id="events-and-messages">Events and Messages</h3>
-<p>There is a long history of <em>messaging</em> in IT systems.  You can easily see an event driven solution and events in the context of messaging systems and messages. However, there are different characteristics that are worth considering:</p>
-<ul>
-<li><strong>Messaging:</strong> Messages transport a payload and messages are persisted until consumed. Message consumers are typically directly targeted and related to the producer who cares that the message has been delivered and processed.</li>
-<li><strong>Events:</strong> Events are persisted as a replayable stream history. Event consumers are not tied to the producer. An event is a record of something that has happened and so can't be changed. (You can't change history.)</li>
-</ul>
-<p><img alt="" src="images/evt-msg.png" /></p>
-<h3 id="messaging-versus-event-streaming">Messaging versus event streaming</h3>
-<p>We recommend reading <a href="https://developer.ibm.com/messaging/2018/05/18/comparing-messaging-event-streaming-use-cases/">this article</a> and <a href="https://developer.ibm.com/messaging/2019/02/05/comparing-messaging-pub-sub-and-event-streams/">this one</a>, to get insight on messaging (focusing on operations / actions to be performed by a system or service) versus events (focusing on the state / facts of a system with no knowledge of the downstream processing).</p>
-<p>To summarize messaging (like MQ) are to support:</p>
-<ul>
-<li><strong>Transient Data:</strong> data is only stored until a consumer has processed the message, or it expires.</li>
-<li><strong>Request / reply</strong> most of the time.</li>
-<li><strong>Targeted reliable delivery:</strong> targeted to the entity that will process the request or receive the response. Reliable with transaction support.</li>
-<li><strong>Highly Coupled</strong> producers and consumers</li>
-</ul>
-<p>For events:</p>
-<ul>
-<li><strong>Stream History:</strong> consumers are interested in historic events, not just the most recent.</li>
-<li><strong>Scalable Consumption:</strong> A single event is consumed by many consumers with limited impact as the number of consumers grow.</li>
-<li><strong>Immutable Data</strong></li>
-<li><strong>Loosely coupled / decoupled</strong> producers and consumers</li>
-</ul>
-<h2 id="kafka-streams-vs-apache-flink">Kafka Streams vs Apache Flink</h2>
-<p>Once we have setup data streams, we need technology to support real-time analytics and complex event processing. Historically, analytics performed on static data was done using batch reporting techniques. However, if
-insights have to be derived in real-time, event-driven architectures help to analyze and look for patterns within events.</p>
-<p><a href="https://flink.apache.org">Apache Flink</a> (2016) is a framework and <strong>distributed processing</strong> engine for stateful computations over unbounded and bounded data streams. It is considered to be superior to Apache Spark and Hadoop. It supports batch and graph processing and complex event processing. </p>
-<p>Here is simple diagram of Flink architecture.</p>
-<p><img alt="Flink components" src="images/arch.png" /></p>
-<p>The run time can run on any common resource manager like Hadoop Yarn, Mesos, or Kubernetes. It can run on its own with two majors cluster types: Job manager and task manager. Two types of processing: data set or data stream. For development purpose we can use the docker images to deploy a <strong>Session</strong> or <strong>Job cluster</strong> in a containerized environment. </p>
-<p>See also <a href="https://www.confluent.io/blog/apache-flink-apache-kafka-streams-comparison-guideline-users">this article from Confluent</a></p>
+                <h1 id="saga">Saga</h1>
+<h2 id="problems-and-constraints">Problems and Constraints</h2>
+<p>With the adoption of one data source per microservice, there is an interesting challenge on how to support long running transaction cross microservices. With event backbone two phase commit is not an option.</p>
+<h2 id="solution-and-pattern">Solution and Pattern</h2>
+<p>Introduced in 1987 <a href="https://www.cs.cornell.edu/andru/cs711/2002fa/reading/sagas.pdf">by Hector Garcaa-Molrna Kenneth Salem paper</a> the Saga pattern help to support a long running transaction that can be broken up to a collection of sub transactions that can be interleaved any way with other transactions.</p>
+<p>With microservice each transaction updates data within a single service, each subsequent steps may be triggered by previous completion. The following figure, based on <a href="https://ibm-cloud-architecture.github.io/refarch-kc">our solution implementation</a>, illustrates those concepts for an order transaction:</p>
+<p><img alt="1" src="images/saga-ctx.png" /></p>
+<p>When the order is created, the business process says, we need to allocate a "voyage", assign containers and update the list of containers to load on the ship. Those actions / commands are chained. The final state (in this schema, not in the reality, as the process has more steps) is the Order assigned state in the order microservice.</p>
+<p>With a unique application implementation, the integrity between order, voyage and container tables will be done via transactions. With distributed system we could not apply two phase commit transaction so the Saga pattern will help.</p>
+<p>SAGA pattern supports two types of implementation: Choreography and Orchestration.</p>
+<h2 id="services-choreography">Services choreography</h2>
+<p>With Choreography each service produces and listens to other service’s events and decides if an action should be taken or not.</p>
+<p><img alt="2" src="images/saga-choreo.png" /></p>
+<p>The first service executes a transaction to its own data store and then publishes an event ( OrderCreated event (1)) as fact about its business entity update. It maintains the business entity status, (order.status) to the <code>Pending</code> state until the saga is completed. This event is listened by one or more services which execute local transactions and publish new events (VoyageAllocated (3), ReeferAssigned (4), PaymentProcessed (5)).
+The distributed transaction ends when the last service executes its local transaction or when a service does not publish any events or the event published is not polled by any of the saga’s participants. For example, the Order microservice gets all the events from the other service and changed the Order state to be <code>Accepted</code>.</p>
+<p>In case of failure, the source microservice is keeping state and timer to monitor for the expected completion events.</p>
+<p><img alt="3" src="images/saga-choreo-fail.png" /></p>
+<p>When a message from any service is missing, the source service, needs to trigger a compensation process:</p>
+<p><img alt="4" src="images/saga-compensation.png" /></p>
+<p>Rolling back a distributed transaction does not come for free. Normally you have to implement another operation/transaction to compensate for what has been done before. This will be a new event sent by the service responsible of the transaction integrity. In the order example, in the rare case where one of the service is not able to provide a positive response, no voyage found, or no Reefer container found, then the order needs to change to 'Uncompleted' status, and an event to the orders topic will claim the orderID is now uncompleted (OrderUncompleted event Step 1 above) . Any service that has something allocated for this orderId will 'unroll' their changes in their own data source  (Steps 2,3,4 below).</p>
+<p>Also it is important to note, that if one of the service is taking time to answer this may not be a problem as the order is in pending state. If the business requirement stipulates to address an order within a small time period then the compensation process may start. Uncompleted orders can be reviewed by a business user for manual handling. Email can be automatically sent to the customer about issue related to his order. There are a lot of different ways to handle order issue at the business level.</p>
+<h2 id="services-orchestration">Services orchestration</h2>
+<p>With orchestration, one service is responsible to drive each participant on what to do and when.</p>
+<p><img alt="5" src="images/saga-ochestration.png" /></p>
+<p>It uses the different topics to control the saga by issuing event commands to the different service. It uses the event backbone as a queue processing to support the asynchronous invocations. In this case the event should be exactly once delivered and idempotent. Each participant produces response in their context and to the order topic. The orchestration layer needs to keep a state machine and acts once all the expected responses are received.</p>
+<p>If anything fails, the orchestrator is also responsible for coordinating the compensation process by sending rollback events with orderID and their respective impacted entity key (voyageID, reeferID, transactionID). Each  participant will undo its previous operations.
+Orchestrator is a State Machine where each transformation corresponds to a command or message.</p>
+<p>See also <a href="https://microservices.io/patterns/data/saga.html">this article</a> from Chris Richardson on the Saga pattern.</p>
+<p>We have implemented the choreography saga pattern in the order management, voyage and refeer management microservices within the <a href="https://ibm-cloud-architecture.github.io/refarch-kc/implementation/saga-patterns/">EDA reference implementation solution</a> with a detailed explanation of the integration tests to validate the <a href="https://ibm-cloud-architecture.github.io/refarch-kc/integration-tests/happy-path/">happy path</a>, and the <a href="https://ibm-cloud-architecture.github.io/refarch-kc/integration-tests/saga-pattern/">exception path</a> with compensation.</p>
+                
+                  
                 
               
               
