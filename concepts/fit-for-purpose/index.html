@@ -198,7 +198,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/concepts/fit-for-purpose/" title="Fit for purpose" class="md-nav__link">
+    <a href="./" title="Fit for purpose" class="md-nav__link">
       Fit for purpose
     </a>
   </li>
@@ -231,7 +231,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/patterns/event-sourcing/" title="Event Sourcing" class="md-nav__link">
+    <a href="../../patterns/event-sourcing/" title="Event Sourcing" class="md-nav__link">
       Event Sourcing
     </a>
   </li>
@@ -243,7 +243,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/patterns/cqrs/" title="CQRS" class="md-nav__link">
+    <a href="../../patterns/cqrs/" title="CQRS" class="md-nav__link">
       CQRS
     </a>
   </li>
@@ -292,16 +292,29 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#integrated-governance" class="md-nav__link">
-    Integrated governance
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#mq-versus-kafka" class="md-nav__link">
     MQ Versus Kafka
   </a>
+  
+    <nav class="md-nav" aria-label="MQ Versus Kafka">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#events-and-messages" class="md-nav__link">
+    Events and Messages
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#messaging-versus-event-streaming" class="md-nav__link">
+    Messaging versus event streaming
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -329,8 +342,7 @@
                 
                 
                 <h1 id="fit-for-purpose">Fit for purpose</h1>
-<p>d
-In this note we want to list some of the criterias to consider and assess during an event-driven architecture establishment work and as part of a continuous application governance. This is not fully exhaustive, but give good foundations for analysis and study.
+<p>In this note we want to list some of the criterias to consider and assess during an event-driven architecture establishment work and as part of a continuous application governance. This is not fully exhaustive, but give good foundations for analysis and study.
 Fit for purpose practices should be done under a bigger program about application development governance and data governance. 
 We can look at least to the following major subject:</p>
 <h2 id="cloud-native-applications">Cloud native applications</h2>
@@ -347,7 +359,6 @@ We can look at least to the following major subject:</p>
 <p>As new business applications need to react to events in real time, the adoption of <a href="/concepts/terms-and-definitions/#event-backbone">event backbone</a> is really part of the IT toolbox. Some existing deployment consider this to be their new data hub, where all the data about the 'customer' is accessible. Therefore, it is natural to assess the data movement strategy and offload some of those ETL jobs running at night, as most of those works are done already inside of the applications generating those data, but not those data are visible inside the backbone.</p>
 <p>We detailed the new architecture in <a href="introduction/reference-architecture/#modern-data-lake">this modern data lake</a> discussion, so from a <em>fit for purpose</em> point of view, we need to assess what those ETL jobs were doing and how much of those data is now visible to other to consume.</p>
 <p>With Event Backbone like Kafka, any consumer can join the consumption at any point of time, within the retention period. So if new data is kept like 10 days, within those 10 days a consumer can continuously get the data, no more wait for the next morning, just connected to the topic you need to.</p>
-<h2 id="integrated-governance">Integrated governance</h2>
 <h2 id="mq-versus-kafka">MQ Versus Kafka</h2>
 <p>Consider queue system. like IBM MQ, for:</p>
 <ul>
@@ -362,13 +373,36 @@ We can look at least to the following major subject:</p>
 <li>Keep data once consumed, for future consumers, for replayability</li>
 <li>Scale horizontally the message consumption</li>
 </ul>
+<h3 id="events-and-messages">Events and Messages</h3>
+<p>There is a long history of <em>messaging</em> in IT systems.  You can easily see an event driven solution and events in the context of messaging systems and messages. However, there are different characteristics that are worth considering:</p>
+<ul>
+<li><strong>Messaging:</strong> Messages transport a payload and messages are persisted until consumed. Message consumers are typically directly targeted and related to the producer who cares that the message has been delivered and processed.</li>
+<li><strong>Events:</strong> Events are persisted as a replayable stream history. Event consumers are not tied to the producer. An event is a record of something that has happened and so can't be changed. (You can't change history.)</li>
+</ul>
+<p><img alt="" src="images/evt-msg.png" /></p>
+<h3 id="messaging-versus-event-streaming">Messaging versus event streaming</h3>
+<p>We recommend reading <a href="https://developer.ibm.com/messaging/2018/05/18/comparing-messaging-event-streaming-use-cases/">this article</a> and <a href="https://developer.ibm.com/messaging/2019/02/05/comparing-messaging-pub-sub-and-event-streams/">this one</a>, to get insight on messaging (focusing on operations / actions to be performed by a system or service) versus events (focusing on the state / facts of a system with no knowledge of the downstream processing).</p>
+<p>To summarize messaging (like MQ) are to support:</p>
+<ul>
+<li><strong>Transient Data:</strong> data is only stored until a consumer has processed the message, or it expires.</li>
+<li><strong>Request / reply</strong> most of the time.</li>
+<li><strong>Targeted reliable delivery:</strong> targeted to the entity that will process the request or receive the response. Reliable with transaction support.</li>
+<li><strong>Highly Coupled</strong> producers and consumers</li>
+</ul>
+<p>For events:</p>
+<ul>
+<li><strong>Stream History:</strong> consumers are interested in historic events, not just the most recent.</li>
+<li><strong>Scalable Consumption:</strong> A single event is consumed by many consumers with limited impact as the number of consumers grow.</li>
+<li><strong>Immutable Data</strong></li>
+<li><strong>Loosely coupled / decoupled</strong> producers and consumers</li>
+</ul>
 <h2 id="kafka-streams-vs-apache-flink">Kafka Streams vs Apache Flink</h2>
 <p>Once we have setup data streams, we need technology to support real-time analytics and complex event processing. Historically, analytics performed on static data was done using batch reporting techniques. However, if
 insights have to be derived in real-time, event-driven architectures help to analyse and look for patterns within events.</p>
 <p><a href="https://flink.apache.org">Apache Flink</a> (2016) is a framework and <strong>distributed processing</strong> engine for stateful computations over unbounded and bounded data streams. It is considered to be superior to Apache Spark and Hadoop. It supports batch and graph processing and complex event processing. </p>
 <p>Here is simple diagram of Flink architecture.</p>
 <p><img alt="Flink components" src="images/arch.png" /></p>
-<p>The run time can run on any common resource manager like Hadoop Yarn, Mesos, or kubernetes. It can run on its own with two majors cluster types: Job manager and task manager. Two types of processing: data set or data stream. For development purpose we can use the docker images to deploy a <strong>Session</strong> or <strong>Job cluster</strong> in a containerized environment. </p>
+<p>The run time can run on any common resource manager like Hadoop Yarn, Mesos, or Kubernetes. It can run on its own with two majors cluster types: Job manager and task manager. Two types of processing: data set or data stream. For development purpose we can use the docker images to deploy a <strong>Session</strong> or <strong>Job cluster</strong> in a containerized environment. </p>
 <p>See also <a href="https://www.confluent.io/blog/apache-flink-apache-kafka-streams-comparison-guideline-users">this article from Confluent</a></p>
                 
               
