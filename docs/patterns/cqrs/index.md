@@ -1,19 +1,4 @@
----
-title: Patterns in Event-Driven Architectures
-description: Command Query Responsibility Segregation (CQRS) pattern
----
-
 # Command-Query Responsibility Segregation (CQRS)
-
-<AnchorLinks>
-  <AnchorLink>Problems and Constraints</AnchorLink>
-  <AnchorLink>Solution and Pattern</AnchorLink>
-  <AnchorLink>Considerations</AnchorLink>
-  <AnchorLink>Combining event sourcing and CQRS</AnchorLink>
- <AnchorLink>Keeping the write model on Mainframe</AnchorLink>
- <AnchorLink>The consistency challenges</AnchorLink>
-
-</AnchorLinks>
 
 ## Problems and Constraints
 
@@ -23,7 +8,7 @@ A domain model encapsulates domain data with the behavior for maintaining the co
 
 An application accesses data both to read and to modify it. The primitive data tasks are often expressed as create, read, update, and delete (CRUD); using them is known as CRUDing the data. Application code often does not make much distinction between the tasks; individual operations may mix reading the data with changing the data as needed.
 
-This simple approach works well when all clients of the data can use the same structure and contention is low. A single domain model can manage the data, make it accessible as domain objects, and ensure updates maintain its consistency. However, this approach becomes inadaquate when different clients want different views across multiple sets of data, when the data is too widely used, and/or when multiple clients updating the data my unknowlingly conflict with each other.
+This simple approach works well when all clients of the data can use the same structure and contention is low. A single domain model can manage the data, make it accessible as domain objects, and ensure updates maintain its consistency. However, this approach becomes inadequate when different clients want different views across multiple sets of data, when the data is too widely used, and/or when multiple clients updating the data my unknowingly conflict with each other.
 
 For example, in a microservices architecture, each microservice should store and manage its own data, but a user interface may need to display data from several microservices. A query that gathers bits of data from multiple sources can be inefficient (time and bandwidth consumed accessing multiple data sources, CPU consumed transforming data, memory consumed by intermediate objects) and must be repeated each time the data is accessed.
 
@@ -122,7 +107,7 @@ CQRS employs a couple of design features that support keeping the databases sync
 * **Command Bus for queuing commands** (optional): A more subtle and optional design decision is to queue the commands produced by the modify API, shown in the diagram as the command bus. This can significantly increase the throughput of multiple apps updating the database, as well as serialize updates to help avoid--or at least detect--merge conflicts. With the bus, a client making an update does not block synchronously while the change is written to the database. Rather, the request to change the database is captured as a [command](https://en.wikipedia.org/wiki/Command_pattern) ([*Design Patterns*](https://www.pearson.com/us/higher-education/program/Gamma-Design-Patterns-Elements-of-Reusable-Object-Oriented-Software/PGM14333.html)) and put on a message queue, after which the client can proceed with other work. Asynchronously in the background, the write model processes the commands at the maximum sustainable rate that the database can handle, without the database ever becoming overloaded. If the database becomes temporarily unavailable, the commands queue and will be processed when the database becomes available once more.
 * **Event Bus for publishing update events** (required): Whenever the write database is updated, a change notification is published as an event on the event bus. Interested parties can subscribe to the event bus to be notified when the database is updated. One such party is an event processor for the query database, which receives update events and processes them by updating the query database accordingly. In this way, every time the write database is updated, a corresponding update is made to the read database to keep it in sync.
 
-The connection between the command bus and the event bus is facilitated by an application of the [Event Sourcing pattern](/patterns/event-sourcing/), which keeps a change log that is suitable for publishing. Event sourcing maintains not only the current state of the data but also the history of how that current state was reached. For each command on the command bus, the write model performs these tasks to process the command:
+The connection between the command bus and the event bus is facilitated by an application of the [Event Sourcing pattern](../event-sourcing/), which keeps a change log that is suitable for publishing. Event sourcing maintains not only the current state of the data but also the history of how that current state was reached. For each command on the command bus, the write model performs these tasks to process the command:
 
 * Logs the change
 * Updates the database with the change
@@ -139,7 +124,7 @@ Keep these decisions in mind while applying this pattern:
 * **Eventual consistency**: Clients querying data must expect that updates will have latency. In a microservices architecture, eventual data consistency is a given and acceptable in many of cases.
 * **Command queuing**: Using a command bus as part of the write solution to queue the commands is optional but powerful. In addition to the benefits of queuing, the command objects can easily be stored in the change log and easily be converted into notification events. (In the next section, we illustrate a way to use event bus to queue commands as well.)
 * **Change log**: The log of changes to the database of record can be either the list of commands from the command bus or the list of event notifications published on the event bus. The Event Sourcing pattern assumes it’s a log of events, but that pattern doesn’t include the command bus. An event list may be easier to scan as a history, whereas a command list is easier to replay.
-* **Create keys**: Strick interpretation of the Command Query Separation (CQS) pattern says that command operations do not have return types. A possible exception is commands that create data: An operation that creates a new record or document typically returns the key for accessing the new data, which is convenient for the client. However, if the create operation is invoked asynchronously by a command on a command bus, the write model will need to perform a callback on the client to return the key.
+* **Create keys**: Strict interpretation of the Command Query Separation (CQS) pattern says that command operations do not have return types. A possible exception is commands that create data: An operation that creates a new record or document typically returns the key for accessing the new data, which is convenient for the client. However, if the create operation is invoked asynchronously by a command on a command bus, the write model will need to perform a callback on the client to return the key.
 * **Messaging queues and topics**: While messaging is used to implement both the command bus and event bus, the two busses use messaging differently. The command bus guarantees exactly once delivery. The event bus broadcasts each event to all interested event processors.
 * **Query database persistence**: The database of record is always persistent. The query database is a cache that can be a persistent cache or an in-memory cache. If the cache is in-memory and is lost, it must be rebuilt completely from the database of record.
 * **Security**: Controls on reading data and updating data can be applied separately using the two parts of the solution.
@@ -166,7 +151,7 @@ Some implementation items to consider:
 
 * **Consistency** (ensure the data constraints are respected for each data transaction): CQRS without event sourcing has the same consistency guarantees as the database used to persist data and events. With Event Sourcing the consistency could be different, one for the write model and one for the read model. On write model, strong consistency is important to ensure the current state of the system is correct, so it leverages transaction, lock and sharding. On read side, we need less consistency, as they mostly work on stale data. Locking data on the read operation is not reasonable.
 * **Scalability**: Separating read and write as two different microservices allows for high availability. Caching at the read level can be used to increase performance response time, and can be deployed as multiple standalone instances (Pods in Kubernetes). It is also possible to separate the query implementations between different services. Functions as service / serverless are good technology choices to implement complex queries.
-* **Availability**: The write model sacrafices consistency for availability. This is a fact. The read model is eventually consistent so high availability is possible. In case of failure the system disables the writing of data but still is able to read them as they are served by different databases and services.
+* **Availability**: The write model sacrifices consistency for availability. This is a fact. The read model is eventually consistent so high availability is possible. In case of failure the system disables the writing of data but still is able to read them as they are served by different databases and services.
 
 With CQRS, the write model can evolve over time without impacting the read model, as long as the event model doesn't change. The read model requires additional tables, but they are often simpler and easier to understand.
 
@@ -184,11 +169,11 @@ As you can see in previous figure, as soon as we see two arrows from the same co
 
 ## Keeping the write model on Mainframe
 
-It is very important to note that the system of records and transaction processing is still easier to run on mainframe to support strong consistency. But with the move to cloud native development, it does not mean we have to move all the system of records to the cloud. Data pipelines can be put in place, but CQRS should help by keeping the write model on the current system of records and without impacting the current MIPS utilization move data in the eventual consistency workd of the cloud native, distributed computing world.
+It is very important to note that the system of records and transaction processing is still easier to run on mainframe to support strong consistency. But with the move to cloud native development, it does not mean we have to move all the system of records to the cloud. Data pipelines can be put in place, but CQRS should help by keeping the write model on the current system of records and without impacting the current MIPS utilization move data in the eventual consistency world of the cloud native, distributed computing world.
 
  ![](./images/cqrs-mainframe.png)
 
-In the figure above, the write model follows the current transaction processing on the mainframce, change data capture push data to Event backbone for getting real time visibility into the distributed world. The read is the costly operation, dues to the joins to be done to build the projection views needed to expose data depending of the business use cases. This is more true with distributed microservices. All the write operations for the business entities kept in the mainframe's system of records are still done via the transaction. 
+In the figure above, the write model follows the current transaction processing on the mainframe, change data capture push data to Event backbone for getting real time visibility into the distributed world. The read is the costly operation, dues to the joins to be done to build the projection views needed to expose data depending of the business use cases. This is more true with distributed microservices. All the write operations for the business entities kept in the mainframe's system of records are still done via the transaction. 
 Reference data can be injected in one load job to topic and persisted in the event store so streaming applications can leverage them by joining with transactional data. 
 
 ## The consistency challenges
@@ -201,7 +186,7 @@ With event sourcing pattern, the source of trust is the event source, which acts
 
 ![6](./images/cqrs-es-error-handling.png)
 
-The steps for syncronizing changes to the data are:
+The steps for synchronizing changes to the data are:
 
 1. The write model creates the event and publishes it
 1. The consumer receives the event and extracts its payload
@@ -227,7 +212,7 @@ The CQRS implementation using CDC will look like in the following diagram:
 
 ![](./images/cqrs-cdc.png)
 
-What is important to note is that the event needs to be flexible on the data payload. We are presenting a [event model](https://ibm-cloud-architecture.github.io/refarch-kc-order-ms/#data-and-event-model) in the reference implementation.
+What is important to note is that the event needs to be flexible on the data payload. 
 
 On the view side, updates to the view part need to be idempotent.
 
@@ -235,7 +220,7 @@ On the view side, updates to the view part need to be idempotent.
 
 There is a delay between the data persistence and the availability of the data in the Read model. For most business applications, it is perfectly acceptable. In web based data access most of the data are at stale.
 
-When there is a need for the client, calling the query operation, to know if the data is up-to-date, the service can define a versioning strategy. When the order data was entered in a form within a single page application like our [kc- user interface](https://github.com/ibm-cloud-architecture/refarch-kc-ui), the "create order" operation should return the order with its unique key freshly created and the Single Page Application will have the last data. Here is an example of such operation:
+When there is a need for the client, calling the query operation, to know if the data is up-to-date, the service can define a versioning strategy. When the order data was entered in a form within a single page application, the "create order" operation should return the order with its unique key freshly created and the Single Page Application will have the last data. Here is an example of such operation:
 
 ```java
 @POST

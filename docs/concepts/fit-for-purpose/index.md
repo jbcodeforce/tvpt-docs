@@ -1,7 +1,7 @@
 # Fit for purpose
-d
-In this note we want to list some of the criterias to consider and assess during an event-driven architecture establishment work and as part of a continuous application governance. This is not fully exhaustive, but give good foundations for analysis and study.
-Fit for purpose practices should be done under a bigger program about application development governance and data governance. 
+
+In this note we want to list some of the criteria to consider and assess during an event-driven architecture establishment work and as part of a continuous application governance. This is not fully exhaustive, but give good foundations for analysis and study.
+Fit for purpose practices should be done under a bigger program about application development governance and data governance.
 We can look at least to the following major subject:
 
 ## Cloud native applications
@@ -10,7 +10,7 @@ With the adoption of cloud native and microservice applications (12 factors app)
 
 * Responsiveness with elastic scaling and resilience to failure. Which leads to adopt the '[reactive](/advantages/reactive/) manifesto' and consider messaging as a way to communicate between apps. Elastic also may lead to multi cloud deployment practice.
 * Address data sharing using a push model to improve decoupling, and performance. Instead of having each service using REST end point to pull the data from other services, each service push the change to their main business entity to a event backbone. Each future service which needs those data, pull from the messaging system.
-* Adopting common pattern like [command query responsibility seggregation](/patterns/cqrs/) to help implementing complex queries, joining different business entities owned by different microservices, [event sourcing](/patterns/event-sourcing/), [transactional outbox](/patterns/intro/#transactional-outbox) and [SAGA](/patterns/saga/).
+* Adopting common pattern like [command query responsibility segregation](../../patterns/cqrs/) to help implementing complex queries, joining different business entities owned by different microservices, [event sourcing](../../patterns/event-sourcing/), [transactional outbox](../../patterns/transactional-outbox) and [SAGA](../../patterns/saga/).
 * Addressing data eventual consistency to propagate change to other components versus ACID transaction.
 * Support always-on approach with the deployment to multiple data centers (at least three) being active/active and being able to propagate data in all data centers.
 
@@ -24,10 +24,6 @@ We detailed the new architecture in [this modern data lake](introduction/referen
 
 With Event Backbone like Kafka, any consumer can join the consumption at any point of time, within the retention period. So if new data is kept like 10 days, within those 10 days a consumer can continuously get the data, no more wait for the next morning, just connected to the topic you need to.
 
-## Integrated governance
-
-
-
 ## MQ Versus Kafka
 
 Consider queue system. like IBM MQ, for:
@@ -40,20 +36,32 @@ Consider Kafka as pub/sub and persistence system for:
 
 * Publish events as immutable facts of what happen in an application
 * Get continuous visibility of the data Streams
-* Keep data once consumed, for future consumers, for replayability
+* Keep data once consumed, for future consumers, for replay-ability
 * Scale horizontally the message consumption
 
-## Kafka Streams vs Apache Flink
+### Events and Messages
 
-Once we have setup data streams, we need technology to support real-time analytics and complex event processing. Historically, analytics performed on static data was done using batch reporting techniques. However, if
-insights have to be derived in real-time, event-driven architectures help to analyse and look for patterns within events.
+There is a long history of *messaging* in IT systems.  You can easily see an event driven solution and events in the context of messaging systems and messages. However, there are different characteristics that are worth considering:
 
-[Apache Flink](https://flink.apache.org) (2016) is a framework and **distributed processing** engine for stateful computations over unbounded and bounded data streams. It is considered to be superior to Apache Spark and Hadoop. It supports batch and graph processing and complex event processing. 
+* **Messaging:** Messages transport a payload and messages are persisted until consumed. Message consumers are typically directly targeted and related to the producer who cares that the message has been delivered and processed.
+* **Events:** Events are persisted as a replay-able stream history. Event consumers are not tied to the producer. An event is a record of something that has happened and so can't be changed. (You can't change history.)
 
-Here is simple diagram of Flink architecture.
+![](./images/evt-msg.png)
 
- ![Flink components](./images/arch.png)
+### Messaging versus event streaming
 
-The run time can run on any common resource manager like Hadoop Yarn, Mesos, or kubernetes. It can run on its own with two majors cluster types: Job manager and task manager. Two types of processing: data set or data stream. For development purpose we can use the docker images to deploy a **Session** or **Job cluster** in a containerized environment. 
+We recommend reading [this article](https://developer.ibm.com/messaging/2018/05/18/comparing-messaging-event-streaming-use-cases/) and [this one](https://developer.ibm.com/messaging/2019/02/05/comparing-messaging-pub-sub-and-event-streams/), to get insight on messaging (focusing on operations / actions to be performed by a system or service) versus events (focusing on the state / facts of a system with no knowledge of the downstream processing).
 
-See also [this article from Confluent](https://www.confluent.io/blog/apache-flink-apache-kafka-streams-comparison-guideline-users)
+To summarize messaging (like MQ) are to support:
+
+* **Transient Data:** data is only stored until a consumer has processed the message, or it expires.
+* **Request / reply** most of the time.
+* **Targeted reliable delivery:** targeted to the entity that will process the request or receive the response. Reliable with transaction support.
+* **Highly Coupled** producers and consumers
+
+For events:
+
+* **Stream History:** consumers are interested in historic events, not just the most recent.
+* **Scalable Consumption:** A single event is consumed by many consumers with limited impact as the number of consumers grow.
+* **Immutable Data**
+* **Loosely coupled / decoupled** producers and consumers

@@ -7,14 +7,13 @@ Traditional domain oriented implementation builds a domain data model and map it
 
 ![1](./images/evt-src-ex1.png)
 
-
 If you need to implement a query that looks at what happened to the order over a time period, you need to change the model and add historical records, basically building a log table.
 
 Designing a service to manage the life cycle of this order will, most of the time, add a "delete operation" to remove data.  For legal reason, most businesses do not remove data. As an example, a business ledger has to include new record(s) to compensate a previous transaction. There is no erasing of previously logged transactions. It is always possible to understand what was done in the past. Most business application needs to keep this capability.
 
 ## Solution and Pattern
 
-**Event sourcing** persists the state of a business entity, such an Order, as a sequence of state-changing events or immuttable "facts" ordered over time. Event sourcing has its roots in the domain-driven design community. 
+**Event sourcing** persists the state of a business entity, such an Order, as a sequence of state-changing events or immutable "facts" ordered over time. Event sourcing has its roots in the domain-driven design community. 
 
 ![2](./images/evt-src.png)
 
@@ -52,11 +51,9 @@ When replaying the events, it may be important to avoid generating side effects.
 
 Sometime it may be too long to replay hundreds of events. In that case we can use snapshot, to capture the current state of an entity, and then replay events from the most recent snapshot. This is an optimization technique not needed for all event sourcing implementations. When state change events are in low volume there is no need for snapshots.
 
-Kafka is supporting the event sourcing pattern with [the topic and partition](../../technology/kafka-overview/#topics). In our [reference implementation](https://ibm-cloud-architecture.github.io/refarch-kc) we are validating event sourcing with Kafka in the [Order microservices](https://github.com/ibm-cloud-architecture/refarch-kc-order-ms) demonstrate in [this set of test cases.](https://ibm-cloud-architecture.github.io/refarch-kc/itg-tests/itgtests)
+Kafka is supporting the event sourcing pattern with [the topic and partition](../../technology/kafka-overview/#topics). In our [reference implementation](https://ibm-cloud-architecture.github.io/refarch-kc) we are validating event sourcing with Kafka in the [Order microservice](https://github.com/ibm-cloud-architecture/refarch-kc-order-ms).
 
 The event sourcing pattern is well described in [this article on microservices.io](https://microservices.io/patterns/data/event-sourcing.html). It is a very important pattern to support eventual data consistency between microservices and for data synchronization between system as the event store becomes the source of truth.
-
-See also this [event sourcing article](https://martinfowler.com/eaaDev/EventSourcing.html) from Martin Fowler, where he is also using ship movement examples. [Our implementation](https://github.com/ibm-cloud-architecture/refarch-kc) differs as we are using Kafka topic as event store and use different entities to support the container shipping process: the Order, the Container and Voyage entities...
 
 Another common use case, where event sourcing helps, is when developers push a new code version that corrupts the data: being able to see what was done on the data, and being able to reload from a previous state helps fixing problems.
 
@@ -70,9 +67,6 @@ One derived challenge is that the command may be executed multiple times, especi
 * At the microservice level, updating data and emitting event needs to be an atomic operation, to avoid inconsistency if the service crashes after the update to the datasource and before emitting the event. This can be done with an eventTable added to the microservice datasource and an event publisher that reads this table on a regular basis and change the state of the event once published. Another solution is to have a database transaction log reader or miner responsible to publish event on new row added to the log.
 * One other approach to avoid the two-phase commit and inconsistency is to use an Event Store or Event Sourcing pattern to keep track of what is done on the business entity with enough information to rebuild the data state. Events are becoming facts describing state changes done on the business entity.
 
-## Code repository
-
-All the microservices implementing the Reefer management solution is using event sourcing, as we use kafka with long persistence. The order management service is using CQRS combined with event sourcing: [https://github.com/ibm-cloud-architecture/refarch-kc-order-ms](https://github.com/ibm-cloud-architecture/refarch-kc-order-ms) and an integration test validate the pattern [here](https://ibm-cloud-architecture.github.io/refarch-kc/itg-tests/#how-to-proof-the-event-sourcing).
 
 ## Compendium
 
