@@ -350,7 +350,7 @@ We can look at least to the following major subject:</p>
 <ul>
 <li>Responsiveness with elastic scaling and resilience to failure. Which leads to adopt the '<a href="/advantages/reactive/">reactive</a> manifesto' and consider messaging as a way to communicate between apps. Elastic also may lead to multi cloud deployment practice.</li>
 <li>Address data sharing using a push model to improve decoupling, and performance. Instead of having each service using REST end point to pull the data from other services, each service push the change to their main business entity to a event backbone. Each future service which needs those data, pull from the messaging system.</li>
-<li>Adopting common pattern like <a href="/patterns/cqrs/">command query responsibility seggregation</a> to help implementing complex queries, joining different business entities owned by different microservices, <a href="/patterns/event-sourcing/">event sourcing</a>, <a href="/patterns/intro/#transactional-outbox">transactional outbox</a> and <a href="/patterns/saga/">SAGA</a>.</li>
+<li>Adopting common pattern like <a href="patterns/cqrs/">command query responsibility seggregation</a> to help implementing complex queries, joining different business entities owned by different microservices, <a href="patterns/event-sourcing/">event sourcing</a>, <a href="patterns/intro/#transactional-outbox">transactional outbox</a> and <a href="patterns/saga/">SAGA</a>.</li>
 <li>Addressing data eventual consistency to propagate change to other components versus ACID transaction.</li>
 <li>Support always-on approach with the deployment to multiple data centers (at least three) being active/active and being able to propagate data in all data centers.</li>
 </ul>
