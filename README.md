@@ -1,6 +1,6 @@
 # Travelport Repository for Documentation
 
-Read in [the book format](https://pages.github.com/Travelport-Rail/tvpt-docs)
+Read in [the book format](https://pages.github.ibm.com/Travelport-Rail/tvpt-docs/)
 
 
 ## Building this booklet locally
@@ -9,7 +9,7 @@ The content of this repository is written with markdown files, packaged with [Mk
 
 1. Install MkDocs locally following the [official documentation instructions](https://www.mkdocs.org/#installation).
 1. Install Material plugin for mkdocs:  `pip install mkdocs-material` 
-2. `git clone https://github.com/` _(or your forked repository if you plan to edit)_
+2. `git clone https://github.ibm.com/` _(or your forked repository if you plan to edit)_
 3. `cd tvpt-docs`
 4. `mkdocs serve`
 5. Go to `http://127.0.0.1:8000/` in your browser.

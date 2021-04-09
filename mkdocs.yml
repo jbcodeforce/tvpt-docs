@@ -1,8 +1,10 @@
 site_name: Travelport Event-Driven Microservice practices
+epo_url: https://github.ibm.com/Travelport-Rail/tvpt-docs/
 nav:
   - Home: index.md
   - Fit for purpose: /concepts/fit-for-purpose/
   - Design Patterns:
+    - Event Sourcing: /patterns/event-sourcing/
     - CQRS: /patterns/cqrs/
   
 
