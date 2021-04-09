@@ -1,4 +1,4 @@
-# Travelport Repository for Documentation Wiki
+# Travelport Repository for Documentation
 
 Read in [the book format](https://pages.github.com/Travelport-Rail/tvpt-docs)
 
