@@ -1,0 +1,22 @@
+site_name: Travelport Event-Driven Microservice practices
+nav:
+  - Home: index.md
+  - Fit for purpose: /concepts/fit-for-purpose/
+  - Design Patterns:
+    - CQRS: /patterns/cqrs/
+  
+
+theme: 
+  name: material
+  logo: 'images/cloud.png'
+  feature:
+    tabs: true
+  palette:
+      primary: 'blue dark'
+extra_css: ["extra.css"]
+markdown_extensions:
+  - admonition
+  - codehilite
+  - footnotes
+  - pymdownx.smartsymbols
+  - pymdownx.superfences
