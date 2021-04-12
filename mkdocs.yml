@@ -5,11 +5,14 @@ nav:
   - EDA Concepts: concepts/terms-and-definitions/
   - Fit for purpose: concepts/fit-for-purpose/
   - Design Patterns:
+    - API management: patterns/api_mgt/
     - Event Sourcing: patterns/event-sourcing/
     - CQRS: patterns/cqrs/
     - Outbox: patterns/transactional-outbox/
     - SAGA: patterns/saga/
-  
+  - Technology:
+    - Kafka Summary: technology/kafka-overview/
+    - Producer - Consumer: technology/kafka-producers-consumers/
 
 theme: 
   name: material
