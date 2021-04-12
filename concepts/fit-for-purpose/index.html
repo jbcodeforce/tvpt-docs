@@ -243,6 +243,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../../patterns/api_mgt/" title="API management" class="md-nav__link">
+      API management
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
     <a href="../../patterns/event-sourcing/" title="Event Sourcing" class="md-nav__link">
       Event Sourcing
     </a>
@@ -281,6 +293,56 @@
   <li class="md-nav__item">
     <a href="../../patterns/saga/" title="SAGA" class="md-nav__link">
       SAGA
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-5" type="checkbox" id="nav-5">
+    
+    <label class="md-nav__link" for="nav-5">
+      Technology
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="Technology" data-md-level="1">
+      <label class="md-nav__title" for="nav-5">
+        <span class="md-nav__icon md-icon"></span>
+        Technology
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../technology/kafka-overview/" title="Kafka Summary" class="md-nav__link">
+      Kafka Summary
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../technology/kafka-producers-consumers/" title="Producer - Consumer" class="md-nav__link">
+      Producer - Consumer
     </a>
   </li>
 
@@ -334,6 +396,13 @@
   
     <nav class="md-nav" aria-label="MQ Versus Kafka">
       <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#direct-product-feature-comparison" class="md-nav__link">
+    Direct product feature comparison
+  </a>
+  
+</li>
         
           <li class="md-nav__item">
   <a href="#events-and-messages" class="md-nav__link">
@@ -402,6 +471,73 @@ We can look at least to the following major subject:</p>
 <li>Keep data once consumed, for future consumers, for replay-ability</li>
 <li>Scale horizontally the message consumption</li>
 </ul>
+<h3 id="direct-product-feature-comparison">Direct product feature comparison</h3>
+<table>
+<thead>
+<tr>
+<th>Kafka</th>
+<th>IBM MQ</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Kafka is a pub/sub engine with streams and connectors</td>
+<td>MQ is a queue, pub/sub engine with file transfer, MQTT, AMQP and other capabilities</td>
+</tr>
+<tr>
+<td>All topics are persistent </td>
+<td>Queues and topics can be persistent or non persistent</td>
+</tr>
+<tr>
+<td>All subscribers are durable</td>
+<td>Subscribers can be durable or non durable</td>
+</tr>
+<tr>
+<td>Adding brokers to requires little work (changing a configuration file)</td>
+<td>Adding QMGRs requires some work (Add the QMGRs to the cluster, add cluster channels.  Queues and Topics need to be added to the cluster.)</td>
+</tr>
+<tr>
+<td>Topics can be spread across brokers (partitions) with a command</td>
+<td>Queues and topics can be spread across a cluster by adding them to clustered QMGRs</td>
+</tr>
+<tr>
+<td>Producers and Consumers are aware of changes made to the cluster</td>
+<td>All MQ clients require a CCDT file to know of changes if not using a gateway QMGR</td>
+</tr>
+<tr>
+<td>Can have n number of replication partitions</td>
+<td>Can have 2 replicas (RDQM) of a QMGR, Multi Instance QMGRs</td>
+</tr>
+<tr>
+<td>Simple load balancing</td>
+<td>Load balancing can be simple or more complex using weights and affinity</td>
+</tr>
+<tr>
+<td>Can reread messages</td>
+<td>Cannot reread messages that have been already processed</td>
+</tr>
+<tr>
+<td>All clients connect using a single connection method</td>
+<td>MQ has Channels which allow different clients to connect, each having the ability to have different security requirements</td>
+</tr>
+<tr>
+<td>Data Streams processing built in, using Kafka topic for efficiency</td>
+<td>Stream processing is not built in, but using third party libraries, like MicroProfile Reactive Messaging, ReactiveX, etc.</td>
+</tr>
+<tr>
+<td>Has connection security, authentication security, and ACLs (read/write to Topic)</td>
+<td>Has connection security, channel security, authentication security, message security/encryption, ACLs for each Object, third party plugins (Channel Exits)</td>
+</tr>
+<tr>
+<td>Built on Java, so can run on any platform that support Java 8+</td>
+<td>Latest native on AIX, IBM i, Linux systems, Solaris, Windows, z/OS, run as Container</td>
+</tr>
+<tr>
+<td>Monitoring by using statistics provided by Kafka CLI, open source tools, Prometheus</td>
+<td>Monitoring using PCF API, MQ Explorer, MQ CLI (runmqsc), Third Party Tools (Tivoli, CA APM, Help Systems, Open Source, etc)</td>
+</tr>
+</tbody>
+</table>
 <h3 id="events-and-messages">Events and Messages</h3>
 <p>There is a long history of <em>messaging</em> in IT systems.  You can easily see an event driven solution and events in the context of messaging systems and messages. However, there are different characteristics that are worth considering:</p>
 <ul>
