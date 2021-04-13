@@ -2,21 +2,21 @@
 
 In this note we summarize some of the best practices to introduce API management in their development practices and architecture patterns.
 
-## Move from a pure API gateway to API management
+## Move from a pure API gateway to an API Management system
 
-API Gateway helps provide security, control, integration, and optimized access to a full range of mobile, web, application programming interface (API), service-oriented architecture (SOA), B2B and cloud workloads. Gateways are used in the following patterns:
+An API Gateway helps provide security, control, integration, and optimized access to a full range of mobile, web, application programming interface (API), service-oriented architecture (SOA), B2B and cloud workloads. Gateways are used in the following patterns:
 
 * Security Gateway, placed between the consumer facing firewall and the system of records facing firewall (DMZ), it is used for both policy enforcement and consistent security policies across business channels.
-* API gateway, both as internal and external gateway, with centralized service governance and policy enforcement, and with traffic monitoring.
+* API gateway, both as an internal and external gateway, with centralized service governance and policy enforcement, and with traffic monitoring.
 * Providing connectivity (HTTP) and mediation (XML, JSON) services in the internal network, close to the system of record. 
 
-Adopting a broader scope for API lifecycle using API management product to address:
+An API Management system supports a broader scope for API lifecycle management, including: 
 
 * API lifecycle management to active, retire, or stage API product.
 * API governance with security, access, and versioning.
 * Analytics, dashboards, third party data offload for usage analysis.
-* API socialization based in a portal that allows self-service for developer community.
-* API developer toolkit,
+* API socialization based on a portal that allows self-service for the developer community.
+* API developer toolkit
 
 ### Classical pain points
 
