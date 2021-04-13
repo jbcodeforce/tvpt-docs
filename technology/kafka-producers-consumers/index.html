@@ -1,6 +1,4 @@
 
-
-
 <!doctype html>
 <html lang="en" class="no-js">
   <head>
@@ -10,31 +8,34 @@
       
       
       
-      <link rel="shortcut icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-5.5.12">
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-7.1.0">
     
     
       
-        <title>Kafka Producers & Consumers - Travelport Event-Driven Microservice practices</title>
+        <title>Producer - Consumer - Travelport Event-Driven Microservice practices</title>
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.4dd2dd8d.min.css">
-      
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.6a5ad368.min.css">
-      
+      <link rel="stylesheet" href="../../assets/stylesheets/main.33e2939f.min.css">
       
         
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ef6f36e2.min.css">
         
-        <meta name="theme-color" content="">
+          
+          
+          <meta name="theme-color" content="">
+        
       
     
     
     
       
-        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
-        <style>body,input{font-family:"Roboto",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
+        <style>:root{--md-text-font-family:"Roboto";--md-code-font-family:"Roboto Mono"}</style>
       
     
     
@@ -51,8 +52,12 @@
     
     
     
+    
+    
     <body dir="ltr" data-md-color-scheme="" data-md-color-primary="blue-dark" data-md-color-accent="">
   
+    
+    <script>function __prefix(e){return new URL("../..",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
@@ -70,45 +75,49 @@
     </div>
     
       <header class="md-header" data-md-component="header">
-  <nav class="md-header-nav md-grid" aria-label="Header">
-    <a href="../.." title="Travelport Event-Driven Microservice practices" class="md-header-nav__button md-logo" aria-label="Travelport Event-Driven Microservice practices">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Travelport Event-Driven Microservice practices" class="md-header__button md-logo" aria-label="Travelport Event-Driven Microservice practices" data-md-component="logo">
       
   <img src="../../images/cloud.png" alt="logo">
 
     </a>
-    <label class="md-header-nav__button md-icon" for="__drawer">
+    <label class="md-header__button md-icon" for="__drawer">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
     </label>
-    <div class="md-header-nav__title" data-md-component="header-title">
-      
-        <div class="md-header-nav__ellipsis">
-          <span class="md-header-nav__topic md-ellipsis">
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
             Travelport Event-Driven Microservice practices
           </span>
-          <span class="md-header-nav__topic md-ellipsis">
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
             
-              Kafka Producers & Consumers
+              Producer - Consumer
             
           </span>
         </div>
-      
+      </div>
     </div>
     
-      <label class="md-header-nav__button md-icon" for="__search">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
       </label>
       
 <div class="md-search" data-md-component="search" role="dialog">
   <label class="md-search__overlay" for="__search"></label>
   <div class="md-search__inner" role="search">
     <form class="md-search__form" name="search">
-      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active" required>
       <label class="md-search__icon md-icon" for="__search">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
       </label>
-      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" data-md-component="search-reset" tabindex="-1">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
       </button>
     </form>
     <div class="md-search__output">
@@ -125,12 +134,12 @@
 </div>
     
     
-      <div class="md-header-nav__source">
+      <div class="md-header__source">
         
-<a href="https://github.ibm.com/Travelport-Rail/tvpt-docs/" title="Go to repository" class="md-source">
+<a href="https://github.ibm.com/Travelport-Rail/tvpt-docs/" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 00-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 01-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 000 40.81l195.61 195.6a28.86 28.86 0 0040.8 0l194.69-194.69a28.86 28.86 0 000-40.81z"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
   </div>
   <div class="md-source__repository">
     Github
@@ -143,8 +152,6 @@
     
     <div class="md-container" data-md-component="container">
       
-        
-      
       
         
       
@@ -152,12 +159,16 @@
         <div class="md-main__inner md-grid">
           
             
-              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
-                    <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../.." title="Travelport Event-Driven Microservice practices" class="md-nav__button md-logo" aria-label="Travelport Event-Driven Microservice practices">
+    <a href="../.." title="Travelport Event-Driven Microservice practices" class="md-nav__button md-logo" aria-label="Travelport Event-Driven Microservice practices" data-md-component="logo">
       
   <img src="../../images/cloud.png" alt="logo">
 
@@ -167,10 +178,10 @@
   
     <div class="md-nav__source">
       
-<a href="https://github.ibm.com/Travelport-Rail/tvpt-docs/" title="Go to repository" class="md-source">
+<a href="https://github.ibm.com/Travelport-Rail/tvpt-docs/" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 00-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 01-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 000 40.81l195.61 195.6a28.86 28.86 0 0040.8 0l194.69-194.69a28.86 28.86 0 000-40.81z"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
   </div>
   <div class="md-source__repository">
     Github
@@ -184,172 +195,339 @@
       
       
 
-
-  <li class="md-nav__item">
-    <a href="../.." title="Home" class="md-nav__link">
-      Home
-    </a>
-  </li>
-
-    
-      
-      
-      
-
-
-  <li class="md-nav__item">
-    <a href="../../concepts/terms-and-definitions/" title="EDA Concepts" class="md-nav__link">
-      EDA Concepts
-    </a>
-  </li>
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
 
     
       
       
       
 
-
-  <li class="md-nav__item">
-    <a href="../../concepts/fit-for-purpose/" title="Fit for purpose" class="md-nav__link">
-      Fit for purpose
-    </a>
-  </li>
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concepts/terms-and-definitions/" class="md-nav__link">
+        EDA Concepts
+      </a>
+    </li>
+  
 
     
       
       
       
 
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concepts/fit-for-purpose/" class="md-nav__link">
+        Fit for purpose
+      </a>
+    </li>
+  
 
-  <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-4" type="checkbox" id="nav-4">
+      
+      
+      
+
+  
+  
+  
     
-    <label class="md-nav__link" for="nav-4">
-      Design Patterns
-      <span class="md-nav__icon md-icon"></span>
-    </label>
-    <nav class="md-nav" aria-label="Design Patterns" data-md-level="1">
-      <label class="md-nav__title" for="nav-4">
-        <span class="md-nav__icon md-icon"></span>
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      <label class="md-nav__link" for="__nav_4">
         Design Patterns
-      </label>
-      <ul class="md-nav__list" data-md-scrollfix>
-        
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../../patterns/api_mgt/" title="API management" class="md-nav__link">
-      API management
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../../patterns/event-sourcing/" title="Event Sourcing" class="md-nav__link">
-      Event Sourcing
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../../patterns/cqrs/" title="CQRS" class="md-nav__link">
-      CQRS
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../../patterns/transactional-outbox/" title="Outbox" class="md-nav__link">
-      Outbox
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../../patterns/saga/" title="SAGA" class="md-nav__link">
-      SAGA
-    </a>
-  </li>
-
-        
-      </ul>
-    </nav>
-  </li>
-
-    
-      
-      
-      
-
-
-  <li class="md-nav__item md-nav__item--nested">
-    
-      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-5" type="checkbox" id="nav-5">
-    
-    <label class="md-nav__link" for="nav-5">
-      Technology
-      <span class="md-nav__icon md-icon"></span>
-    </label>
-    <nav class="md-nav" aria-label="Technology" data-md-level="1">
-      <label class="md-nav__title" for="nav-5">
         <span class="md-nav__icon md-icon"></span>
-        Technology
       </label>
-      <ul class="md-nav__list" data-md-scrollfix>
+      <nav class="md-nav" aria-label="Design Patterns" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Design Patterns
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../patterns/api_mgt/" class="md-nav__link">
+        API management
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../patterns/event-sourcing/" class="md-nav__link">
+        Event Sourcing
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../patterns/cqrs/" class="md-nav__link">
+        CQRS
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../patterns/transactional-outbox/" class="md-nav__link">
+        Outbox
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../patterns/saga/" class="md-nav__link">
+        SAGA
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" checked>
+      
+      <label class="md-nav__link" for="__nav_5">
+        Technology
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Technology" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Technology
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../kafka-overview/" class="md-nav__link">
+        Kafka Summary
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
         
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Producer - Consumer
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Producer - Consumer
+      </a>
+      
         
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../kafka-overview/" title="Kafka Summary" class="md-nav__link">
-      Kafka Summary
-    </a>
-  </li>
-
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#kafka-producers" class="md-nav__link">
+    Kafka Producers
+  </a>
+  
+    <nav class="md-nav" aria-label="Kafka Producers">
+      <ul class="md-nav__list">
         
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="./" title="Producer - Consumer" class="md-nav__link">
-      Producer - Consumer
-    </a>
-  </li>
-
+          <li class="md-nav__item">
+  <a href="#design-considerations" class="md-nav__link">
+    Design considerations
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#typical-producer-code-structure" class="md-nav__link">
+    Typical producer code structure
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kafka-useful-producer-apis" class="md-nav__link">
+    Kafka useful Producer APIs
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#properties-to-consider" class="md-nav__link">
+    Properties to consider
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-to-support-exactly-once-delivery" class="md-nav__link">
+    How to support exactly once delivery
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#more-readings" class="md-nav__link">
+    More readings
+  </a>
+  
+</li>
         
       </ul>
     </nav>
-  </li>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#kafka-consumers" class="md-nav__link">
+    Kafka Consumers
+  </a>
+  
+    <nav class="md-nav" aria-label="Kafka Consumers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#important-concepts" class="md-nav__link">
+    Important concepts
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#assess-number-of-consumers-needed" class="md-nav__link">
+    Assess number of consumers needed
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#offset-management" class="md-nav__link">
+    Offset management
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#producer-transaction" class="md-nav__link">
+    Producer transaction
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#consumer-lag" class="md-nav__link">
+    Consumer lag
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kafka-useful-consumer-apis" class="md-nav__link">
+    Kafka useful Consumer APIs
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    References
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
 
     
   </ul>
@@ -359,7 +537,8 @@
               </div>
             
             
-              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
                     
@@ -373,7 +552,7 @@
       <span class="md-nav__icon md-icon"></span>
       Table of contents
     </label>
-    <ul class="md-nav__list" data-md-scrollfix>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
   <a href="#kafka-producers" class="md-nav__link">
@@ -500,12 +679,9 @@
               </div>
             
           
-          <div class="md-content">
+          <div class="md-content" data-md-component="content">
             <article class="md-content__inner md-typeset">
               
-                
-                
-                  
                 
                 
                 <h1 id="kafka-producers-consumers">Kafka Producers &amp; Consumers</h1>
@@ -602,11 +778,10 @@
 As soon as you want to get acknowledge of all replicates, it is obvious to set idempotence to true. It does not impact performance.</p>
 </blockquote>
 <p>To add to this discussion, as topic may have multiple partitions, idempotent producers do not provide guarantees for writes across multiple Topic-Partition. For that Kafka supports atomic writes to all partitions, so that all records are saved or none of them are visible to consumers. This transaction control is done by using the producer transactional API, and a transactional protocol with coordinator and control message. Here is an example of such configuration that can be done in a producer constructor method:</p>
-<div class="highlight"><pre><span></span><code><span class="n">producerProps</span><span class="p">.</span><span class="na">put</span><span class="p">(</span><span class="s">&quot;enable.idempotence&quot;</span><span class="p">,</span> <span class="s">&quot;true&quot;</span><span class="p">);</span>
-<span class="n">producerProps</span><span class="p">.</span><span class="na">put</span><span class="p">(</span><span class="s">&quot;transactional.id&quot;</span><span class="p">,</span> <span class="s">&quot;prod-1&quot;</span><span class="p">);</span>
-<span class="n">KafkaProducer</span><span class="p">.</span><span class="na">initTransactions</span><span class="p">()</span>
+<div class="highlight"><pre><span></span><code><span class="n">producerProps</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;enable.idempotence&quot;</span><span class="o">,</span> <span class="s">&quot;true&quot;</span><span class="o">);</span>
+<span class="n">producerProps</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;transactional.id&quot;</span><span class="o">,</span> <span class="s">&quot;prod-1&quot;</span><span class="o">);</span>
+<span class="n">KafkaProducer</span><span class="o">.</span><span class="na">initTransactions</span><span class="o">()</span>
 </code></pre></div>
-
 <p><code>initTransactions()</code> registers the producer with the broker as one that can use transaction, identifying it by its <code>transactional.id</code> and a sequence number, or epoch. Epoch is used to avoid an old producer to commit a transaction while a new producer instance was created for that and continues its work.</p>
 <p>Kafka streams with consume-process-produce loop requires transaction and exactly once. Even committing its read offset is part of the transaction. So Producer API has a <a href="https://Kafka.apache.org/27/javadoc/org/apache/Kafka/clients/producer/KafkaProducer.html#sendOffsetsToTransaction-java.util.Map-org.apache.Kafka.clients.consumer.ConsumerGroupMetadata-">sendOffsetsToTransaction method</a>.</p>
 <p>See the <a href="https://cwiki.apache.org/confluence/display/Kafka/KIP-98+-+Exactly+Once+Delivery+and+Transactional+Messaging">KIP 98 for details.</a></p>
@@ -614,28 +789,25 @@ As soon as you want to get acknowledge of all replicates, it is obvious to set i
 <p>To support transaction a transaction coordinator keeps its states into an internal topic (TransactionLog). Control messages are added to the main topic but never exposed to the 'user', so that consumers have the knowledge if a transaction is committed or not.</p>
 <p>See the <a href="https://github.com/ibm-cloud-architecture/refarch-kc-order-ms/blob/53bbb8cdeac413883ca2ccf521eb0797a43f45a3/order-command-ms/src/main/java/ibm/gse/orderms/infrastructure/Kafka/OrderCommandProducer.java#L46">code in order command</a> microservice.</p>
 <p>The consumer is also interested to configure the reading of the transactional messages by defining the isolation level. Consumer waits to read transactional messages until the associated transaction has been committed. Here is an example of consumer code and configuration</p>
-<div class="highlight"><pre><span></span><code><span class="n">consumerProps</span><span class="p">.</span><span class="na">put</span><span class="p">(</span><span class="s">&quot;enable.auto.commit&quot;</span><span class="p">,</span> <span class="s">&quot;false&quot;</span><span class="p">);</span>
-<span class="n">consumerProps</span><span class="p">.</span><span class="na">put</span><span class="p">(</span><span class="s">&quot;isolation.level&quot;</span><span class="p">,</span> <span class="s">&quot;read_committed&quot;</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><span class="n">consumerProps</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;enable.auto.commit&quot;</span><span class="o">,</span> <span class="s">&quot;false&quot;</span><span class="o">);</span>
+<span class="n">consumerProps</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;isolation.level&quot;</span><span class="o">,</span> <span class="s">&quot;read_committed&quot;</span><span class="o">);</span>
 </code></pre></div>
-
 <p>With <code>read_committed</code>, no message that was written to the input topic in the same transaction will be read by this consumer until message replicas are all written.</p>
 <p>In consume-process-produce loop, producer commits its offset with code, and specifies the last offset to read.</p>
-<div class="highlight"><pre><span></span><code><span class="n">offsetsToCommit</span><span class="p">.</span><span class="na">put</span><span class="p">(</span><span class="n">partition</span><span class="p">,</span> <span class="k">new</span> <span class="n">OffsetAndMetadata</span><span class="p">(</span><span class="n">offset</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
-<span class="n">producer</span><span class="p">.</span><span class="na">sendOffsetsToTransaction</span><span class="p">(</span><span class="n">offsetsToCommit</span><span class="p">,</span> <span class="s">&quot;consumer-group-id&quot;</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><span class="n">offsetsToCommit</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">partition</span><span class="o">,</span> <span class="k">new</span> <span class="n">OffsetAndMetadata</span><span class="o">(</span><span class="n">offset</span> <span class="o">+</span> <span class="mi">1</span><span class="o">))</span>
+<span class="n">producer</span><span class="o">.</span><span class="na">sendOffsetsToTransaction</span><span class="o">(</span><span class="n">offsetsToCommit</span><span class="o">,</span> <span class="s">&quot;consumer-group-id&quot;</span><span class="o">);</span>
 </code></pre></div>
-
 <p>The producer then commits the transaction.</p>
-<div class="highlight"><pre><span></span><code><span class="k">try</span> <span class="p">{</span>
-    <span class="n">KafkaProducer</span><span class="p">.</span><span class="na">beginTransaction</span><span class="p">();</span>
-    <span class="n">ProducerRecord</span><span class="o">&lt;</span><span class="n">String</span><span class="p">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">record</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ProducerRecord</span><span class="o">&lt;&gt;</span><span class="p">(</span><span class="n">ApplicationConfig</span><span class="p">.</span><span class="na">ORDER_COMMAND_TOPIC</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">);</span>
-    <span class="n">Future</span><span class="o">&lt;</span><span class="n">RecordMetadata</span><span class="o">&gt;</span> <span class="n">send</span> <span class="o">=</span> <span class="n">KafkaProducer</span><span class="p">.</span><span class="na">send</span><span class="p">(</span><span class="n">record</span><span class="p">,</span> <span class="n">callBackFunction</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><span class="k">try</span> <span class="o">{</span>
+    <span class="n">KafkaProducer</span><span class="o">.</span><span class="na">beginTransaction</span><span class="o">();</span>
+    <span class="n">ProducerRecord</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">record</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ProducerRecord</span><span class="o">&lt;&gt;(</span><span class="n">ApplicationConfig</span><span class="o">.</span><span class="na">ORDER_COMMAND_TOPIC</span><span class="o">,</span> <span class="n">key</span><span class="o">,</span> <span class="n">value</span><span class="o">);</span>
+    <span class="n">Future</span><span class="o">&lt;</span><span class="n">RecordMetadata</span><span class="o">&gt;</span> <span class="n">send</span> <span class="o">=</span> <span class="n">KafkaProducer</span><span class="o">.</span><span class="na">send</span><span class="o">(</span><span class="n">record</span><span class="o">,</span> <span class="n">callBackFunction</span><span class="o">);</span>
 
-    <span class="n">KafkaProducer</span><span class="p">.</span><span class="na">commitTransaction</span><span class="p">();</span>
-<span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="n">KafkaException</span> <span class="n">e</span><span class="p">){</span>
-    <span class="n">KafkaProducer</span><span class="p">.</span><span class="na">abortTransaction</span><span class="p">();</span>
-<span class="p">}</span>
+    <span class="n">KafkaProducer</span><span class="o">.</span><span class="na">commitTransaction</span><span class="o">();</span>
+<span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">KafkaException</span> <span class="n">e</span><span class="o">){</span>
+    <span class="n">KafkaProducer</span><span class="o">.</span><span class="na">abortTransaction</span><span class="o">();</span>
+<span class="o">}</span>
 </code></pre></div>
-
 <p>There is an interesting <a href="https://www.baeldung.com/Kafka-exactly-once">article</a> from the Baeldung team about exactly once processing in Kafka with code example which we have re-used to implement the order processing in our <a href="https://ibm-cloud-architecture.github.io/refarch-kc/">Reefer Container Shipment reference application</a> and explained <a href="https://ibm-cloud-architecture.github.io/refarch-kc/orders/order/">here</a></p>
 <h3 id="more-readings">More readings</h3>
 <ul>
@@ -646,9 +818,8 @@ As soon as you want to get acknowledge of all replicates, it is obvious to set i
 <p>This note includes some quick summary of different practices we discovered and studied over time. It may be useful for beginner or seasoned developers who want a refresh after some time far away from Kafka...</p>
 <h3 id="important-concepts">Important concepts</h3>
 <p>Consumers belong to <strong>consumer groups</strong>. You specify the group name as part of the consumer connection parameters using the <code>group.id</code> configuration:</p>
-<div class="highlight"><pre><span></span><code>  <span class="n">properties</span><span class="p">.</span><span class="na">put</span><span class="p">(</span><span class="n">ConsumerConfig</span><span class="p">.</span><span class="na">GROUP_ID_CONFIG</span><span class="p">,</span>  <span class="n">groupid</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code>  <span class="n">properties</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">ConsumerConfig</span><span class="o">.</span><span class="na">GROUP_ID_CONFIG</span><span class="o">,</span>  <span class="n">groupid</span><span class="o">);</span>
 </code></pre></div>
-
 <p>Consumer groups are grouping consumers to cooperate to consume messages from one or more topics. Consumers can run in separate hosts and separate processes. The figure below represents 2 consumer apps belonging to one consumer group. Consumer 1 is getting data from 2 partitions, while consumer 2 is getting from one partition.</p>
 <p><img alt="consumer group" src="images/consumer-group.png" /></p>
 <p>When a consumer is unique in a group, it will get data from all partitions. There is always at least one consumer per partition.</p>
@@ -743,10 +914,30 @@ This consumer-per-partition pattern maximizes throughput. When consumers run in 
             </article>
           </div>
         </div>
+        
       </main>
       
         
 <footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        <a href="../kafka-overview/" class="md-footer__link md-footer__link--prev" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Kafka Summary
+            </div>
+          </div>
+        </a>
+      
+      
+    </nav>
   
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
@@ -756,6 +947,7 @@ This consumer-per-partition pattern maximizes throughput. When consumers run in 
         <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
           Material for MkDocs
         </a>
+        
       </div>
       
     </div>
@@ -763,19 +955,13 @@ This consumer-per-partition pattern maximizes throughput. When consumers run in 
 </footer>
       
     </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}, "search": "../../assets/javascripts/workers/search.fe42c31b.min.js", "version": null}</script>
     
-      <script src="../../assets/javascripts/vendor.3636a4ec.min.js"></script>
-      <script src="../../assets/javascripts/bundle.e9fe3281.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents"}</script>
-      
-      <script>
-        app = initialize({
-          base: "../..",
-          features: [],
-          search: Object.assign({
-            worker: "../../assets/javascripts/worker/search.5eca75d3.min.js"
-          }, typeof search !== "undefined" && search)
-        })
-      </script>
+    
+      <script src="../../assets/javascripts/bundle.d892486b.min.js"></script>
       
     
   </body>
