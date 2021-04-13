@@ -2,17 +2,17 @@ site_name: Travelport Event-Driven Microservice practices
 repo_url: https://github.ibm.com/Travelport-Rail/tvpt-docs/
 nav:
   - Home: index.md
-  - EDA Concepts: concepts/terms-and-definitions/
-  - Fit for purpose: concepts/fit-for-purpose/
+  - EDA Concepts: concepts/terms-and-definitions/index.md
+  - Fit for purpose: concepts/fit-for-purpose/index.md
   - Design Patterns:
-    - API management: patterns/api_mgt/
+    - API management: patterns/api_mgt/index.md
     - Event Sourcing: patterns/event-sourcing/
-    - CQRS: patterns/cqrs/
-    - Outbox: patterns/transactional-outbox/
-    - SAGA: patterns/saga/
+    - CQRS: patterns/cqrs/index.md
+    - Outbox: patterns/transactional-outbox/index.md
+    - SAGA: patterns/saga/index.md
   - Technology:
-    - Kafka Summary: technology/kafka-overview/
-    - Producer - Consumer: technology/kafka-producers-consumers/
+    - Kafka Summary: technology/kafka-overview/index.md
+    - Producer - Consumer: technology/kafka-producers-consumers/index.md
 
 theme: 
   name: material
