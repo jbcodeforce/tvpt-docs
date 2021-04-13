@@ -1,16 +1,16 @@
 # Modernization from API lifecycle
 
-In this note we summarize some of the best practices to introduce API management in their development practices and architecture patterns.
+This note summarizes some of the best practices to introduce API management in development practices and architecture patterns.
 
 ## Move from a pure API gateway to an API Management system
 
 An API Gateway helps provide security, control, integration, and optimized access to a full range of mobile, web, application programming interface (API), service-oriented architecture (SOA), B2B and cloud workloads. Gateways are used in the following patterns:
 
-* Security Gateway, placed between the consumer facing firewall and the system of records facing firewall (DMZ), it is used for both policy enforcement and consistent security policies across business channels.
-* API gateway, both as an internal and external gateway, with centralized service governance and policy enforcement, and with traffic monitoring.
-* Providing connectivity (HTTP) and mediation (XML, JSON) services in the internal network, close to the system of record. 
+* As a **Security Gateway**, placed between the consumer facing firewall and the system of records facing firewall (DMZ). It is used for both policy enforcement and consistent security policies across business channels.
+* As an **API Gateway**, both as an internal and external gateway, with centralized service governance and policy enforcement, and with traffic monitoring.
+* To provide **connectivity (HTTP) and mediation (XML, JSON) services** in the internal network, close to the system of record. 
 
-An API Management system supports a broader scope for API lifecycle management, including: 
+An API Management system supports a broader scope of features for API lifecycle management, including: 
 
 * API lifecycle management to active, retire, or stage API product.
 * API governance with security, access, and versioning.
