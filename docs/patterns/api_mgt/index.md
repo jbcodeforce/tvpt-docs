@@ -1,6 +1,6 @@
 # Modernization from API lifecycle
 
-This note summarizes some of the best practices to introduce API management in development practices and architecture patterns.
+This note summarizes some of the best practices for introducing API management in development practices and architecture patterns within an enterprise setting.
 
 ## Move from a pure API gateway to an API Management system
 
@@ -12,24 +12,24 @@ An API Gateway helps provide security, control, integration, and optimized acces
 
 An API Management system supports a broader scope of features for API lifecycle management, including: 
 
-* API lifecycle management to active, retire, or stage API product.
+* API lifecycle management to activate, retire, or stage an API product.
 * API governance with security, access, and versioning.
 * Analytics, dashboards, third party data offload for usage analysis.
-* API socialization based on a portal that allows self-service for the developer community.
-* API developer toolkit
+* API socialization based on a portal that allows self-service for the developer community.
+* An API developer toolkit to facilitate the creation and testing of APIs.
 
 ### Classical pain points
 
-When the following pain points are becoming more important, it is time to consider adopting a broader API management product:
+Some of the familiar pain points that indicate it is time to consider adopting a broader API management product include:
 
-* The current API details like endpoints, request/response message format, error conditions, test messages,
+* Current API details like endpoints, request/response message format, error conditions, test messages,
 SLAs are not easily available.
 * Difficult to tell which subscribers are really using the API and how often, without building a custom solution.
 * Difficult to differentiate between business-critical subscribers versus low value subscribers.
-* Complexity to manage different line of businesses and organizations.
-* No dynamic scaling that is built into the solution, which often means making hardware investment for max load or worst availability scenario.
-* Difficult to move from SOAP based web service to RESTful services to GraphQL
-* No support of AsynchAPI
+* Managing different lines of business and organizations is complex.
+* No dynamic scaling built into the solution, which often means making hardware investments  for max load or worst availability scenarios.
+* Difficult to move from SOAP based web services to RESTful services to GraphQL
+* No support for AsynchAPI
 * Ensure consistent security rules
 * Integrating CI/CD pipelines with API life cycle
 
