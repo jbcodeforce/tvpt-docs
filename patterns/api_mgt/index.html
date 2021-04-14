@@ -342,6 +342,26 @@
     Integration with messaging definition
   </a>
   
+    <nav class="md-nav" aria-label="Integration with messaging definition">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#asynch-api" class="md-nav__link">
+    Asynch API
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#schema-registry" class="md-nav__link">
+    Schema registry
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -563,6 +583,26 @@
     Integration with messaging definition
   </a>
   
+    <nav class="md-nav" aria-label="Integration with messaging definition">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#asynch-api" class="md-nav__link">
+    Asynch API
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#schema-registry" class="md-nav__link">
+    Schema registry
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -639,7 +679,7 @@ SLAs are not easily available.</li>
 <li>Managing different lines of business and organizations is complex.</li>
 <li>No dynamic scaling built into the solution, which often means making hardware investments  for max load or worst availability scenarios.</li>
 <li>Difficult to move from SOAP based web services to RESTful services to GraphQL</li>
-<li>No support for AsynchAPI</li>
+<li>No support for AsynchAPI to automate and formalize the documentation or code generation of your event-driven APIs.</li>
 <li>Ensure consistent security rules</li>
 <li>Integrating CI/CD pipelines with API life cycle</li>
 </ul>
@@ -664,8 +704,10 @@ The management service for the API management product, is here running on-premis
 <h3 id="kubernetes-deployment">Kubernetes deployment</h3>
 <p>The different API management services run in OpenShift and can ensure the high availability of each of the components. </p>
 <h2 id="integration-with-messaging-definition">Integration with messaging definition</h2>
-<p>Asynch API</p>
-<p>Schema registry</p>
+<h3 id="asynch-api">Asynch API</h3>
+<p>AsyncAPI is an open source initiative that focuses on making Event-Driven Architectures (EDAs) as easy to work with as REST APIs.</p>
+<p>The AsyncAPI specification (currently at 2.0.0) establishes standards for your events, from documentation to code generation, and  discovery to event management, enabling better governance of your asynchronous APIs.</p>
+<h3 id="schema-registry">Schema registry</h3>
 <h2 id="developer-experiences-and-practices">Developer experiences and practices</h2>
 <h3 id="swagger">Swagger</h3>
 <p>The OpenAPI document can be created top-down with a Swagger UI or bottom up using Annotation in the Java JAXRS resource classes. Either ways the API can be uploaded to the API management product.</p>
