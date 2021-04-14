@@ -82,6 +82,7 @@ Each partition can be replicated across a number of servers. The replication fac
 Partitions have one leader and zero or more followers.
 
 ![](./images/topic-replication.png)
+
 The leader manages all the read and write requests for the partition. The followers replicate the leader content. We are addressing data replication in the high availability section below.
 
 ## Zookeeper
