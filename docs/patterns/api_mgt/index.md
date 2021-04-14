@@ -62,7 +62,7 @@ Gateway services, Developer Portal services, and Analytics services are scoped t
 
 ### Kubernetes deployment
 
-The different API management services run in OpenShift and can ensure the high availability of each of the components. 
+The different API management services run in OpenShift and can ensure the high availability of each of the components. The diagram below illustrates 
 
 ## Integration with messaging definition
 
