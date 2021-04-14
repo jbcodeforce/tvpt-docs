@@ -1,0 +1,744 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-7.1.0">
+    
+    
+      
+        <title>Fit for purpose - Travelport Event-Driven Microservice practices</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.33e2939f.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ef6f36e2.min.css">
+        
+          
+          
+          <meta name="theme-color" content="">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>:root{--md-text-font-family:"Roboto";--md-code-font-family:"Roboto Mono"}</style>
+      
+    
+    
+    
+      <link rel="stylesheet" href="../../extra.css">
+    
+    
+      
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="blue-dark" data-md-color-accent="">
+  
+    
+    <script>function __prefix(e){return new URL("../..",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#fit-for-purpose" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Travelport Event-Driven Microservice practices" class="md-header__button md-logo" aria-label="Travelport Event-Driven Microservice practices" data-md-component="logo">
+      
+  <img src="../../images/cloud.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Travelport Event-Driven Microservice practices
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Fit for purpose
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        
+<a href="https://github.ibm.com/Travelport-Rail/tvpt-docs/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Github
+  </div>
+</a>
+      </div>
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Travelport Event-Driven Microservice practices" class="md-nav__button md-logo" aria-label="Travelport Event-Driven Microservice practices" data-md-component="logo">
+      
+  <img src="../../images/cloud.png" alt="logo">
+
+    </a>
+    Travelport Event-Driven Microservice practices
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.ibm.com/Travelport-Rail/tvpt-docs/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Github
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../terms-and-definitions/" class="md-nav__link">
+        EDA Concepts
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Fit for purpose
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Fit for purpose
+      </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#cloud-native-applications" class="md-nav__link">
+    Cloud native applications
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#modern-data-pipeline" class="md-nav__link">
+    Modern data pipeline
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mq-versus-kafka" class="md-nav__link">
+    MQ Versus Kafka
+  </a>
+  
+    <nav class="md-nav" aria-label="MQ Versus Kafka">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#direct-product-feature-comparison" class="md-nav__link">
+    Direct product feature comparison
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#events-and-messages" class="md-nav__link">
+    Events and Messages
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#messaging-versus-event-streaming" class="md-nav__link">
+    Messaging versus event streaming
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      <label class="md-nav__link" for="__nav_4">
+        Design Patterns
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Design Patterns" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Design Patterns
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../patterns/api_mgt/" class="md-nav__link">
+        API management
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../patterns/event-sourcing/" class="md-nav__link">
+        Event Sourcing
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../patterns/cqrs/" class="md-nav__link">
+        CQRS
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../patterns/transactional-outbox/" class="md-nav__link">
+        Outbox
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../patterns/saga/" class="md-nav__link">
+        SAGA
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      <label class="md-nav__link" for="__nav_5">
+        Technology
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Technology" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Technology
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../technology/kafka-overview/" class="md-nav__link">
+        Kafka Summary
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../technology/kafka-producers-consumers/" class="md-nav__link">
+        Producer - Consumer
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#cloud-native-applications" class="md-nav__link">
+    Cloud native applications
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#modern-data-pipeline" class="md-nav__link">
+    Modern data pipeline
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mq-versus-kafka" class="md-nav__link">
+    MQ Versus Kafka
+  </a>
+  
+    <nav class="md-nav" aria-label="MQ Versus Kafka">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#direct-product-feature-comparison" class="md-nav__link">
+    Direct product feature comparison
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#events-and-messages" class="md-nav__link">
+    Events and Messages
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#messaging-versus-event-streaming" class="md-nav__link">
+    Messaging versus event streaming
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                
+                <h1 id="fit-for-purpose">Fit for purpose</h1>
+<p>In this note we want to list some of the criteria to consider and assess during an event-driven architecture establishment work and as part of a continuous application governance. This is not fully exhaustive, but give good foundations for analysis and study.
+Fit for purpose practices should be done under a bigger program about application development governance and data governance.
+We can look at least to the following major subject:</p>
+<h2 id="cloud-native-applications">Cloud native applications</h2>
+<p>With the adoption of cloud native and microservice applications (12 factors app), the following needs to be addressed:</p>
+<ul>
+<li>Responsiveness with elastic scaling and resilience to failure. Which leads to adopt the '<a href="/advantages/reactive/">reactive</a> manifesto' and consider messaging as a way to communicate between apps. Elastic also may lead to multi cloud deployment practice.</li>
+<li>Address data sharing using a push model to improve decoupling, and performance. Instead of having each service using REST end point to pull the data from other services, each service push the change to their main business entity to a event backbone. Each future service which needs those data, pull from the messaging system.</li>
+<li>Adopting common pattern like <a href="../../patterns/cqrs/">command query responsibility segregation</a> to help implementing complex queries, joining different business entities owned by different microservices, <a href="../../patterns/event-sourcing/">event sourcing</a>, <a href="../../patterns/transactional-outbox">transactional outbox</a> and <a href="../../patterns/saga/">SAGA</a>.</li>
+<li>Addressing data eventual consistency to propagate change to other components versus ACID transaction.</li>
+<li>Support always-on approach with the deployment to multiple data centers (at least three) being active/active and being able to propagate data in all data centers.</li>
+</ul>
+<p>So the net: <strong>do we need to implement event-driven microservices because of those needs?</strong></p>
+<h2 id="modern-data-pipeline">Modern data pipeline</h2>
+<p>As new business applications need to react to events in real time, the adoption of <a href="/concepts/terms-and-definitions/#event-backbone">event backbone</a> is really part of the IT toolbox. Some existing deployment consider this to be their new data hub, where all the data about the 'customer' is accessible. Therefore, it is natural to assess the data movement strategy and offload some of those ETL jobs running at night, as most of those works are done already inside of the applications generating those data, but not those data are visible inside the backbone.</p>
+<p>We detailed the new architecture in <a href="introduction/reference-architecture/#modern-data-lake">this modern data lake</a> discussion, so from a <em>fit for purpose</em> point of view, we need to assess what those ETL jobs were doing and how much of those data is now visible to other to consume.</p>
+<p>With Event Backbone like Kafka, any consumer can join the consumption at any point of time, within the retention period. So if new data is kept like 10 days, within those 10 days a consumer can continuously get the data, no more wait for the next morning, just connected to the topic you need to.</p>
+<h2 id="mq-versus-kafka">MQ Versus Kafka</h2>
+<p>Consider queue system. like IBM MQ, for:</p>
+<ul>
+<li>Exactly once delivery, and to participate into two phase commit transaction</li>
+<li>Asynchronous request / reply communication: the semantic of the communication is for one component to ask a second command to do something on its data. This is a command pattern with delay on the response.</li>
+<li>Recall messages in queue are kept until consumer(s) got them.</li>
+</ul>
+<p>Consider Kafka as pub/sub and persistence system for:</p>
+<ul>
+<li>Publish events as immutable facts of what happen in an application</li>
+<li>Get continuous visibility of the data Streams</li>
+<li>Keep data once consumed, for future consumers, for replay-ability</li>
+<li>Scale horizontally the message consumption</li>
+</ul>
+<h3 id="direct-product-feature-comparison">Direct product feature comparison</h3>
+<table>
+<thead>
+<tr>
+<th>Kafka</th>
+<th>IBM MQ</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Kafka is a pub/sub engine with streams and connectors</td>
+<td>MQ is a queue, pub/sub engine with file transfer, MQTT, AMQP and other capabilities</td>
+</tr>
+<tr>
+<td>All topics are persistent </td>
+<td>Queues and topics can be persistent or non persistent</td>
+</tr>
+<tr>
+<td>All subscribers are durable</td>
+<td>Subscribers can be durable or non durable</td>
+</tr>
+<tr>
+<td>Adding brokers to requires little work (changing a configuration file)</td>
+<td>Adding QMGRs requires some work (Add the QMGRs to the cluster, add cluster channels.  Queues and Topics need to be added to the cluster.)</td>
+</tr>
+<tr>
+<td>Topics can be spread across brokers (partitions) with a command</td>
+<td>Queues and topics can be spread across a cluster by adding them to clustered QMGRs</td>
+</tr>
+<tr>
+<td>Producers and Consumers are aware of changes made to the cluster</td>
+<td>All MQ clients require a CCDT file to know of changes if not using a gateway QMGR</td>
+</tr>
+<tr>
+<td>Can have n number of replication partitions</td>
+<td>Can have 2 replicas (RDQM) of a QMGR, Multi Instance QMGRs</td>
+</tr>
+<tr>
+<td>Simple load balancing</td>
+<td>Load balancing can be simple or more complex using weights and affinity</td>
+</tr>
+<tr>
+<td>Can reread messages</td>
+<td>Cannot reread messages that have been already processed</td>
+</tr>
+<tr>
+<td>All clients connect using a single connection method</td>
+<td>MQ has Channels which allow different clients to connect, each having the ability to have different security requirements</td>
+</tr>
+<tr>
+<td>Data Streams processing built in, using Kafka topic for efficiency</td>
+<td>Stream processing is not built in, but using third party libraries, like MicroProfile Reactive Messaging, ReactiveX, etc.</td>
+</tr>
+<tr>
+<td>Has connection security, authentication security, and ACLs (read/write to Topic)</td>
+<td>Has connection security, channel security, authentication security, message security/encryption, ACLs for each Object, third party plugins (Channel Exits)</td>
+</tr>
+<tr>
+<td>Built on Java, so can run on any platform that support Java 8+</td>
+<td>Latest native on AIX, IBM i, Linux systems, Solaris, Windows, z/OS, run as Container</td>
+</tr>
+<tr>
+<td>Monitoring by using statistics provided by Kafka CLI, open source tools, Prometheus</td>
+<td>Monitoring using PCF API, MQ Explorer, MQ CLI (runmqsc), Third Party Tools (Tivoli, CA APM, Help Systems, Open Source, etc)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="events-and-messages">Events and Messages</h3>
+<p>There is a long history of <em>messaging</em> in IT systems.  You can easily see an event driven solution and events in the context of messaging systems and messages. However, there are different characteristics that are worth considering:</p>
+<ul>
+<li><strong>Messaging:</strong> Messages transport a payload and messages are persisted until consumed. Message consumers are typically directly targeted and related to the producer who cares that the message has been delivered and processed.</li>
+<li><strong>Events:</strong> Events are persisted as a replay-able stream history. Event consumers are not tied to the producer. An event is a record of something that has happened and so can't be changed. (You can't change history.)</li>
+</ul>
+<p><img alt="" src="images/evt-msg.png" /></p>
+<h3 id="messaging-versus-event-streaming">Messaging versus event streaming</h3>
+<p>We recommend reading <a href="https://developer.ibm.com/messaging/2018/05/18/comparing-messaging-event-streaming-use-cases/">this article</a> and <a href="https://developer.ibm.com/messaging/2019/02/05/comparing-messaging-pub-sub-and-event-streams/">this one</a>, to get insight on messaging (focusing on operations / actions to be performed by a system or service) versus events (focusing on the state / facts of a system with no knowledge of the downstream processing).</p>
+<p>To summarize messaging (like MQ) are to support:</p>
+<ul>
+<li><strong>Transient Data:</strong> data is only stored until a consumer has processed the message, or it expires.</li>
+<li><strong>Request / reply</strong> most of the time.</li>
+<li><strong>Targeted reliable delivery:</strong> targeted to the entity that will process the request or receive the response. Reliable with transaction support.</li>
+<li><strong>Highly Coupled</strong> producers and consumers</li>
+</ul>
+<p>For events:</p>
+<ul>
+<li><strong>Stream History:</strong> consumers are interested in historic events, not just the most recent.</li>
+<li><strong>Scalable Consumption:</strong> A single event is consumed by many consumers with limited impact as the number of consumers grow.</li>
+<li><strong>Immutable Data</strong></li>
+<li><strong>Loosely coupled / decoupled</strong> producers and consumers</li>
+</ul>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        <a href="../terms-and-definitions/" class="md-footer__link md-footer__link--prev" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              EDA Concepts
+            </div>
+          </div>
+        </a>
+      
+      
+        <a href="../../patterns/api_mgt/" class="md-footer__link md-footer__link--next" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              API management
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+        
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}, "search": "../../assets/javascripts/workers/search.fe42c31b.min.js", "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d892486b.min.js"></script>
+      
+    
+  </body>
+</html>

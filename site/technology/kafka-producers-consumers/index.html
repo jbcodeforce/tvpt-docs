@@ -1,0 +1,968 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-7.1.0">
+    
+    
+      
+        <title>Producer - Consumer - Travelport Event-Driven Microservice practices</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.33e2939f.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ef6f36e2.min.css">
+        
+          
+          
+          <meta name="theme-color" content="">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>:root{--md-text-font-family:"Roboto";--md-code-font-family:"Roboto Mono"}</style>
+      
+    
+    
+    
+      <link rel="stylesheet" href="../../extra.css">
+    
+    
+      
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="blue-dark" data-md-color-accent="">
+  
+    
+    <script>function __prefix(e){return new URL("../..",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#kafka-producers-consumers" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Travelport Event-Driven Microservice practices" class="md-header__button md-logo" aria-label="Travelport Event-Driven Microservice practices" data-md-component="logo">
+      
+  <img src="../../images/cloud.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Travelport Event-Driven Microservice practices
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Producer - Consumer
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        
+<a href="https://github.ibm.com/Travelport-Rail/tvpt-docs/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Github
+  </div>
+</a>
+      </div>
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Travelport Event-Driven Microservice practices" class="md-nav__button md-logo" aria-label="Travelport Event-Driven Microservice practices" data-md-component="logo">
+      
+  <img src="../../images/cloud.png" alt="logo">
+
+    </a>
+    Travelport Event-Driven Microservice practices
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.ibm.com/Travelport-Rail/tvpt-docs/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Github
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concepts/terms-and-definitions/" class="md-nav__link">
+        EDA Concepts
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concepts/fit-for-purpose/" class="md-nav__link">
+        Fit for purpose
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      <label class="md-nav__link" for="__nav_4">
+        Design Patterns
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Design Patterns" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Design Patterns
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../patterns/api_mgt/" class="md-nav__link">
+        API management
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../patterns/event-sourcing/" class="md-nav__link">
+        Event Sourcing
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../patterns/cqrs/" class="md-nav__link">
+        CQRS
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../patterns/transactional-outbox/" class="md-nav__link">
+        Outbox
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../patterns/saga/" class="md-nav__link">
+        SAGA
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" checked>
+      
+      <label class="md-nav__link" for="__nav_5">
+        Technology
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Technology" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Technology
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../kafka-overview/" class="md-nav__link">
+        Kafka Summary
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Producer - Consumer
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Producer - Consumer
+      </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#kafka-producers" class="md-nav__link">
+    Kafka Producers
+  </a>
+  
+    <nav class="md-nav" aria-label="Kafka Producers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#design-considerations" class="md-nav__link">
+    Design considerations
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#typical-producer-code-structure" class="md-nav__link">
+    Typical producer code structure
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kafka-useful-producer-apis" class="md-nav__link">
+    Kafka useful Producer APIs
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#properties-to-consider" class="md-nav__link">
+    Properties to consider
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-to-support-exactly-once-delivery" class="md-nav__link">
+    How to support exactly once delivery
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#more-readings" class="md-nav__link">
+    More readings
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#kafka-consumers" class="md-nav__link">
+    Kafka Consumers
+  </a>
+  
+    <nav class="md-nav" aria-label="Kafka Consumers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#important-concepts" class="md-nav__link">
+    Important concepts
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#assess-number-of-consumers-needed" class="md-nav__link">
+    Assess number of consumers needed
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#offset-management" class="md-nav__link">
+    Offset management
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#producer-transaction" class="md-nav__link">
+    Producer transaction
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#consumer-lag" class="md-nav__link">
+    Consumer lag
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kafka-useful-consumer-apis" class="md-nav__link">
+    Kafka useful Consumer APIs
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    References
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#kafka-producers" class="md-nav__link">
+    Kafka Producers
+  </a>
+  
+    <nav class="md-nav" aria-label="Kafka Producers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#design-considerations" class="md-nav__link">
+    Design considerations
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#typical-producer-code-structure" class="md-nav__link">
+    Typical producer code structure
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kafka-useful-producer-apis" class="md-nav__link">
+    Kafka useful Producer APIs
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#properties-to-consider" class="md-nav__link">
+    Properties to consider
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-to-support-exactly-once-delivery" class="md-nav__link">
+    How to support exactly once delivery
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#more-readings" class="md-nav__link">
+    More readings
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#kafka-consumers" class="md-nav__link">
+    Kafka Consumers
+  </a>
+  
+    <nav class="md-nav" aria-label="Kafka Consumers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#important-concepts" class="md-nav__link">
+    Important concepts
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#assess-number-of-consumers-needed" class="md-nav__link">
+    Assess number of consumers needed
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#offset-management" class="md-nav__link">
+    Offset management
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#producer-transaction" class="md-nav__link">
+    Producer transaction
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#consumer-lag" class="md-nav__link">
+    Consumer lag
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kafka-useful-consumer-apis" class="md-nav__link">
+    Kafka useful Consumer APIs
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    References
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                
+                <h1 id="kafka-producers-consumers">Kafka Producers &amp; Consumers</h1>
+<h2 id="kafka-producers">Kafka Producers</h2>
+<p>A producer is a thread safe Kafka client API that publishes records to the cluster. It uses buffers, thread pool, and serializers to send data. They are stateless: the consumers is responsible to manage the offsets of the message they read. When the producer connects via the initial bootstrap connection, it gets the metadata about the topic - partition and the leader broker to connect to. The assignment of messages to partition is done following different algorithms: round-robin if there is no key specified, using the hash code of the key, or custom defined.</p>
+<p>We recommend reading <a href="https://ibm.github.io/event-streams/about/producing-messages/">IBM Event streams producer guidelines</a> to understand how producers work with its configuration parameters.</p>
+<h3 id="design-considerations">Design considerations</h3>
+<p>When developing a record producer you need to assess the followings:</p>
+<ul>
+<li>What is the event payload to send? Is is a root aggregate, as defined in domain driven design, with value objects?  Does it need to be kept in sequence to be used as event sourcing? or order does not matter? Remember that when order is important, messages need to go to the same topic. When multiple partitions are used, the messages with the same key will go to the same partition to guaranty the order. See related discussions <a href="https://www.confluent.io/blog/put-several-event-types-Kafka-topic/">from Martin Kleppmann on confluent web site</a>. Also to be exhaustive, it is possible to get a producer doing retries that could generate duplicate records as acknowledges may take time to come: within a batch of n records, if the producer did not get all the n acknowledges on time, it may resend the batch. This is where 'idempotence' becomes important (see later section).</li>
+<li>Is there a strong requirement to manage the schema definition? If using one topic to manage all events about a business entity, then be sure to support a flexible <a href="https://avro.apache.org/docs/1.8.1/spec.html">avro schema</a>.</li>
+<li>What is the expected throughput to send events? Event size * average throughput combined with the expected latency help to compute buffer size. By default, the buffer size is set at 32Mb, but can be configured with <code>buffer.memory</code> property. (See <a href="https://Kafka.apache.org/27/javadoc/org/apache/Kafka/clients/producer/ProducerConfig.html">producer configuration API</a></li>
+<li>Can the producer batches events together to send them in batch over one send operation? By design Kafka producers batch events.</li>
+<li>Is there a risk for loosing communication? Tune the RETRIES_CONFIG and buffer size, and ensure to have at least 3 or even better 5, brokers within the cluster to maintain quorum in case of one failure. The client API is implemented to support reconnection.</li>
+<li>
+<p>When deploying Kafka on Kubernetes, it is important to proxy the broker URLs with a proxy server outside of kubernetes. The HAProxy needs to scale, and as the Kafka traffic may be important, it may make sense to have a dedicated HAProxy for clients to brokers traffic.</p>
+</li>
+<li>
+<p>Assess <em>exactly once</em> delivery requirement. Look at idempotent producer: retries will not introduce duplicate records (see <a href="#how-to-support-exactly-once-delivery">section</a> below).</p>
+</li>
+<li>Partitions help to scale the consumer processing of messages, but it also helps the producer to be more efficient as it can send message in parallel to different partition.</li>
+<li>Where the event timestamp comes from? Should the producer send operation set it or is it loaded from external data? Remember that <code>LogAppendTime</code> is considered to be processing time, and <code>CreateTime</code> is considered to be event time.</li>
+</ul>
+<h3 id="typical-producer-code-structure">Typical producer code structure</h3>
+<p>The producer code, using java or python API, does the following steps:</p>
+<ul>
+<li>define producer properties</li>
+<li>create a producer instance</li>
+<li>Connect to the bootstrap URL, get a broker leader</li>
+<li>send event records and get resulting metadata.</li>
+</ul>
+<p>Producers are thread safe. The send() operation is asynchronous and returns immediately once record has been stored in the buffer of records, and it is possible to add a callback to process the broker acknowledgements.</p>
+<p><a href="https://github.com/ibm-cloud-architecture/eda-quickstarts/tree/main/quarkus-Kafka-producer">Here is an example of producer code from the our quick start.</a></p>
+<h3 id="kafka-useful-producer-apis">Kafka useful Producer APIs</h3>
+<p>Here is a list of common API to use in your producer and consumer code.</p>
+<ul>
+<li><a href="https://Kafka.apache.org/11/javadoc/org/apache/Kafka/clients/producer/KafkaProducer.html">KafkaProducer</a> A Kafka client that publishes records to the Kafka cluster.  The send method is asynchronous. A producer is thread safe so we can have per topic to interface.</li>
+<li><a href="https://Kafka.apache.org/11/javadoc/org/apache/Kafka/clients/producer/ProducerRecord.html">ProducerRecord</a> to be published to a topic</li>
+<li><a href="https://Kafka.apache.org/11/javadoc/org/apache/Kafka/clients/producer/RecordMetadata.html">RecordMetadata</a> metadata for a record that has been acknowledged by the server.</li>
+</ul>
+<h3 id="properties-to-consider">Properties to consider</h3>
+<p>The following properties are helpful to tune at each topic and producer and will vary depending on the requirements:  </p>
+<table>
+<thead>
+<tr>
+<th>Properties</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BOOTSTRAP_SERVERS_CONFIG</td>
+<td>A comma-separated list of host:port values for all the brokers deployed. So producer may use any brokers</td>
+</tr>
+<tr>
+<td>KEY_SERIALIZER_CLASS_CONFIG and VALUE_SERIALIZER_CLASS_CONFIG</td>
+<td>convert the keys and values into byte arrays. Using default String serializer should be a good solution for Json payload. For streaming app, use customer serializer.</td>
+</tr>
+<tr>
+<td>ACKS_CONFIG</td>
+<td>specifies the minimum number of acknowledgments from a broker that the producer will wait for before considering a record send completed. Values = all, 0, and 1. 0 is for fire and forget.</td>
+</tr>
+<tr>
+<td>RETRIES_CONFIG</td>
+<td>specifies the number of times to attempt to resend a batch of events.</td>
+</tr>
+<tr>
+<td>ENABLE_IDEMPOTENCE_CONFIG</td>
+<td>Set to true, the number of retries will be maximized, and the acks will be set to <code>All</code>.</td>
+</tr>
+<tr>
+<td>TRANSACTION_ID</td>
+<td>A unique identifier for a producer. In case of multiple producer instances, a same ID will mean a second producers can commit the transaction. Epoch number, linked to the process ID, avoid having two producers doing this commit. If no transaction ID is specified, the transaction will be valid within a single session.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="how-to-support-exactly-once-delivery">How to support exactly once delivery</h3>
+<p>Knowing that exactly once delivery is one of the hardest problems to solve in distributed systems, how Kafka does it?. Broker can fail or a network may respond slowly while a producer is trying to send events.</p>
+<p>Producer can set acknowledge level to control the delivery semantic to ensure not loosing data. The following semantic is supported:</p>
+<ul>
+<li><strong>At least once</strong>: means the producer set ACKS_CONFIG=1 and get an acknowledgement message when the message sent, has been written to at least one time in the cluster (assume replicas = 3).  If the ack is not received, the producer may retry, which may generate duplicate records in case the broker stops after saving to the topic and before sending back the acknowledgement message.</li>
+<li><strong>At most semantic</strong>: means the producer will not do retry in case of no acknowledge received. It may create log and compensation, but the message may be lost.</li>
+<li><strong>Exactly once</strong> means even if the producer sends the message twice the system will send only one message to the consumer. Once the consumer commits the read offset, it will not receive the message again, even if it restarts. Consumer offset needs to be in sync with produced event.</li>
+</ul>
+<p>At the best case scenario, with a replica factor set to 3, a broker responding on time to the producer, and with a consumer committing its offset and reading from the last committed offset it is possible to get only one message end to end.</p>
+<p><img alt="" src="images/exactly-one-0.png" /></p>
+<p>Sometime the brokers will not send acknowledge in expected time, and the producer may decide to send the records again, generating duplicate...</p>
+<p><img alt="" src="images/exactly-one-1.png" /></p>
+<p>To avoid duplicate message at the broker level, when acknowledge is set to ALL, the producer can also set idempotence flag: ENABLE_IDEMPOTENCE_CONFIG = true. With the idempotence property, the record sent, has a sequence number and a producer id, so that the broker keeps the last sequence number per producer and per partition. If a message is received with a lower sequence number, it means a producer is doing some retries on record already processed, so the broker will drop it, to avoid having duplicate records per partition. If the id is greater than current id known by the broker, the broker will create an OutOfSequence exception, which may be fatal as records may have been lost.</p>
+<p><img alt="Exactly once" src="images/exactly-one-2.png" /></p>
+<p>The sequence number is persisted in a log so even in case of broker leader failure, the new leader will have a good view of the states of the system.</p>
+<blockquote>
+<p>The replication mechanism guarantees that, when a message is written to the leader replica, it will be replicated to all available replicas.
+As soon as you want to get acknowledge of all replicates, it is obvious to set idempotence to true. It does not impact performance.</p>
+</blockquote>
+<p>To add to this discussion, as topic may have multiple partitions, idempotent producers do not provide guarantees for writes across multiple Topic-Partition. For that Kafka supports atomic writes to all partitions, so that all records are saved or none of them are visible to consumers. This transaction control is done by using the producer transactional API, and a transactional protocol with coordinator and control message. Here is an example of such configuration that can be done in a producer constructor method:</p>
+<div class="highlight"><pre><span></span><code><span class="n">producerProps</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;enable.idempotence&quot;</span><span class="o">,</span> <span class="s">&quot;true&quot;</span><span class="o">);</span>
+<span class="n">producerProps</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;transactional.id&quot;</span><span class="o">,</span> <span class="s">&quot;prod-1&quot;</span><span class="o">);</span>
+<span class="n">KafkaProducer</span><span class="o">.</span><span class="na">initTransactions</span><span class="o">()</span>
+</code></pre></div>
+<p><code>initTransactions()</code> registers the producer with the broker as one that can use transaction, identifying it by its <code>transactional.id</code> and a sequence number, or epoch. Epoch is used to avoid an old producer to commit a transaction while a new producer instance was created for that and continues its work.</p>
+<p>Kafka streams with consume-process-produce loop requires transaction and exactly once. Even committing its read offset is part of the transaction. So Producer API has a <a href="https://Kafka.apache.org/27/javadoc/org/apache/Kafka/clients/producer/KafkaProducer.html#sendOffsetsToTransaction-java.util.Map-org.apache.Kafka.clients.consumer.ConsumerGroupMetadata-">sendOffsetsToTransaction method</a>.</p>
+<p>See the <a href="https://cwiki.apache.org/confluence/display/Kafka/KIP-98+-+Exactly+Once+Delivery+and+Transactional+Messaging">KIP 98 for details.</a></p>
+<p>In case of multiple partitions, the broker will store a list of all updated partitions for a given transaction.</p>
+<p>To support transaction a transaction coordinator keeps its states into an internal topic (TransactionLog). Control messages are added to the main topic but never exposed to the 'user', so that consumers have the knowledge if a transaction is committed or not.</p>
+<p>See the <a href="https://github.com/ibm-cloud-architecture/refarch-kc-order-ms/blob/53bbb8cdeac413883ca2ccf521eb0797a43f45a3/order-command-ms/src/main/java/ibm/gse/orderms/infrastructure/Kafka/OrderCommandProducer.java#L46">code in order command</a> microservice.</p>
+<p>The consumer is also interested to configure the reading of the transactional messages by defining the isolation level. Consumer waits to read transactional messages until the associated transaction has been committed. Here is an example of consumer code and configuration</p>
+<div class="highlight"><pre><span></span><code><span class="n">consumerProps</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;enable.auto.commit&quot;</span><span class="o">,</span> <span class="s">&quot;false&quot;</span><span class="o">);</span>
+<span class="n">consumerProps</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;isolation.level&quot;</span><span class="o">,</span> <span class="s">&quot;read_committed&quot;</span><span class="o">);</span>
+</code></pre></div>
+<p>With <code>read_committed</code>, no message that was written to the input topic in the same transaction will be read by this consumer until message replicas are all written.</p>
+<p>In consume-process-produce loop, producer commits its offset with code, and specifies the last offset to read.</p>
+<div class="highlight"><pre><span></span><code><span class="n">offsetsToCommit</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">partition</span><span class="o">,</span> <span class="k">new</span> <span class="n">OffsetAndMetadata</span><span class="o">(</span><span class="n">offset</span> <span class="o">+</span> <span class="mi">1</span><span class="o">))</span>
+<span class="n">producer</span><span class="o">.</span><span class="na">sendOffsetsToTransaction</span><span class="o">(</span><span class="n">offsetsToCommit</span><span class="o">,</span> <span class="s">&quot;consumer-group-id&quot;</span><span class="o">);</span>
+</code></pre></div>
+<p>The producer then commits the transaction.</p>
+<div class="highlight"><pre><span></span><code><span class="k">try</span> <span class="o">{</span>
+    <span class="n">KafkaProducer</span><span class="o">.</span><span class="na">beginTransaction</span><span class="o">();</span>
+    <span class="n">ProducerRecord</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">record</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ProducerRecord</span><span class="o">&lt;&gt;(</span><span class="n">ApplicationConfig</span><span class="o">.</span><span class="na">ORDER_COMMAND_TOPIC</span><span class="o">,</span> <span class="n">key</span><span class="o">,</span> <span class="n">value</span><span class="o">);</span>
+    <span class="n">Future</span><span class="o">&lt;</span><span class="n">RecordMetadata</span><span class="o">&gt;</span> <span class="n">send</span> <span class="o">=</span> <span class="n">KafkaProducer</span><span class="o">.</span><span class="na">send</span><span class="o">(</span><span class="n">record</span><span class="o">,</span> <span class="n">callBackFunction</span><span class="o">);</span>
+
+    <span class="n">KafkaProducer</span><span class="o">.</span><span class="na">commitTransaction</span><span class="o">();</span>
+<span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">KafkaException</span> <span class="n">e</span><span class="o">){</span>
+    <span class="n">KafkaProducer</span><span class="o">.</span><span class="na">abortTransaction</span><span class="o">();</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>There is an interesting <a href="https://www.baeldung.com/Kafka-exactly-once">article</a> from the Baeldung team about exactly once processing in Kafka with code example which we have re-used to implement the order processing in our <a href="https://ibm-cloud-architecture.github.io/refarch-kc/">Reefer Container Shipment reference application</a> and explained <a href="https://ibm-cloud-architecture.github.io/refarch-kc/orders/order/">here</a></p>
+<h3 id="more-readings">More readings</h3>
+<ul>
+<li><a href="http://cloudurable.com/blog/Kafka-tutorial-Kafka-producer-advanced-java-examples/index.html">Creating advanced Kafka producer in java - Cloudurable</a></li>
+<li><a href="https://www.confluent.io/blog/exactly-once-semantics-are-possible-heres-how-apache-Kafka-does-it/">Confluent blog: Exactly-once Semantics are Possible: Here’s How Kafka Does it</a></li>
+</ul>
+<h2 id="kafka-consumers">Kafka Consumers</h2>
+<p>This note includes some quick summary of different practices we discovered and studied over time. It may be useful for beginner or seasoned developers who want a refresh after some time far away from Kafka...</p>
+<h3 id="important-concepts">Important concepts</h3>
+<p>Consumers belong to <strong>consumer groups</strong>. You specify the group name as part of the consumer connection parameters using the <code>group.id</code> configuration:</p>
+<div class="highlight"><pre><span></span><code>  <span class="n">properties</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">ConsumerConfig</span><span class="o">.</span><span class="na">GROUP_ID_CONFIG</span><span class="o">,</span>  <span class="n">groupid</span><span class="o">);</span>
+</code></pre></div>
+<p>Consumer groups are grouping consumers to cooperate to consume messages from one or more topics. Consumers can run in separate hosts and separate processes. The figure below represents 2 consumer apps belonging to one consumer group. Consumer 1 is getting data from 2 partitions, while consumer 2 is getting from one partition.</p>
+<p><img alt="consumer group" src="images/consumer-group.png" /></p>
+<p>When a consumer is unique in a group, it will get data from all partitions. There is always at least one consumer per partition.</p>
+<p>One broker is responsible to be the consumer group coordinator which is responsible for assigning partitions to the consumers in the group. The first consumer to join the group will be the group leader. It will get the list of consumers and it is responsible for assigning a subset of partitions to each consumer</p>
+<p>Membership in a consumer group is maintained dynamically. Consumers send hearbeats to the group coordinator broker (see configuration like <a href="https://Kafka.apache.org/documentation/#consumerconfigs_heartbeat.interval.ms">heartbeat.interval.ms</a>) and <code>session.timeout.ms</code>. Partition assignement is done by different strategies from range, round robin, sticky and cooperative sticky (See <a href="https://Kafka.apache.org/documentation/#consumerconfigs_partition.assignment.strategy">partition assignement strategy</a>). </p>
+<p>When a consumer fails, the partitions assigned to it will be reassigned to another consumer in the same group. When a new consumer joins the group, partitions will be moved from existing consumers to the new one. Group rebalancing is also used when new partitions are added to one of the subscribed topics. The group will automatically detect the new partitions through periodic metadata refreshes and assign them to members of the group. During a rebalance, depending of the strategy, consumers may not consume messages (Need Kafka 2.4+ to get cooperative balancing feature). </p>
+<p><img alt="" src="images/consumer-groups.png" /></p>
+<p>Implementing a Topic consumer is using the Kafka <a href="https://Kafka.apache.org/24/javadoc/?org/apache/Kafka/clients/consumer/KafkaConsumer.html">KafkaConsumer class</a> which the API documentation is a must read.</p>
+<p>It is interesting to note that:</p>
+<ul>
+<li>To support the same semantic of a queue processing like other integration messaging systems, you need to have all the consumers assigned to a single consumer group, so that each record delivery would be balanced over the group like with a queue.</li>
+<li>To support pub/sub like other messaging systems, each consumer would have its own consumer group, and subscribes to all the records published to the topic.</li>
+<li>With <code>client.rack</code> setting a consumer can consume from a local replica, which will have better latency when using a stretched cluster.</li>
+</ul>
+<p>The implementation is simple for a single thread consumer, and the code structure looks like:</p>
+<ul>
+<li>prepare the consumer properties</li>
+<li>create an instance of KafkaConsumer to subscribe to at least one topic</li>
+<li>loop on polling events: the consumer ensures its liveness with the broker via the poll API. It will get n records per poll.</li>
+<li>process the ConsumerRecords and commit the offset by code or use the autocommit attribute of the consumer</li>
+</ul>
+<p>As long as the consumer continues to call poll(), it will stay in the group and continue to receive messages from the partitions it was assigned. When the consumer does not send heartbeats for a duration of <code>session.timeout.ms</code>, then it is considered dead and its partitions will be reassigned.</p>
+<p>Examples of Java consumers can be found in <a href="https://github.com/ibm-cloud-architecture/refarch-kc-order-ms/blob/master/order-command-ms/src/main/java/ibm/gse/orderms/infrastructure/Kafka/OrderEventAgent.java">the order management microservice project</a> under the order-command-ms folder.</p>
+<p>We are proposing a deep dive study on this manual offset commit in <a href="https://github.com/jbcodeforce/quarkus-event-driven-consumer-microservice-template">this consumer code</a> that persists events to cassandra.
+Example of Javascript implementation is in <a href="https://github.com/ibm-cloud-architecture/refarch-kc-ms/blob/master/voyages-ms/server/utils/Kafka.js">this repository/folder</a></p>
+<p>But the complexity comes from the offset management and multithreading needs. So the following important considerations need to be addressed while implementing a consumer.</p>
+<h3 id="assess-number-of-consumers-needed">Assess number of consumers needed</h3>
+<p>The KafkaConsumer is not thread safe so it is recommended to run in a unique thread. But if needed you can implement a multi-threads solution, but as each thread will open a TCP connection to the Kafka broker, be sure to close the connection to avoid memory leak. The alternate is to start n processes (JVM process).</p>
+<p>If you need multiple consumers running in parallel to scale horizontally, you have to define multiple partitions while configuring the topic and use fine-grained control over offset persistence. You’ll use one consumer per partition of a topic.
+This consumer-per-partition pattern maximizes throughput. When consumers run in parallel and you use multiple threads per consumer you need to be sure the total number of threads across all instances do not exceed the total number of partitions in the topic.</p>
+<p>Also, a consumer can subscribe to multiple topics. The brokers are doing rebalancing of the assignment of topic-partition to a consumer that belong to a group. When creating a new consumer you can specify the group id in the options.</p>
+<h3 id="offset-management">Offset management</h3>
+<p>Recall that offset is just a numeric identifier of a consumer position of the last record read within a partition. Consumers periodically need to commit the offsets they have received, to present a recovery point in case of failure. To commit offset (via API or automatically) the consumer sends a message to Kafka broker to the special topic named <code>__consumer_offsets</code> to keep the committed offset for each partition. </p>
+<p>Consumers do a read commit for the last processed record: </p>
+<p><img alt="of-1" src="images/offsets.png" /></p>
+<p>When a consumer starts and is assigned a partition to consume, it will start at its group's committed offset or latest or earliest as <a href="https://Kafka.apache.org/documentation/#auto.offset.reset">auto.offset.reset</a> (When there is a committed offset, the auto.offset.reset property is not used).</p>
+<p>As shown in the figure below, it is possible to get duplicates if the last message processed by the consumer before crashing and committing its offset, is bigger than the last commited offset.</p>
+<p><img alt="" src="images/kafka-commit-offset.png" />
+<em>Source: Kafka definitive guide book from Todd Palino, Gwen Shapira</em></p>
+<p>In the opposite, if the last committed offset is after the last processed messages and there were multiple messages returned in the poll, then those messages may be lost.</p>
+<p><img alt="" src="./images/Kafka-commit-offset-2.png" /></p>
+<p>It is possible to commit by calling API or by setting some properties at the consumer creation level to enable autocommit offset <a href="https://Kafka.apache.org/documentation/#consumerconfigs_enable.auto.commit">enable.auto.commit</a>.</p>
+<p>When doing manual offset commit, there are two types of approaches:</p>
+<ul>
+<li>offsets—synchronous</li>
+<li>asynchronous</li>
+</ul>
+<p>As soon as you are coding manual commit, it is strongly recommended to implement the ConsumerRebalanceListener interface to be able to do the state modifications when the topic is rebalanced.</p>
+<p>If a consumer fails after processing a message but before committing its offset, the committed offset information will not reflect the processing of the message. </p>
+<p><img alt="of-2" src="images/offsets-2.png" /></p>
+<p>This means that the message will be processed again by the next consumer in that group to be assigned the partition.</p>
+<p>Assess if it is acceptable to loose messages from topic.  If so, when a consumer restarts it will start consuming the topic from the latest committed offset within the partition allocated to itself.</p>
+<p>As storing a message to an external system and storing the offsets are two separate operations, and in case of failure between them, it is possible to have stale offsets, which will introduce duplicate messages when consumers restart to process from last known committed offset. In this case, consumer's idempotence is needed to support updating the same row in the table, or use the event timestamp as update timestamp in the database record or use other clever solution.</p>
+<p>As presented in the producer coding practice, using transaction to support "exactly-once", also means the consumers should read committed data only. This can be achieved by setting the <code>isolation.level=read_committed</code> in the consumer's configuration. The last offset will be the first message in the partition belonging to an open not yet committed transaction. This offset is known as the 'Last Stable Offset'(LSO).</p>
+<p>Finally in the case where consumers are set to auto commit, it means the offset if committed at the poll() level and if the service crashed while processing of this record as: </p>
+<p><img alt="of-3" src="images/offsets-3.png" /></p>
+<p>then the record (partition 0 - offset 4) will never be processed.</p>
+<h3 id="producer-transaction">Producer transaction</h3>
+<p>When consuming from a Kafka topic and producing to another topic, like in Kafka Stream, but also in CQRS implementation, we can use the producer's transaction feature to send the committed offset message and the new records in the second topic in the same transaction.  This can be seen as a <code>consume-transform-produce</code> loop pattern so that every input event is processed exactly once. </p>
+<p>An example of such pattern in done in the <a href="https://github.com/ibm-cloud-architecture/refarch-kc-order-ms/tree/master/order-command-ms">order management microservice - command part</a>.</p>
+<h3 id="consumer-lag">Consumer lag</h3>
+<p>The consumer lag for a partition is the difference between the offset of the most recently published message and the consumer's committed offset.</p>
+<p>If the lag starts to grow, it means the consumer is not able to keep up with the producer's pace.</p>
+<p>The risk, is that slow consumer may fall behind, and when partition management may remove old log segments, leading the consumer to jump forward to continnue on the next log segment. Consumer may have lost messages.</p>
+<p><img alt="" src="images/offsets-4.png" /></p>
+<p>You can use the Kafka-consumer-groups tool to see the consumer lag.</p>
+<h3 id="kafka-useful-consumer-apis">Kafka useful Consumer APIs</h3>
+<ul>
+<li><a href="https://Kafka.apache.org/11/javadoc/org/apache/Kafka/clients/consumer/KafkaConsumer.html">KafkaConsumer</a> a topic consumer which support:</li>
+<li>transparently handles brokers failure</li>
+<li>transparently adapt to partition migration within the cluster</li>
+<li>support grouping for load balancing among consumers</li>
+<li>maintains TCP connections to the necessary brokers to fetch data</li>
+<li>subscribe to multiple topics and being part of consumer groups</li>
+<li>each partition is assigned to exactly one consumer in the group</li>
+<li>if a process fails, the partitions assigned to it will be reassigned to other consumers in the same group</li>
+<li><a href="https://Kafka.apache.org/11/javadoc/org/apache/Kafka/clients/consumer/ConsumerRecords.html">ConsumerRecords</a> holds the list ConsumerRecord per partition for a particular topic.</li>
+<li><a href="https://Kafka.apache.org/11/javadoc/org/apache/Kafka/clients/consumer/ConsumerRecord.html">ConsumerRecord</a> A key/value pair to be received from Kafka. This also consists of a topic name and a partition number from which the record is being received, an offset that points to the record in a Kafka partition, and a timestamp</li>
+</ul>
+<h3 id="references">References</h3>
+<ul>
+<li><a href="https://ibm.github.io/event-streams/about/consuming-messages/">IBM Event Streams - Consuming messages</a></li>
+<li><a href="https://Kafka.apache.org/10/javadoc/?org/apache/Kafka/clients/consumer/KafkaConsumer.html">KafkaConsumer class</a></li>
+</ul>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        <a href="../kafka-overview/" class="md-footer__link md-footer__link--prev" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Kafka Summary
+            </div>
+          </div>
+        </a>
+      
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+        
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}, "search": "../../assets/javascripts/workers/search.fe42c31b.min.js", "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d892486b.min.js"></script>
+      
+    
+  </body>
+</html>
