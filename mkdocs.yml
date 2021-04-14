@@ -16,7 +16,7 @@ nav:
 
 theme: 
   name: material
-  logo: 'images/cloud.png'
+  logo: 'images/travelportlogo.png'
   feature:
     tabs: true
   palette:
