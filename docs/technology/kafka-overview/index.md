@@ -81,7 +81,7 @@ are used in Streams processing for stateful operator to keep aggregate or groupi
 Each partition can be replicated across a number of servers. The replication factor is captured by the number of brokers to be used for replication. To ensure high availability it should be set to at least a value of three.
 Partitions have one leader and zero or more followers.
 
-![](./images/topic-replication.png)
+![Topic replication](./images/topic-replication.png)
 
 The leader manages all the read and write requests for the partition. The followers replicate the leader content. We are addressing data replication in the high availability section below.
 
@@ -131,7 +131,7 @@ With multiple racks you will have better fault tolerance, as one rack failure wi
 As introduced on the topic section above, data are replicated between brokers. The following diagram illustrates the best case scenario where followers fetch data from
 the partition leader, acknowledge the replications:
 
-![](./images/topic-replica-seq.png)
+![sequence](./images/topic-replica-seq.png)
 
 Usually replicas is done in-sync, and the configuration settings specify the number of replicas in-sync needed: for example, a replicas 3 can have a minimum in-sync of 2,
 to tolerate 1 out of sync replica (1 broker outage).
@@ -151,7 +151,7 @@ If a leader fails, followers elect a new one. The leadership of partitions is dy
 Applications do not need to take specific actions to handle the change in the leadership of a partition. The Kafka client library automatically reconnects to the new leader, although you will see increased latency while the cluster settles.
 Any replica in the ISR is eligible to be elected leader.
 
-![](./images/topic-replica-fail.png)
+![Failing replicas](./images/topic-replica-fail.png)
 
 When a leader waits to get acknowledge before committing a message there will be more potential leaders. With (#failure + 1) replicas there is no data lost.
 But there is a risk of having the single broker separated from the zookeeper cluster when network partition occurs. To tolerate f failures, both the majority
@@ -160,7 +160,7 @@ But there is a risk of having the single broker separated from the zookeeper clu
 Having higher replicas number like 5, will duplicate 5 times the data (more disk used) and impact throughput as data is sent 1+4 times over the network.
 
 Another important design distinction is that Kafka does not require that crashed nodes recover with all their data intact. 
-Kafka protocol for allowing a replica to rejoin the ISR ensures that before rejoining, it must fully re-sync again even if it lost unflushed data in its crash.
+Kafka protocol for allowing a replica to rejoin the ISR ensures that before rejoining, it must fully re-sync again even if it lost un-flushed data in its crash.
 
 When a producer sends message, it can control how to get the response from the committed message: wait for all replicas to succeed, wait for one acknowledge, fire and forget.
 Consumers receive only committed messages.
