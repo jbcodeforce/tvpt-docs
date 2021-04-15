@@ -3,6 +3,9 @@
 Read in [the book format](https://pages.github.ibm.com/Travelport-Rail/tvpt-docs/)
 
 
+Other [public site](https://jbcodeforce.github.com/tvpt-docs/)
+
+
 ## Building this booklet locally
 
 The content of this repository is written with markdown files, packaged with [MkDocs](https://www.mkdocs.org/) and can be built into a book-readable format by MkDocs build processes.

@@ -30,7 +30,7 @@ The typical use cases where **Kafka** helps are:
 
 The diagram below presents Kafka's key components:
 
-![Kafka architecture](./images/Kafka-hl-view.png)
+![Kafka architecture](images/Kafka-hl-view.png)
 
 ### Brokers
 
@@ -52,7 +52,7 @@ Topics represent end points to publish and consume records.
 
 The figure below illustrates one topic having multiple partitions, replicated within the broker cluster:
 
-![topics](./images/Kafka-topic-partition.png)
+![topics](images/Kafka-topic-partition.png)
 
 ### Partitions
 
@@ -78,7 +78,7 @@ are used in Streams processing for stateful operator to keep aggregate or groupi
 Each partition can be replicated across a number of servers. The replication factor is captured by the number of brokers to be used for replication. To ensure high availability it should be set to at least a value of three.
 Partitions have one leader and zero or more followers.
 
-![Topic replication](./images/topic-replication.png)
+![Topic replication](images/topic-replication.png)
 
 The leader manages all the read and write requests for the partition. The followers replicate the leader content. We are addressing data replication in the high availability section below.
 
