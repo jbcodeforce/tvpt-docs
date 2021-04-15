@@ -1,5 +1,5 @@
 site_name: Travelport Event-Driven Microservice practices
-repo_url: https://github.ibm.com/Travelport-Rail/tvpt-docs/
+repo_url: https://github.com/jbcodeforce/tvpt-docs/
 nav:
   - Home: index.md
   - EDA Concepts: concepts/terms-and-definitions/index.md

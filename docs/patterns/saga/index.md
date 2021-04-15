@@ -1,8 +1,3 @@
----
-title: Patterns in Event-Driven Architectures
-description: Saga pattern
----
-
 # Saga
 
 ## Problems and Constraints

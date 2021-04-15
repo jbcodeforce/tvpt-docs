@@ -1,11 +1,8 @@
----
-title: Kafka Overview
-description: Kafka Overview
----
+# Kafka Summary
 
 In this article we are summarizing what Apache [**Kafka**](https://Kafka.apache.org) is and grouping some references, notes and tips we gathered working with Kafka while producing the different assets for this Event Driven Architecture references. This content does not replace [the excellent introduction](https://Kafka.apache.org/intro) every developer using Kafka should read.
 
-# Introduction
+## Introduction
 
 [Kafka](https://Kafka.apache.org) is a distributed real time event streaming platform with the following key capabilities:
 
@@ -29,13 +26,13 @@ The typical use cases where **Kafka** helps are:
 * Implement [event sourcing pattern](/patterns/event-sourcing/) out of the box, using configuration to keep message for a long time period. Data are replicated between brokers within the cluster and cross availability zones if needed.
 * Manage loosely coupled communication between microservices. (See [this note](https://ibm-cloud-architecture.github.io/refarch-integration/service-mesh/readme/#asynchronous-loosely-coupled-solution-using-events) where we present a way to support a service mesh solution using asynchronous event)
 
-# Architecture
+## Architecture
 
 The diagram below presents Kafka's key components:
 
 ![Kafka architecture](./images/Kafka-hl-view.png)
 
-## Brokers
+### Brokers
 
 * **Kafka** runs as a cluster of **broker** servers that can, in theory, span multiple data centers. Each brokers manages data replication, topic/partition management, offset management and all the interesting delivery semantic.
 To cover multiple data centers within the same cluster, the network latency between data centers needs to be very low, at the 15ms or less, as there is a lot of communication between Kafka brokers and between Kafka brokers and zookeeper servers.
@@ -43,7 +40,7 @@ To cover multiple data centers within the same cluster, the network latency betw
 
 In the figure above, the **Kafka** brokers are allocated on three servers, with data within the topic are replicated two times. In production, it is recommended to use at least five nodes to authorize planned failure and un-planned failure, and when doing replicas, use a replica factor at least equals to three.
 
-## Topics
+### Topics
 
 Topics represent end points to publish and consume records.
 
@@ -57,7 +54,7 @@ The figure below illustrates one topic having multiple partitions, replicated wi
 
 ![topics](./images/Kafka-topic-partition.png)
 
-## Partitions
+### Partitions
 
 Partitions are basically used to parallelize the event processing when a single server would not be able to process all events, using the broker clustering. So to manage increase in the load of messages, Kafka uses partitions.
 
@@ -76,7 +73,7 @@ Partitions are basically used to parallelize the event processing when a single 
 It is possible to compact the log. The log compaction means, the last known value for each message key is kept. Compacted Topics
 are used in Streams processing for stateful operator to keep aggregate or grouping by key. You can read more about [log compaction from the Kafka doc](https://Kafka.apache.org/documentation/#design_compactionbasics).
 
-## Replication
+### Replication
 
 Each partition can be replicated across a number of servers. The replication factor is captured by the number of brokers to be used for replication. To ensure high availability it should be set to at least a value of three.
 Partitions have one leader and zero or more followers.
@@ -85,7 +82,7 @@ Partitions have one leader and zero or more followers.
 
 The leader manages all the read and write requests for the partition. The followers replicate the leader content. We are addressing data replication in the high availability section below.
 
-## Zookeeper
+### Zookeeper
 
 Zookeeper is used to persist the component and platform states and it runs in cluster to ensure high availability. One zookeeper server is the leader and other are used in backup.
 
@@ -93,11 +90,11 @@ Zookeeper is used to persist the component and platform states and it runs in cl
 * Depends on Kafka version, offsets are maintained in Zookeeper or in **Kafka**: newer versions use an internal Kafka topic called __consumer_offsets. In any case consumers can read next message (or from a specific offset) correctly even during broker server outrages.
 * Access Controls are saved in Zookeeper
 
-## Consumer group
+### Consumer group
 
 This is the way to group consumers so the processing of event is parallelized. The number of consumers in a group is the same as the number of partition defined in a topic. We are detailing consumer group implementation in [this note](../Kafka-producers-consumers/#Kafka-consumers)
 
-# High Availability
+## High Availability
 
 As a distributed cluster, Kafka brokers ensure high availability to process new events. Topic has replication factor to support not loosing data in case of broker failure. You need at least 3 brokers to ensure availability and a replication factor set to 3 for each topic, so no data should be lost.
 In production it is recommended to use 5 brokers cluster to ensure the quorum is always set, but replica factor can still be set to 3.
@@ -108,7 +105,7 @@ Partition enables data locality, elasticity, scalability, high performance, para
 
 ![Replication and partition leadership](./images/Kafka-ha.png)
 
-## Replication and partition leadership
+### Replication and partition leadership
 
 The keys in the data record determine the partitioning of data in **Kafka**. The records with the same key will be in the same partition.
 
@@ -176,7 +173,7 @@ Finally to be exhaustive, the control of the segment size for the change log top
 
 To add new broker, you can deploy the runtime to a new server / rack / blade, and give it a unique ID. Broker will process new topic, but it is possible to use tool to migrate some existing topic/ partitions to the new server. The tool is used to reassign partitions across brokers. An ideal partition distribution would ensure even data load and partition sizes across all brokers.
 
-## High Availability in the context of Kubernetes deployment
+### High Availability in the context of Kubernetes deployment
 
 The combination of Kafka with Kubernetes seems to be a sound approach, but it is not that easy to achieve. Kubernetes workloads prefer to be stateless,
 Kafka is a stateful platform and manages its own brokers, and replications across known servers. It knows the underlying infrastructure.
@@ -260,7 +257,7 @@ Within Kafka's boundary, data will not be lost, when doing proper configuration,
 
 Zookeeper is not CPU intensive and each server should have a least 2 GB of heap space and 4GB reserved. Two CPUs per server should be sufficient. Servers keep their entire state machine in memory, and write every mutation to a durable WAL (Write Ahead Log) on persistent storage. To prevent the WAL from growing without bound, ZooKeeper servers periodically snapshot their in memory state to storage. Use fast and dynamically provisioned persistence storage for both WAL and snapshot.
 
-# Performance Considerations
+## Performance Considerations
 
 Performance will vary depending of the current Kafka broker nodes load: in Kubernetes deployment, with small production topology, nodes may shared with other pods. It is recommended to control the environment with dedicated nodes for Kafka to achieve higher throughput.  Performance will always depend on
 numerous factors including message throughput, message size, hardware, configuration settings, ...
@@ -271,20 +268,20 @@ Performance may be linked to different focuses:
 * Throughput: ensuring message processing performance
 * Payload size: support larger message
 
-## Resilience
+### Resilience
 
 When defining a topic, we need to specify the replicas factor to match the be at least 3 and then set the minimum number of in-sync replicas that specifies how may replicas must acknowledge a write to satisfy a producer that requests acknowledgments from all replicas. (`min.insync.replicas`).
 
 The replication of message data between brokers can consume a lot of network bandwidth so isolating replication traffic from application traffic can benefit performance. To achieve this, all replication traffic is configured to flow on a dedicated internal network.
 
-## Throughput
+### Throughput
 
 To achieve higher throughput the messages are not replicated across brokers and the acknowledgement can be set to only one broker. Expose resiliency to failures.
 
 The number of producers and consumers are aligned, and the number of partitions matches the number of consumers. All consumers are in the same consumer group. Measurement has to be done from the producer code.
 With 12 producers on a 3 brokers cluster and small payload (128 bytes), with 24 consumers the measured throughput is around 2.3 M messages / second.
 
-## Payload size
+### Payload size
 
 From measurement tests done using Kafka producer performance tool, there is a 1/log(s) curve, where below 10k bytes the performances are correct and then slowly degrade from 3000 msg /s (10k bytes msg) to 65 msg/s (515kb msg).
 
@@ -297,15 +294,15 @@ To do performance test the [event-streams-sample-producer](https://github.com/IB
 </dependency>
 ```
 
-## Parameter considerations
+### Parameter considerations
 
 There are a lot of factors and parameters that needs to be tuned to improve performance at the brokers threading level (`num.replica.fetchers, num.io.threads, num.network.threads, log.cleaner.threads` ) and the pod resources constraints. See [configuration documentation](https://Kafka.apache.org/documentation/#configuration).
 
-## Openshift specifics
+### Openshift specifics
 
 When exposing the Kafka broker via Routes, the traffic is encrypted with TLS, so client needs to deal with TLS certificates and encryption. Routes are exposed via DNS and HAProxy router. The router will act as middleman between Kafka clients and brokers, adding latency, and it can become bottleneck. The traffic generated by client needs to be sized and in case of the router needs to be scaled up, and even isolate the routing by adding a separate router for the Kafka routes.
 
-# Disaster Recovery
+## Disaster Recovery
 
 With the current implementation it is recommended to have one cluster per data center / availability zone. Consumers and producers are co-located to the brokers cluster. When there are needs to keep some part of the data replicated in both data center, you need to assess what kind of data can be aggregated, and if Kafka mirroring tool can be used. The tool consumes from a source cluster, from a given topic, and produces to a destination cluster with the same named topic. It keeps the message key for partitioning, so order is preserved.
 
@@ -326,11 +323,11 @@ When you want to deploy solution that spreads over multiple regions to support g
 
 [Kafka 2.4](https://www.confluent.io/blog/apache-Kafka-2-4-latest-version-updates/) introduces the capability for a consumer to read messages from the closest replica using some rack-id and specific algorithm. This capability will help to extend the cluster to multiple data center and avoid having consumers going over WAN communication.
 
-# Solution Considerations
+## Solution Considerations
 
 There are a set of design considerations to assess for each **Kafka** solution:
 
-## Topics
+### Topics
 
 Performance is more a function of number of partitions than topics. Expect that each topic has at least one partition. When considering latency you should aim for limiting to hundreds of topic-partition per broker node.
 
@@ -351,7 +348,7 @@ Other best practices:
 
 With **Kafka** stream, state store or KTable, you should separate the changelog topic from the others.
 
-## Producers
+### Producers
 
 When developing a record producer you need to assess the following:
 
@@ -362,7 +359,7 @@ When developing a record producer you need to assess the following:
 
 See [implementation considerations discussion](../Kafka-producers-consumers/#Kafka-producers)
 
-## Consumers
+### Consumers
 
 From the consumer point of view a set of items need to be addressed during design phase:
 
@@ -375,16 +372,11 @@ From the consumer point of view a set of items need to be addressed during desig
 
 See [implementation considerations discussion](../Kafka-producers-consumers/#Kafka-consumers)
 
-# Deployment
+## Deployment
 
 In this section we provide the instructions for getting Kafka deployed in your vanilla kubernetes environment through the Strimzi kubernetes operator or getting the IBM Event Streams product (based on Kafka) deployed on your IBM Cloud Private/OpenShift cluster or in your IBM Cloud account as a managed service.
 
-## Kubernetes Operator
+### Kubernetes Operator
 
 It is important to note that the deployment and management of stateful application in Kubernetes should, now, use the proposed [Operator Framework](https://github.com/operator-framework) introduced by Red Hat and Google. One important contribution is the [Strimzi Kafka operator](https://github.com/strimzi/strimzi-Kafka-operator) that simplifies the deployment of Kafka within k8s by adding a set of operators to deploy and manage Kafka clusters, topics, users and more.
 
-## IBM Event Streams
-
-IBM Event Streams is an event-streaming platform based on the open-source Apache Kafka® project. It can be installed on IBM Cloud Private (ICP) cluster, OpenShift cluster or as a hosted service in IBM Cloud.
-
-Instructions for installing IBM Event Streams on your cluster as well as getting an instance as a hosted service in IBM Cloud can be found [here](https://ibm.github.io/event-streams/)
