@@ -1,10 +1,10 @@
 # Kafka Summary
 
-In this article we are summarizing what Apache [**Kafka**](https://Kafka.apache.org) is and grouping some references, notes and tips we gathered working with Kafka while producing the different assets for this Event Driven Architecture references. This content does not replace [the excellent introduction](https://Kafka.apache.org/intro) every developer using Kafka should read.
+In this article we are summarizing what Apache [**Kafka**](https://kafka.apache.org) is and grouping some references, notes and tips we gathered working with Kafka while producing the different assets for this Event Driven Architecture references. This content does not replace [the excellent introduction](https://kafka.apache.org/intro) every developer using Kafka should read.
 
 ## Introduction
 
-[Kafka](https://Kafka.apache.org) is a distributed real time event streaming platform with the following key capabilities:
+[Kafka](https://kafka.apache.org) is a distributed real time event streaming platform with the following key capabilities:
 
 * Publish and subscribe streams of records. Data are stored so consuming applications can pull the information they need, and keep track of what they have seen so far.
 * It can handle hundreds of read and write operations per second from many producers and consumers.
@@ -30,7 +30,7 @@ The typical use cases where **Kafka** helps are:
 
 The diagram below presents Kafka's key components:
 
-![Kafka architecture](images/Kafka-hl-view.png)
+![Kafka architecture](images/kafka-hl-view.png)
 
 ### Brokers
 
@@ -52,7 +52,7 @@ Topics represent end points to publish and consume records.
 
 The figure below illustrates one topic having multiple partitions, replicated within the broker cluster:
 
-![topics](images/Kafka-topic-partition.png)
+![topics](images/kafka-topic-partition.png)
 
 ### Partitions
 
@@ -71,7 +71,7 @@ Partitions are basically used to parallelize the event processing when a single 
 * Partitions guarantee that data with the same keys will be sent to the same consumer and in order.
 * Partitions are saved to disk as append log. The older records are deleted after a given time period or if the size of log goes over a limit.
 It is possible to compact the log. The log compaction means, the last known value for each message key is kept. Compacted Topics
-are used in Streams processing for stateful operator to keep aggregate or grouping by key. You can read more about [log compaction from the Kafka doc](https://Kafka.apache.org/documentation/#design_compactionbasics).
+are used in Streams processing for stateful operator to keep aggregate or grouping by key. You can read more about [log compaction from the Kafka doc](https://kafka.apache.org/documentation/#design_compactionbasics).
 
 ### Replication
 
@@ -92,7 +92,7 @@ Zookeeper is used to persist the component and platform states and it runs in cl
 
 ### Consumer group
 
-This is the way to group consumers so the processing of event is parallelized. The number of consumers in a group is the same as the number of partition defined in a topic. We are detailing consumer group implementation in [this note](../Kafka-producers-consumers/#Kafka-consumers)
+This is the way to group consumers so the processing of event is parallelized. The number of consumers in a group is the same as the number of partition defined in a topic. We are detailing consumer group implementation in [this note](../kafka-producers-consumers/#kafka-consumers)
 
 ## High Availability
 
@@ -103,7 +103,7 @@ The brokers need to run on separate physical machines, and when cluster extends 
 
 Partition enables data locality, elasticity, scalability, high performance, parallelism, and fault tolerance. Each partition is replicated at least 3 times and allocated in different brokers. One replicas is the **leader**. In the case of broker failure (broker 1 in figure below), one of the existing partition in the remaining running brokers will take the leader role (e.g. red partition in broker 3):
 
-![Replication and partition leadership](./images/Kafka-ha.png)
+![Replication and partition leadership](./images/kafka-ha.png)
 
 ### Replication and partition leadership
 
@@ -123,7 +123,7 @@ A Kafka cluster has exactly one broker that acts as the controller.
 
 Per design Kafka aims to run within a single data center. But it is still recommended to use multiple racks connected with low latency dual networks.
 With multiple racks you will have better fault tolerance, as one rack failure will impact only one broker. There is a configuration property
- to assign Kafka broker using rack awareness. (See [this configuration](https://Kafka.apache.org/documentation/#brokerconfigs) from the product documentation).
+ to assign Kafka broker using rack awareness. (See [this configuration](https://kafka.apache.org/documentation/#brokerconfigs) from the product documentation).
 
 As introduced on the topic section above, data are replicated between brokers. The following diagram illustrates the best case scenario where followers fetch data from
 the partition leader, acknowledge the replications:
@@ -289,16 +289,16 @@ To do performance test the [event-streams-sample-producer](https://github.com/IB
 
 ```xml
 <dependency>
-  <groupId>org.apache.Kafka</groupId>
+  <groupId>org.apache.kafka</groupId>
   <artifactId>Kafka-tools</artifactId>
 </dependency>
 ```
 
 ### Parameter considerations
 
-There are a lot of factors and parameters that needs to be tuned to improve performance at the brokers threading level (`num.replica.fetchers, num.io.threads, num.network.threads, log.cleaner.threads` ) and the pod resources constraints. See [configuration documentation](https://Kafka.apache.org/documentation/#configuration).
+There are a lot of factors and parameters that needs to be tuned to improve performance at the brokers threading level (`num.replica.fetchers, num.io.threads, num.network.threads, log.cleaner.threads` ) and the pod resources constraints. See [configuration documentation](https://kafka.apache.org/documentation/#configuration).
 
-### Openshift specifics
+### OpenShift specifics
 
 When exposing the Kafka broker via Routes, the traffic is encrypted with TLS, so client needs to deal with TLS certificates and encryption. Routes are exposed via DNS and HAProxy router. The router will act as middleman between Kafka clients and brokers, adding latency, and it can become bottleneck. The traffic generated by client needs to be sized and in case of the router needs to be scaled up, and even isolate the routing by adding a separate router for the Kafka routes.
 
@@ -321,7 +321,7 @@ When you want to deploy solution that spreads over multiple regions to support g
 * How to be compliant on regulations, like GDPR?
 * How to address no duplication of records?
 
-[Kafka 2.4](https://www.confluent.io/blog/apache-Kafka-2-4-latest-version-updates/) introduces the capability for a consumer to read messages from the closest replica using some rack-id and specific algorithm. This capability will help to extend the cluster to multiple data center and avoid having consumers going over WAN communication.
+[Kafka 2.4](https://www.confluent.io/blog/apache-kafka-2-4-latest-version-updates/) introduces the capability for a consumer to read messages from the closest replica using some rack-id and specific algorithm. This capability will help to extend the cluster to multiple data center and avoid having consumers going over WAN communication.
 
 ## Solution Considerations
 
@@ -357,7 +357,7 @@ When developing a record producer you need to assess the following:
 * Is there a risk for loosing communication? Tune the RETRIES_CONFIG and buffer size
 * Assess *once to exactly once* delivery requirement. Look at idempotent producer.
 
-See [implementation considerations discussion](../Kafka-producers-consumers/#Kafka-producers)
+See [implementation considerations discussion](../kafka-producers-consumers/#Kafka-producers)
 
 ### Consumers
 
@@ -370,13 +370,13 @@ From the consumer point of view a set of items need to be addressed during desig
 * Does record time sensitive, and it is possible that consumers fall behind, so when a consumer restarts he can bypass missed records?
 * Do the consumer needs to perform joins, aggregations between multiple partitions?
 
-See [implementation considerations discussion](../Kafka-producers-consumers/#Kafka-consumers)
+See [implementation considerations discussion](../kafka-producers-consumers/#Kafka-consumers)
 
 ## Deployment
 
-In this section we provide the instructions for getting Kafka deployed in your vanilla kubernetes environment through the Strimzi kubernetes operator or getting the IBM Event Streams product (based on Kafka) deployed on your IBM Cloud Private/OpenShift cluster or in your IBM Cloud account as a managed service.
+In this section we provide the instructions for getting Kafka deployed in your vanilla Kubernetes environment through the Strimzi Kubernetes operator or getting the IBM Event Streams product (based on Kafka) deployed on your IBM Cloud Private/OpenShift cluster or in your IBM Cloud account as a managed service.
 
 ### Kubernetes Operator
 
-It is important to note that the deployment and management of stateful application in Kubernetes should, now, use the proposed [Operator Framework](https://github.com/operator-framework) introduced by Red Hat and Google. One important contribution is the [Strimzi Kafka operator](https://github.com/strimzi/strimzi-Kafka-operator) that simplifies the deployment of Kafka within k8s by adding a set of operators to deploy and manage Kafka clusters, topics, users and more.
+It is important to note that the deployment and management of stateful application in Kubernetes should, now, use the proposed [Operator Framework](https://github.com/operator-framework) introduced by Red Hat and Google. One important contribution is the [Strimzi Kafka operator](https://github.com/strimzi/strimzi-kafka-operator) that simplifies the deployment of Kafka within k8s by adding a set of operators to deploy and manage Kafka clusters, topics, users and more.
 
