@@ -10,9 +10,11 @@ nav:
     - CQRS: patterns/cqrs/index.md
     - Outbox: patterns/transactional-outbox/index.md
     - SAGA: patterns/saga/index.md
+    - Dead letter queue: patterns/dlq/index.md
   - Technology:
     - Kafka Summary: technology/kafka-overview/index.md
     - Producer - Consumer: technology/kafka-producers-consumers/index.md
+    - Kafka FAQ: technology/faq/index.md
 
 theme: 
   name: material
