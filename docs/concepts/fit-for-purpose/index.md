@@ -2,7 +2,7 @@
 
 In this note we want to list some of the criteria to consider and assess during an event-driven architecture establishment work and as part of a continuous application governance. This is not fully exhaustive, but give good foundations for analysis and study.
 Fit for purpose practices should be done under a bigger program about application development governance and data governance.
-We can look at least to the following major subject:
+We can look at least to the following major subjects:
 
 ## Cloud native applications
 
