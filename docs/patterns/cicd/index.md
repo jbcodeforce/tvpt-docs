@@ -43,7 +43,7 @@ We also added persistent storage for the pipeline, in our case called <em>pipeli
 
 Having persistent storage allows us to cache and manage state between tasks in the pipeline. <em>For example:
 * For its build, Maven needs all the repositories from the project dependencies. Having persistent storage allows us to maintain a cache of those repositories so that we don't have to download them every time we build. 
-* From one step to another step in the pipeline. Each task is its own pod. A cloned step will do a git pull, but when moving to the next step, <em><b>you lose that???</b></em>, so this allows us to pass the workspace between the tasks. </em>
+<!-- * From one step to another step in the pipeline. Each task is its own pod. A cloned step will do a git pull, but when moving to the next step, <em><b>you lose that???</b></em>, so this allows us to pass the workspace between the tasks. </em> -->
 
 Since each step runs in an isolated container any data that is created by a step for use by another step must be stored appropriately. If the data is accessed by a subsequent step within the same task then it is possible to use the /workspace directory to hold any created files and directories. A further option for steps within the same task is to use an emptyDir storage mechanism which can be useful for separating out different data content for ease of use. If file stored data is to be accessed by a subsequent step that is in a different task then a Kubernetes persistent volume claim is required to be used.
 The mechanism for adding storage to a step is called a <em>volumeMount</em>. 
