@@ -1,9 +1,6 @@
 # Travelport Repository for Documentation
 
-Read in [the book format](https://pages.github.ibm.com/Travelport-Rail/tvpt-docs/)
-
-
-Other [public site](https://jbcodeforce.github.com/tvpt-docs/)
+Read in [the book format](https://jbcodeforce.github.io/tvpt-docs/)
 
 
 ## Building this booklet locally
