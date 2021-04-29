@@ -65,7 +65,7 @@ For service discovery add netflix-eureka-client.
 ```
 
 
-Using the [Spring Cloud CLI]() we can get the service registry, config server, central tracing started in one command:
+Using the Spring Cloud CLI we can get the service registry, config server, central tracing started in one command:
 
 ```shell
 spring cloud eureka configserver zipkin
@@ -105,7 +105,7 @@ With Kafka based application the best practice is also to define the message str
 
 ### Example of Kafka binding
 
-The [order service spring cloud template](https://github.com/ibm-cloud-architecture/eda-quickstarts/tree/main/spring-cloud-stream) is a simple example of order service that expose CRUD on the Order entity via a controller but instead of writing to a database, it immediately generates a message to Kafka and then the repository class consumes the message to get the data to write to the database. This is a simple way to implement 'transaction' by using the Append log of Kafka partition as a transaction log.
+The [order service spring cloud template](https://github.com/ibm-cloud-architecture/eda-quickstarts/tree/main/spring-cloud-stream) is a simple example of order service that exposes CRUD operations on the Order entity via a controller. Instead of writing to a database, this service immediately generates a message to Kafka and then the repository class consumes the message to get the data to write to the database. This is a simple way to implement 'transaction' by using the Append log of Kafka partition as a transaction log.
 
 ![](./images/spring-orderms-app.png)
 
@@ -250,9 +250,33 @@ The approach to develop such application includes the following steps:
 * Add logic to produce message using middleware 
 
 
-To add a consumer from a Kafka topic for example, we can add a function that will process the message, and declare it as a Bean in the main Spring boot application. Then we add configuration to link to the binders queue or topic:
+To add a consumer from a Kafka topic for example, we can add a function that will process the message, and declare it as a Bean. 
 
+```java
+ @Bean
+    public Consumer<Message<CloudEvent>> consumeCloudEventEvent(){
+        return msg -> {
+            Acknowledgment acknowledgment = msg.getHeaders().get(KafkaHeaders.ACKNOWLEDGMENT, Acknowledgment.class);
+            saveOrder((Order)msg.getPayload().getData());
+            if (acknowledgment != null) {
+                System.out.println("Acknowledgment provided");
+                acknowledgment.acknowledge();
+            }
+        };
+    }
 ```
+This previous code is also illustrating manual offset commit.
+
+Then we add configuration to link to the binders queue or topic:
+
+```yaml
+    consumeOrderEvent-in-0:
+        consumer:
+          autoCommitOffset: false
+          startOffset: latest
+          ackMode: MANUAL
+          configuration:
+            value.deserializer: ibm.eda.demo.infrastructure.events.CloudEventDeserializer
 ```
 
 ### Avro serialization
