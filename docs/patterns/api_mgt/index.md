@@ -7,7 +7,9 @@ This page summarizes some of the best practices for introducing API management i
 An API Gateway helps provide security, control, integration, and optimized access to a full range of mobile, web, application programming interface (API), service-oriented architecture (SOA), B2B and cloud workloads. A gateway is used in the following patterns:
 
 * As a **Security Gateway**, placed between the consumer facing firewall and the system of records facing firewall (DMZ). It is used for both policy enforcement and consistent security policies across business channels.
+<br/>
 * As an **API Gateway**, both as an internal and external gateway, with centralized service governance and policy enforcement, and with traffic monitoring.
+<br/>
 * To provide **connectivity (HTTP) and mediation (XML, JSON) services** in the internal network, close to the system of record. 
 
 API management gives enterprises greater flexibility when reusing the functionality of API integrations and helps save time and money without trading off security. An API Management system supports a broader scope of features for API lifecycle management, including: 
@@ -59,17 +61,15 @@ For Travelport, a deployment across cloud providers could look like the diagram 
 On the left side (green boxes), the consumers of the API register to a Developer portal to get all the metadata about the API they want to consume. They register their applications as API subscribers. Their applications can run on the cloud or on-premise. 
 
 For Travelport's Rail Services, the API Gateway services would be colocated with the target Rail Services to reduce latency. These would be deployed as <em>StatefulSet</em> on an OpenShift cluster, which means as a set of pods with consistent <em>identities</em>. Identities are defined as:
-
 - <b>Network</b>: A single stable DNS and hostname.
 - <b>Storage</b>: As many VolumeClaims as requested.
-
 The StatefulSet guarantees that a given network identity will always map to the same storage identity. 
 
 The API Gateway acts as a reverse proxy, and exposes the `Booking APIs`, enforcing user authentication and security policies, and handling traffic monitoring, rate limiting, and statistics. The API Gateway can also perform transformations and aggregate various services to fulfill a request. 
 
 The Developer Portals can be separated, or centralized depending on API characteristics exposed from different clouds (for example different Developer Portals for internal and external APIs). In the example above, the portal is deployed on the Cloud Provider as a container inside an OpenShift cluster. The Analytic service is also a StatefulSet and gets metrics from the gateway.
 
-The figure above also illustrates the rail services are accessing remote consolidators and this traffic can also go to the API gateway. Those services will also integrate with existing backend services running on-premise, whether they are deployed or not on OpenShift. 
+Rail services for Travelport are accessing remote consolidators and this traffic can also go to the API gateway. Those services will also integrate with existing backend services running on-premise, whether they are deployed or not on OpenShift. 
 
 The management service for the API management product is running on-premise in the diagram above to illustrate that it is a central deployment to manage multiple gateways.
 
@@ -83,13 +83,10 @@ Within the API Management system, the OpenAPI document can be created top-down w
 
 The important parts are to define the operations exposed and the request / response structure of the data model. 
 
-
 ### Async API
-
 Cloud Pak for Integration (CP4I) 2021.1, which includes APIC V10, also supports the Async API specification. AsyncAPI is an open source initiative that focuses on making Event-Driven Architectures (EDAs) as easy to work with as REST APIs.
 
-The AsyncAPI specification (currently at 2.0.0) establishes standards for events and EDAs, covering everything "from documentation to code generation, and  from discovery to event management" (asyncapi.com/docs).
-
+The AsyncAPI specification (currently at 2.0.0) establishes standards for events and EDAs, covering everything "from documentation to code generation, and  from discovery to event management" (asyncapi.com/docs). <br/>
 The goal is to enable the creation of better tooling in the message-driven space, better governance of asynchronous APIs, and standardization in documentation for asynchronous APIs. In short, Async API is to Message-driven architectures what OpenAPI is to REST APIs. While OpenAPI is the recommended practice for RESTful APIs, adopting AsyncAPI is the recommended practice for event-driven APIs.
 
 An AsyncAPI document is a file in either YAML or JSON format that defines and annotates the different components of an event-driven API. For example, AsyncAPI can formally describe how to connect to a Kafka cluster, the details of the Kafka topics (channels in AsyncAPI), and the type of data in messages. AsyncAPI includes both formal schema definitions and space for free-text descriptions (https://dalelane.co.uk/blog/?p=4219).
@@ -100,7 +97,7 @@ Here is what it looks like:
 
 You may have noticed the similarties with OpenAPI. That is because AsyncAPI was initially an adaptation of OpenAPI, which as part of its scope does not include support for the Message Queuing Telemetry Transport (MQTT) and the Advanced Message Queuing Protocol (AMQP). 
 
-The creator of the AsyncAPI specification, Fran Méndez, describes what he did at first with just OpenAPI to make up for the lack of MQTT and AMQP support: paths were AMQP topics, GET was SUBSCRIBE, and POST was PUBLISH-- an ugly hack at best, which forced him to write additonal code to support the necessary EDA-based documentation and code generation.
+The creator of the AsyncAPI specification, Fran Méndez, describes what he did at first with just OpenAPI to make up for the lack of MQTT and AMQP support: paths were AMQP topics, GET was SUBSCRIBE, and POST was PUBLISH--and ugly hack at best, which forced him to write additonal code to support the necessary EDA-based documentation and code generation.
 
 Many companies use OpenAPI, but in real-world situations, including that of Travelport, systems need formalized documentation and code generation support for both REST APIs <em>and</em> events. 
 
@@ -111,26 +108,21 @@ Here are the structural differences between OpenAPI and AsyncAPI:
 Source: https://www.asyncapi.com/docs/getting-started/coming-from-openapi
 
 A few things to note include:
-
 * AsyncAPI is compatible with OpenAPI schemas, which is quite useful since many times the information flowing in the events is very similar to the one the REST APIs have to handle in requests and responses.
-* The message payload in AsyncAPI does not have to be an AsyncAPI/OpenAPI schema; it can be any value such as an Apache Avro schema, which is considered to be one of the better choices for stream data, where data is modeled as streams (see [Why Avro for Kafka](#why-avro-for-kafka) below). 
+* The message payload in AsyncAPI does not have to be an AsyncAPI/OpenAPI schema; it can be any value such as an Apache Avro schema, which is considered to be one of the better choices for stream data, where data is modeled as streams (see <em>Why Avro for Kafka</em> below). 
 * The AsyncAPI server object is almost identical to its OpenAPI counterpart with the exception that <em>scheme</em> has been renamed to <em>protocol</em> and AsyncAPI introduces a new property called <em>protocolVersion</em>.
 * AsyncAPI channel parameters are the equivalent of OpenAPI path parameters, except that AsyncAPI does not have the notion of <em>query</em> and <em>cookie</em>, and header parameters can be defined in the message object. 
 
 ### Describing Kafka with AsyncAPI
-
 This section summarizes how to use AsyncAPI from the perspective of a Kafka user, as described [here](https://dalelane.co.uk/blog/?p=4219) by Dale Lane.
 
 First, there are some minor differences in terminology between Kafka and AsyncAPI that you should note: 
-
 #### Comparing Kafka and AsyncAPI Terminology
 
 ![kafka vs asyncapi](./images/kafkavsasyncapi.jpg)
 
 #### The AsyncAPI Document
-
 Considering the structure in the diagram above, let's look at some of the parts of an AsyncAPI document:
-
 ##### Info
 The Info section has three parts which represent the minimum required information about the application: <em>title</em>, <em>version</em>, and <em>description</em> (optional), used as follows:
 
@@ -187,7 +179,7 @@ When using a <em>broker-centric</em> architecture such as Kafka or RabbitMQ, you
 
 One limitation in AsyncAPI documents is that you cannot include multiple Kafka clusters (such as a production cluster and clusters for dev, test, and staging environments) in a single document.
 
-One workaround is to list all brokers for all clusters in the same document, and then rely on the description or extension fields to explain which ones are in which cluster. Of course, this is not recommended, and could interfere with code  generators or other parts of the AsyncAPI ecosystem which may consider them as all being members of one large cluster.
+One workaround is to list all brokers for all clusters in the same document, and then rely on the description or extension fields to explain which ones are in which cluster. This is, however, not recommended because it could interfere with code  generators or other parts of the AsyncAPI ecosystem which may consider them as all being members of one large cluster.
 
 So, as a best practice, avoid this workaround and stick to one cluster per AsyncAPI document.
 
@@ -222,12 +214,12 @@ components:
       x-mykafka-sasl-mechanism: 'SCRAM-SHA-256'
 view raw
 ```
-The description field allows you to explain the security options that Kafka clients need to use. You could also use an extension (with the x- prefix).
+The description field allows you to explain the security options that Kafka clients need to use. You could also use an extension (with the -x prefix).
+
 
 
 ##### Channels
-
-All brokers support communication through multiple channels (known as <em>topics</em>, <em>event types</em>, <em>routing keys</em>, <em>event names</em> or other terms depending on the system). Channels are assigned a name or identifier, and as a best practice, usually deal with only a single type of message (one channel per message type).
+All brokers support communication through multiple channels (known as <em>topics</em>, <em>event types</em>, <em>routing keys</em>, <em>event names</em> or other terms depending on the system). Channels are assigned a name or identifier.
 
 The channels section of the specification stores all of the mediums where messages flow through. Here is a simple example:
 
@@ -263,10 +255,9 @@ channels:
 For each operation, you can provide a unique id, a short one-line text summary, and a more detailed description in plain text or markdown formatting.
 
 ##### Bindings
-
 AsyncAPI puts protocol-specific values in sections called bindings.
 
-The bindings sections allows you to specify the values that Kafka clients should use to perform the operation. The values you can describe here include the consumer group id and the client id and any properties to connect to Kafka.
+The bindings sections allows you to specify the values that Kafka clients should use to perform the operation. The values you can describe here include the consumer group id and the client id.
 
 If there are expectations about the format of these values, then you can describe those by using regular expressions. Here is an example:
 
@@ -312,11 +303,9 @@ channels:
 view raw
 ```
 ##### Messages
-
 A message is how information is exchanged via a channel between servers and applications. According to the specifications, a message MUST contain a payload and MAY also contain headers. The headers MAY be subdivided into protocol-defined headers and header properties defined by the application which can act as supporting metadata. The payload contains the data, defined by the application, which MUST be serialized into a format (JSON, XML, Avro, binary, etc.). Because a message is a generic mechanism, it can support multiple interaction patterns such as event, command, request, or response.
 
 As with all the other levels of the spec, you can provide background and narrative in a description field for the message:
-
 ```
 asyncapi: '2.0.0'
 ...
@@ -329,14 +318,12 @@ channels:
         description: Description of a single message
 ```
 
-### Summary
-
+###Summary
 The following diagram summarizes the sections described above:
 ![](./images/asyncapisummary.jpg)
 For more information, the official AsyncAPI specifications can be found [here](https://www.asyncapi.com/docs/specifications/2.0.0).
 
 ### Why Avro for Kafka?
-
 Apache Avro is "an open source data serialization system that helps with data exchange between systems, programming languages, and processing frameworks" (https://www.confluent.io/blog/avro-kafka-data/). The following features make Avro a great fit for stream data:
 
 * Direct mapping to and from JSON, but typically much faster than JSON, with much smaller encodings
@@ -344,10 +331,10 @@ Apache Avro is "an open source data serialization system that helps with data ex
 * Bindings for a wide variety of programming languages
 * A rich, extensible schema language defined in pure JSON
 
+
+
 ### Travelport API Management Demo
-
 With respect to API Management, there are three main areas of interest to Travelport:
-
 * Version Control
 * API Documentation & Discovery
 * Redirecting to different APIs
@@ -356,34 +343,89 @@ Besides a new, event-driven approach to its API model, Travelport needs a way to
 
 IBM API Connect (APIC) is a complete and scalable API platform that allows them to do these things, in addition to exposing, managing, and monetizing APIs across clouds. API Connect is also available with other capabilities as an IBM Cloud Pak® solution.
 
-#### Create Capability
+#### API Manager
+You manage your APIs by using the API Manager user interface of IBM® API Connect. The API Manager UI allows you to manage private internal APIs as well as public external APIs. API Manager is an on-premises offering that provides the capabilities required to externalize and manage your services as REST or SOAP APIs.
 
-As the demo provided shows, Travelport can leverage API Connect's <b>Create</b> capability, powered by the Open Source Loopback framework, to build APIs with a built-in Swagger (OpenAPI) editor or using a simple guided model-driven approach. APIC allows developers to create a new API from scratch or an API based on the schema of an existing data source, such as a database.
+
+
+
+
+#### Create Capability
+Travelport can leverage API Connect's <b>Create</b> capability, powered by the Open Source Loopback framework, to build APIs with a built-in Swagger (OpenAPI) editor or using a simple guided model-driven approach. APIC allows developers to create a new API from scratch or an API based on the schema of an existing data source, such as a database.
 
 [NEED SCREEN CAPTURE, PREFERABLY FROM DEMO HERE]
 
 #### Explore Capability
-
 Travelport developers can use API Connect's <b>Explore</b> capability to quickly examine their new APIs and try their operations. 
 
 [NEED SCREEN CAPTURE, PREFERABLY FROM DEMO HERE]
 
 #### Developers
-
 Developers can add their APIs to the API Connect server and have the choice of running them on the cloud or on-premise, as mentioned above. This can be done through API Connect's UI or with the provided CLI. 
 
 Developers and Administrators can then connect to the API Connect Server and see their running APIs, including those that were created as well as those that were added based on existing data sources. 
 
 [NEED SCREEN CAPTURE, PREFERABLY FROM DEMO HERE]
 
-#### API Product Managers
+## Developer Experience
 
+### Developer Portal
+The Developer Portal is a convenient place to share APIs with application developers. After a Developer Portal has been enabled through the API Manager, and one or more API Products have been published, application developers 
+can browse and use the APIs from the Developer Portal dashboard, as shown below:
+
+![](./images/devportal1.jpg)
+
+
+The Developer Portal can be used as is when it is first enabled, or it can be customized to fit the corporate branding and design requirements of a particular organization. You can configure the Developer Portal for test and development purposes, or for internal use only.
+
+#### Subscribing to an API in the Developer Portal
+
+To subscribe to an API, from the Developer Portal, the develper clicks ```API Products``` to find and subscribe to any available APIs:
+
+![](./images/devportal2.jpg)
+
+In this case, an API called <em>FindBranch</em> Version 2.0, which is contained in the <em>FindBranch Auto Products</em> product is available. Clicking ```Subscribe``` enables the developer to use the API:
+
+![](./images/devportal3.jpg)
+
+Under the Application heading, the developer can click ```Select App``` for the new application:
+
+![](./images/devportal4.jpg)
+
+From the next screen below, the developer can click Next:
+
+![](./images/devportal5.jpg)
+
+Doing this shows the screen below, confirming to the devleoper that his or her applicatin is now subscribed to the selected API under the selected plan. Pressing ```Done``` in the next screen completes the subscription.
+
+![](./images/devportal6.jpg)
+
+
+#### Testing An API in the Developer Portal
+To test an API, the developer clicks ```API Products``` in the Developer Portal dashboard to show all available products:
+
+![](./images/devportal7.jpg)
+
+Clicking a product, such as FindBranch auto product, for example, and then clicking the FindBranch API from the provided list shows the available API operations. 
+
+![](./images/devportal8.jpg)
+
+The developer can click ```GET/details```, for instance, to see the details of the GET operation: 
+
+![](./images/devportal10.jpg)
+
+Clicking the ```Try it``` tab and pressing ```Send``` allows the developer to test the API to better understand how it works:
+
+![](./images/devportal11.jpg)
+
+As you can see above, this shows the request/response from invoking the API. API Connect shows a returned response of 200 OK and the message body, indicating that the REST API operation call was successful.
+
+#### API Product Managers
 Administrators or API Product Managers can make changes such as adding corporate security polices or transformations before publishing the APIs. They can also control the visibility and define the rate limit for the APIs. 
 
 [NEED SCREEN CAPTURE, PREFERABLY FROM DEMO HERE]
 
 #### Redirecting to Different APIs
-
 API Product Managers can also create policies to redirect...
 
 [NEED SCREEN CAPTURE, PREFERABLY FROM DEMO HERE]
