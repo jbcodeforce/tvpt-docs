@@ -4,8 +4,7 @@
 With IBM® Cloud Continuous Delivery, you can build, test, and deliver applications by using DevOps or DevSecOps practices and industry-leading tools. Continuous Delivery supports a wide variety of practices. There is no one-size-fits-all answer. The practices you employ can vary from one software delivery project to the next. The IBM® Cloud Garage Method is the IBM approach to rapidly deliver engaging applications. It combines continuous delivery with IBM Design Thinking, lean, DevOps, and agile practices. Those practices are focused on the cloud, but can benefit any software development effort.
 
 ## OpenShift Pipelines
-OpenShift Pipelines is a Continuous Integration / Continuous Delivery (CI/CD) solution based on the open source Tekton project.
-In the OpenShift platform, the Open Source Tekton project is known as <em>OpenShift Pipelines</em>, so both terms are often used interchangeably. 
+OpenShift Pipelines is a Continuous Integration / Continuous Delivery (CI/CD) solution based on the open source Tekton project. In the OpenShift platform, the Open Source Tekton project is known as <em>OpenShift Pipelines</em>, so both terms are often used interchangeably. 
 
 The key objective of Tekton is to enable development teams to quickly create pipelines of activity from simple, repeatable steps. A unique characteristic of Tekton that differentiates it from previous CI/CD solutions is that Tekton steps execute within a container that is specifically created just for that task.
 
@@ -31,7 +30,7 @@ The steps in the pipeline we created are as follows:
 * <b>clone-source-repo</b> which clones the repository
 * <b>maven-package</b> which does the Maven build.
 * <b>image-build-and-push</b> which is a Docker image build and push operation
-* <b>git-kustomize-app</b> is a custom step that takes all the changes with the build (e.g. new image, tags, properties, config maps, secrets, updates, etc.) and anything that needs to be pushed to the Argo repo for Argo to deploy.
+* <b>git-kustomize-app</b> is a custom step that takes all the changes with the build (e.g. new image, tags, properties, config maps, sealed secrets, updates, etc.) and anything that needs to be pushed to the Argo repo for Argo to deploy.
 * <b>argo-sync-health-check</b> Once the pipeline pushes everything to the Argo repo in the previous step, this step deploys it to (syncs with) the cluster, and reports status back from Argo saying that everyting has been deployed and the health of the application is good.
 * <b> newman-integration-test</b> This step starts the integration tests uisng the Postman collection.
 * <b> git-status-complete </b>Finally, this completion task sends status back to Git saying that the build is complete. 
@@ -41,27 +40,28 @@ We also added persistent storage for the pipeline, in our case called <em>pipeli
 
 ![Persistent Storage](./images/persistentstorage-11.jpg)
 
-Having persistent storage allows us to cache and manage state between tasks in the pipeline. <em>For example:
-* For its build, Maven needs all the repositories from the project dependencies. Having persistent storage allows us to maintain a cache of those repositories so that we don't have to download them every time we build. 
+Having persistent storage allows us to cache and manage state between tasks in the pipeline. For example, for its build, Maven needs all the repositories from the project dependencies. Having persistent storage allows us to maintain a cache of those repositories so that we don't have to download them every time we build. 
+
 <!-- * From one step to another step in the pipeline. Each task is its own pod. A cloned step will do a git pull, but when moving to the next step, <em><b>you lose that???</b></em>, so this allows us to pass the workspace between the tasks. </em> -->
 
-Since each step runs in an isolated container any data that is created by a step for use by another step must be stored appropriately. If the data is accessed by a subsequent step within the same task then it is possible to use the /workspace directory to hold any created files and directories. A further option for steps within the same task is to use an emptyDir storage mechanism which can be useful for separating out different data content for ease of use. If file stored data is to be accessed by a subsequent step that is in a different task then a Kubernetes persistent volume claim is required to be used.
-The mechanism for adding storage to a step is called a <em>volumeMount</em>. 
+Since each step runs in an isolated container any data that is created by a step for use by another step must be stored appropriately. If the data is accessed by a subsequent step within the same task then it is possible to use the /workspace directory to hold any created files and directories. A further option for steps within the same task is to use an emptyDir storage mechanism which can be useful for separating different data content for ease of use. If file stored data is to be accessed by a subsequent step that is in a different task, then a Kubernetes persistent volume claim is required to be used.
+The mechanism for adding storage to a step is called a <em>volumeMount</em>, as described further below. 
 
-A persistent volume claim called pipeline-cache is mounted into the step at a specifc path. Other steps within the task and within other tasks of the pipeline can also mount this volume and reuse any data placed there by this step. Note that the path used is where the Buildah command expects to find a local image repository. As a result any steps that invoke a Buildah command will mount this volume at this location.
+In our case, a persistent volume claim called <em>pipeline-storage-claim</em> is mounted into the step at a specifc path. Other steps within the task and within other tasks of the pipeline can also mount this volume and reuse any data placed there by this step. Note that the path used is where the Buildah command expects to find a local image repository. As a result any steps that invoke a Buildah command will mount this volume at this location.
 
-* Also, images referenced in docker files can be cached as well to save time.</em>
+><b>Buildah</b> is a tool that facilitates building Open Container Initiative (OCI) container images. The Buildah package provides a command line tool that can be used to create a container from scratch or using an image as a starting point.
 
 ### When to use persistent storage: 
-* Your data must still be available, even if the container, the worker node, or the cluster is removed. Use persistent storage in the following scenarios:
+* Your data must still be available, even if the container, the worker node, or the cluster is removed. You should use persistent storage in the following scenarios:
     * Stateful apps
     * Core business data
     * Data that must be available due to legal requirements, such as a defined retention period
     * Auditing
-    * Data that must be accessed and shared across app instances. For example, <b>access across pods</b>: When you use Kubernetes persistent volumes to access your storage, you can determine the number of pods that can mount the volume at the same time. Some storage solutions, such as block storage, can be accessed by one pod at a time only. With other storage solutions, you can share volume across multiple pods.
-    <b>Access across zones and regions</b>: You might require your data to be accessible across zones or regions. Some storage solutions, such as file and block storage, are data center-specific and cannot be shared across zones in a multizone cluster setup.
+    * Data that must be accessed and shared across app instances. For example: 
+       - <b>Access across pods</b>: When you use Kubernetes persistent volumes to access your storage, you can determine the number of pods that can mount the volume at the same time. Some storage solutions, such as block storage, can be accessed by one pod at a time only. With other storage solutions, you can share volume across multiple pods.
+       - <b>Access across zones and regions</b>: You might require your data to be accessible across zones or regions. Some storage solutions, such as file and block storage, are data center-specific and cannot be shared across zones in a multizone cluster setup.
 
-## Pipeline Listener
+### Pipeline Listener
 Our pipeline listener, <em>el-ci-event-listener</em>, exposes the endpoints for triggering pipeline execution from a webhook:
 
 ![Pipeline Listener](./images/pipeline-listener-12.jpg)
@@ -74,6 +74,10 @@ The fundamental resource of the Tekton process is the <em>task</em>, which conta
 
 Pipelines execute tasks in parallel unless a task is directed to run after the completion of another task. This facilitates parallel execution of build / test / deploy activities and is a useful characteristic that guides the user in the grouping of steps within tasks.
 
+These are the reusable tasks we have created for the Travelport demo:
+![](./images/tvpttasks.jpg)
+
+### Structure of a Pipeline
 A <em>pipelineRun</em> resource invokes the execution of a pipeline. This allows specific properties and resources to be used as inputs to the pipeline process, such that the steps within the tasks are configured for the requirements of the user or environment. Here is the breakdown of the parts that make up a pipeline run: 
 
 
@@ -81,6 +85,8 @@ A <em>pipelineRun</em> resource invokes the execution of a pipeline. This allows
 ![TektonRR](./images/tektonresourcerelationship-13.jpg)
 
 The <em>pipelineRun</em> invokes the pipeline, which contains tasks. Each task consists of a number of steps, each of which can contain elements such as command, script, volumeMounts, workingDir, parameters, resources, workspace, or image. 
+
+
 
 #### command
 The command element specifies the command to be executed, which can be a sequence of a command and arguments.
@@ -261,18 +267,101 @@ steps :
      image: registry.redhat.io/rhel8/buildah
 ```
 
+## Developer Perspective
+The OpenShift Console provides an Administrator and a Developer perspective. 
+
+With the correct user access, the Administrator perspective lets you manage workload storage, networking, cluster settings, and more.
+
+The Developer perspective lets you build applications and associated components and services, define how they work together, monitor their health, get application metrics, etc. over time.
 
 
+### Argo CD
+To implement our GitOps workflow, we used Argo CD, the GitOps continuous delivery tool for Kubernetes. Argo CD is found in the OpenShift GitOps project. If you go to the Developer's Perspective, you can see a topology:
+
+![ArgoCD](./images/argocd.jpg)
+
+
+><b>OpenShift GitOps</b> is an OpenShift add-on which provides Argo CD and other tooling to enable teams to implement GitOps workflows for cluster configuration and application delivery. OpenShift GitOps is available as an operator in the OperatorHub and can be installed with a simple one-click experience.
+
+Clicking the Argo Server node that contains the URL takes you to the Argo login page:
+
+![ArgoCDServer](./images/argocdserver.jpg)
+
+![](./images/argologin.jpg)
+
+Since OpenShift OAuth is enabled, if you are already logged in to OpenShift, you do not need to provide authentication. Clicking the ```LOG IN VIA OPENSHIFT``` button directly takes you to the ArgoCD main screen:
+
+![ArgoCDMain](./images/argocdmain.jpg)
+
+As you can see in the figure above, we have a few running applications for the Travelport MVP, including:
+* <b>tvpt-argocd</b> - <em>the root application which manages all the other apps</em>
+* <b>tvpt-preprod-infra</b>, <em>to manage post configuration for the cluster, such as logDNA, sealed secrets, etc.; in other words, a central place to manage the infrastructure configurations for an environment, in this case pre-prod.</em>
+* <b>tvpt-preprod-apps</b> 
+* <b>tvpt-prod-apps</b> 
+For demonstration purposes, we are assuming a pre-prod and prod environment. Both environments are in the same cluster, with only the applications, pre-prod and prod, isolated by project names (namespaces).
+
+If you click on an environment, for example, pre-prod, you will get by default a tree view of the applications within that environment, as shown below:
+
+![](./images/argocdapps.jpg)
+
+So, for example, as you can see above, we have <em>rail-shop-atomic</em> and <em>rail-shop-domain</em>, etc.
+
+If you click the network view, as shown below, you will see only the the running applications (the services and pods).
+
+![](./images/argonetworkview.jpg)
+
+Finally, you also have a list view available:
+
+![](./images/argolistview.jpg)
+
+Similarly, if you go to the production environment, you will see the production apps:
+
+In Tree view mode:
+
+![](./images/argoprodtree.jpg) 
+
+Network view mode:
+
+![](./images/argoprodnet.jpg) 
+
+where you can see three instances of the application running, for handling additional load.
+
+...and List view:
+
+![](./images/argoprodlist.jpg) 
+
+This shows that you can have different configurations of the same application running in different environments.
+
+#### Repositories for Travelport Demo
+We created two repositiories for the Argo GitOps in the Travelport Demo:
+* <b>tvpt-app-config
+* tvpt-infra-config</b>
+
+This, of course, can be expanded further as necessary. As mentioned earlier, <em>tvpt-infra...</em> holds infrastructure configuration information. If you peek into the code, you will see the following:
+
+![](./images/repocode.jpg)
+
+The <em>bootstrap</em> folder is about deploying Argo itself. Once you have Argo up and running, this folder will contain all of the applications, projects, etc. and all of the stuff you need to configure with argo.
+
+You also have the <em>infrastructure</em> folder:
+
+![](./images/infrafolder.jpg)
+
+within the <em>base</em> folder you have <em>kubeseal</em>, for example, to enter secrets and credential information, <em>logDNA</em> for logDNA configuration, and <em>tekton</em> for managing the Tekton pipelines. 
+
+The <em>overlays</em> folder looks like this:
+<!-- If you want to deploy this somewhere else. The <em>overlays</em> folder. -->
+
+![](./images/overlaysfolder.jpg)
+
+<em>More to be added here</em>
 ## Command Line Tools to Download
 ### OpenShift Command Line Interface (CLI)
 The OpenShift CLI allows you to create applications and manage OpenShift projects from a terminal.
 
 The oc binary offers the same capabilities as the kubectl binary, but it is further extended to natively support OpenShift Container Platform features.
 
-### <em> More to be added here </em>
-
-
-
+<em> More to be added here </em>
 
 ## Source-to-Image (S2I) Capability
 The Red Hat OpenShift ‘Source to Image’ (S2I) build process allows you to point OpenShift at a Git source repository and OpenShift will perform the following tasks:
@@ -310,3 +399,7 @@ to start a session against an OpenShift cluster. After login, run `oc` and
 
 OpenShift is licensed under the Apache Public License 2.0. The source code for this
 program is [located on github](https://github.com/openshift/origin).
+
+## Reference Information
+[OpenShift Blog](https://www.openshift.com/blog)
+[OpenShift Documentation](https://docs.openshift.com/container-platform/4.6/welcome/index.html)
