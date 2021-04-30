@@ -34,10 +34,6 @@ Some of the familiar pain points that indicate it is time to consider adopting a
 * The need to ensure consistent security rules
 * Integrating CI/CD pipelines with the API lifecycle
 
-## API Management 
-
-As demonstrated during this engagement the [API Connect](https://www.ibm.com/cloud/api-connect) product is part of the Cloud Pak for integration, and lets you create, expose, manage and monetize APIs across clouds. The next sections will focus on generic API management constraints and gives some example of how to address those requirements with API Connect.
-
 ## Enterprise APIs across boundaries
 
 If you consider a typical API management product, it includes a set of components as presented in the figure below that could be deployed on-premise on a Kubernetes-based platform or on several Cloud provider regions. APIs served by different applications or microservices can be deployed in multiple regions but still be managed by one central API management server.
@@ -88,7 +84,6 @@ Within the API Management system, the OpenAPI document can be created top-down w
 The important parts are to define the operations exposed and the request / response structure of the data model. 
 
 ### Async API
-
 Cloud Pak for Integration (CP4I) 2021.1, which includes APIC V10, also supports the Async API specification. AsyncAPI is an open source initiative that focuses on making Event-Driven Architectures (EDAs) as easy to work with as REST APIs.
 
 The AsyncAPI specification (currently at 2.0.0) establishes standards for events and EDAs, covering everything "from documentation to code generation, and  from discovery to event management" (asyncapi.com/docs). <br/>
