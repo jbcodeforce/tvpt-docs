@@ -154,7 +154,8 @@ id: 'urn:uk:co:andrewdoransmith:apimgmtdemo:railevents'
 The servers section allows you to add and define which servers client applications can connect to for sending and receiving messages (for example, this could be a list of server objects, each uniquely identifying a Kafka broker).
 
  Here is an example, where you have three Kafka brokers in the same cluster:
-```
+
+```yaml
 servers:
   broker1:
     url: andy-broker-0:9092

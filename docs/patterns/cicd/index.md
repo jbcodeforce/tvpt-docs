@@ -1,14 +1,19 @@
 # CI/CD Practices
 
 ## Continuous Delivery Practices
-With IBM® Cloud Continuous Delivery, you can build, test, and deliver applications by using DevOps or DevSecOps practices and industry-leading tools. Continuous Delivery supports a wide variety of practices. There is no one-size-fits-all answer. The practices you employ can vary from one software delivery project to the next. The IBM® Cloud Garage Method is the IBM approach to rapidly deliver engaging applications. It combines continuous delivery with IBM Design Thinking, lean, DevOps, and agile practices. Those practices are focused on the cloud, but can benefit any software development effort.
+With IBM® Cloud Continuous Delivery, you can build, test, and deliver applications by using DevOps or DevSecOps practices and industry-leading tools. Continuous Delivery supports a wide variety of practices. There is no one-size-fits-all answer. The practices you employ can vary from one software delivery project to the next. The IBM® Cloud Garage Method is the IBM approach to rapidly deliver engaging applications. It combines continuous delivery with IBM Design Thinking, lean startup methodology, DevOps, and agile practices. 
+Those practices are focused on the cloud native, but can benefit any software development effort.
 
 ## OpenShift Pipelines
-OpenShift Pipelines is a Continuous Integration / Continuous Delivery (CI/CD) solution based on the open source Tekton project. In the OpenShift platform, the Open Source Tekton project is known as <em>OpenShift Pipelines</em>, so both terms are often used interchangeably. 
+OpenShift Pipelines is a Continuous Integration / Continuous Delivery (CI/CD) solution based on the open source Tekton project. 
+In the OpenShift platform, the Open Source Tekton project is known as <em>OpenShift Pipelines</em>, so both terms are often used interchangeably. 
 
-The key objective of Tekton is to enable development teams to quickly create pipelines of activity from simple, repeatable steps. A unique characteristic of Tekton that differentiates it from previous CI/CD solutions is that Tekton steps execute within a container that is specifically created just for that task.
+The key objective of Tekton is to enable development teams to quickly create pipelines of activity from simple, repeatable steps. 
+A unique characteristic of Tekton that differentiates it from previous CI/CD solutions is that Tekton steps execute within a container that is specifically created just for that task.
 
-Users can interact with OpenShift Pipelines using the web user interface, command line interface, and via a Visual Studio Code editor plugin. The command line access is a mixture of the OpenShift ‘oc’ command line utility and the ‘tkn’ command line for specific Tekton commands. The <b>tkn</b> and <b>oc</b> command line utilities can be downloaded from the OpenShift web user interface. To do this, simply press the white circle containing a black question mark near your name on the top right corner and then select Command Line Tools:
+Users can interact with OpenShift Pipelines using the web user interface, command line interface, and via a Visual Studio Code editor plugin. The command line access is a mixture of the OpenShift ‘oc’ command line utility 
+and the ‘tkn’ command line for specific Tekton commands. The <b>tkn</b> and <b>oc</b> command line utilities can be downloaded from the OpenShift console web user interface. To do this, simply press the white circle containing 
+a black question mark near your name on the top right corner and then select Command Line Tools:
 
 ![](./images/clitools.jpg)
 
@@ -30,17 +35,18 @@ The steps in the pipeline we created are as follows:
 * <b>clone-source-repo</b> which clones the repository
 * <b>maven-package</b> which does the Maven build.
 * <b>image-build-and-push</b> which is a Docker image build and push operation
-* <b>git-kustomize-app</b> is a custom step that takes all the changes with the build (e.g. new image, tags, properties, config maps, sealed secrets, updates, etc.) and anything that needs to be pushed to the Argo repo for Argo to deploy.
+* <b>git-kustomize-app</b> is a custom step that takes all the changes from the build (e.g. new image, tags, properties, config maps, sealed secrets, updates, etc.) and anything that needs to be pushed to the Argo repo for Argo to deploy.
 * <b>argo-sync-health-check</b> Once the pipeline pushes everything to the Argo repo in the previous step, this step deploys it to (syncs with) the cluster, and reports status back from Argo saying that everyting has been deployed and the health of the application is good.
-* <b> newman-integration-test</b> This step starts the integration tests uisng the Postman collection.
-* <b> git-status-complete </b>Finally, this completion task sends status back to Git saying that the build is complete. 
+* <b>newman-integration-test</b> This step starts the integration tests using the Postman collection.
+* <b>git-status-complete </b>Finally, this completion task sends status back to Git saying that the build is completed. 
 
 ### Use of Persistent Storage
 We also added persistent storage for the pipeline, in our case called <em>pipeline-storage-claim</em>:
 
 ![Persistent Storage](./images/persistentstorage-11.jpg)
 
-Having persistent storage allows us to cache and manage state between tasks in the pipeline. For example, for its build, Maven needs all the repositories from the project dependencies. Having persistent storage allows us to maintain a cache of those repositories so that we don't have to download them every time we build. 
+Having persistent storage allows us to cache and manage state between tasks in the pipeline. For example, for its build, Maven needs all the repositories from the project dependencies. 
+Having persistent storage allows us to maintain a cache of those repositories so that we don't have to download them every time we build. 
 
 <!-- * From one step to another step in the pipeline. Each task is its own pod. A cloned step will do a git pull, but when moving to the next step, <em><b>you lose that???</b></em>, so this allows us to pass the workspace between the tasks. </em> -->
 
@@ -80,13 +86,9 @@ These are the reusable tasks we have created for the Travelport demo:
 ### Structure of a Pipeline
 A <em>pipelineRun</em> resource invokes the execution of a pipeline. This allows specific properties and resources to be used as inputs to the pipeline process, such that the steps within the tasks are configured for the requirements of the user or environment. Here is the breakdown of the parts that make up a pipeline run: 
 
-
-
 ![TektonRR](./images/tektonresourcerelationship-13.jpg)
 
 The <em>pipelineRun</em> invokes the pipeline, which contains tasks. Each task consists of a number of steps, each of which can contain elements such as command, script, volumeMounts, workingDir, parameters, resources, workspace, or image. 
-
-
 
 #### command
 The command element specifies the command to be executed, which can be a sequence of a command and arguments.
@@ -173,12 +175,14 @@ steps:
 ```
 
 #### volumeMounts
-volumeMounts allow you to add storage to a step. Since each step runs in an isolated container, any data that is created by a step for use by another step must be stored appropriately. If the data is accessed by a subsequent step within the same task then it is possible to use the /workspace directory to hold any created files and directories. A further option for steps within the same task is to use an emptyDir storage mechanism which can be useful for separating out different data content for ease of use. If file stored data is to be accessed by a subsequent step that is in a different task then a Kubernetes persistent volume claim is required to be used. As explained below, this is what we do for the Travelport demo.
+volumeMounts allow you to add storage to a step. Since each step runs in an isolated container, any data that is created by a step for use by another step must be stored appropriately. 
+If the data is accessed by a subsequent step within the same task then it is possible to use the `/workspace` directory to hold any created files and directories. 
+A further option for steps within the same task is to use an emptyDir storage mechanism which can be useful for separating out different data content for ease of use. If file stored data is to be accessed by a subsequent step that is in a different task then a Kubernetes persistent volume claim is required to be used. As explained below, this is what we do for the Travelport demo.
 
 Note that volumes are defined in a section of the task outside the scope of any steps, and then each step that needs the volume will mount it. 
 
 #### workingDir
-The workingDir element refers to the path within the container that should be the current working directory when the command is executed.
+The `workingDir` element refers to the path within the container that should be the current working directory when the command is executed.
 
 #### parameters
 As with volumeMounts, parameters are defined outside the scope of any step within a task and then they are referenced from within the step. Parameters in this case refers to any information in text form required by a step such as a path, a name of an object, a username etc.  The example below shows the parameters used in the Buildah task, which builds source into a container image and then pushes it to a container registry:
@@ -230,7 +234,7 @@ params:
 #### resources
 A reference to the resource is declared within the task and then the steps use the resources in commands. A resource can be used as an output in a step within the task.
 
-In Tekton, there is no explicit Git pull command. Simply including a Git resource in a task definition will result in a Git pull action taking place, before any steps execute, which will pull the content of the Git repository to a location of /workspace/<git-resource-name>. In the example below the Git repository content is pulled to /workspace/source.
+In Tekton, there is no explicit Git pull command. Simply including a Git resource in a task definition will result in a Git pull action taking place, before any steps execute, which will pull the content of the Git repository to a location of `/workspace/<git-resource-name>`. In the example below the Git repository content is pulled to `/workspace/source`.
 
 ```
 kind: Task
@@ -249,13 +253,18 @@ kind: Task
        - '-t'
        - $(resources.outputs.intermediate-image.url)
 ```
-Resources may reference either an image or a Git repository and the resource entity is defined in a separate YAML file. Image resources may be defined as either input or output resources depending on whether an existing image is to be consumed by a step or whether the image is to be created by a step.
+Resources may reference either an image or a Git repository and the resource entity is defined in a separate YAML file. 
+Image resources may be defined as either input or output resources depending on whether an existing image is to be consumed by a step
+ or whether the image is to be created by a step.
 
 #### workspace
-A workspace is similar to a volume in that it provides storage that can be shared across multiple tasks. A persistent volume claim is required to be created first and then the intent to use the volume is declared within the pipeline and task before mapping the workspace into an individual step such that it is mounted. Workspaces and volumes are similar in behaviour but are defined in slightly different places.
+A workspace is similar to a volume in that it provides storage that can be shared across multiple tasks. A persistent volume claim 
+is required to be created first and then the intent to use the volume is declared within the pipeline and task before mapping the 
+workspace into an individual step such that it is mounted. Workspaces and volumes are similar in behavior but are defined in
+ slightly different places.
 
 #### Image
-Since each Tekton step runs within its own image the image must be referenced as shown in the example below:
+Since each Tekton step runs within its own image, the image must be referenced as shown in the example below:
 ```
 steps :
    - name: build
@@ -268,8 +277,8 @@ steps :
 ```
 
 ## Developer Perspective
-The OpenShift Console provides an Administrator and a Developer perspective. 
 
+The OpenShift Console provides an Administrator and a Developer perspective. 
 With the correct user access, the Administrator perspective lets you manage workload storage, networking, cluster settings, and more.
 
 The Developer perspective lets you build applications and associated components and services, define how they work together, monitor their health, get application metrics, etc. over time.
@@ -281,7 +290,8 @@ To implement our GitOps workflow, we used Argo CD, the GitOps continuous deliver
 ![ArgoCD](./images/argocd.jpg)
 
 
-><b>OpenShift GitOps</b> is an OpenShift add-on which provides Argo CD and other tooling to enable teams to implement GitOps workflows for cluster configuration and application delivery. OpenShift GitOps is available as an operator in the OperatorHub and can be installed with a simple one-click experience.
+><b>OpenShift GitOps</b> is an OpenShift add-on which provides Argo CD and other tooling to enable teams to implement GitOps workflows for cluster configuration and application delivery. 
+OpenShift GitOps is available as an operator in the OperatorHub and can be installed with a simple one-click experience.
 
 Clicking the Argo Server node that contains the URL takes you to the Argo login page:
 
@@ -390,16 +400,18 @@ and select the version of OpenShift you are using.
 After extracting this archive, move the `oc` and `kubectl` binaries
 to a location on your PATH such as `/usr/local/bin`. Then run:
 
+```sh
     oc login [API_URL]
+```
 
 to start a session against an OpenShift cluster. After login, run `oc` and
 `oc help` to learn more about how to get started with OpenShift.
 
 ## License
 
-OpenShift is licensed under the Apache Public License 2.0. The source code for this
-program is [located on github](https://github.com/openshift/origin).
+OpenShift is licensed under the Apache Public License 2.0. The source code for this program is [located on github](https://github.com/openshift/origin).
 
 ## Reference Information
-[OpenShift Blog](https://www.openshift.com/blog)
-[OpenShift Documentation](https://docs.openshift.com/container-platform/4.6/welcome/index.html)
+
+* [OpenShift Blog](https://www.openshift.com/blog)
+* [OpenShift Documentation](https://docs.openshift.com/container-platform/4.6/welcome/index.html)
