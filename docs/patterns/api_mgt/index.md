@@ -61,8 +61,10 @@ For Travelport, a deployment across cloud providers could look like the diagram 
 On the left side (green boxes), the consumers of the API register to a Developer portal to get all the metadata about the API they want to consume. They register their applications as API subscribers. Their applications can run on the cloud or on-premise. 
 
 For Travelport's Rail Services, the API Gateway services would be colocated with the target Rail Services to reduce latency. These would be deployed as <em>StatefulSet</em> on an OpenShift cluster, which means as a set of pods with consistent <em>identities</em>. Identities are defined as:
-- <b>Network</b>: A single stable DNS and hostname.
-- <b>Storage</b>: As many VolumeClaims as requested.
+
+* <b>Network</b>: A single stable DNS and hostname.
+* <b>Storage</b>: As many VolumeClaims as requested.
+
 The StatefulSet guarantees that a given network identity will always map to the same storage identity. 
 
 The API Gateway acts as a reverse proxy, and exposes the `Booking APIs`, enforcing user authentication and security policies, and handling traffic monitoring, rate limiting, and statistics. The API Gateway can also perform transformations and aggregate various services to fulfill a request. 
@@ -84,9 +86,11 @@ Within the API Management system, the OpenAPI document can be created top-down w
 The important parts are to define the operations exposed and the request / response structure of the data model. 
 
 ### Async API
-Cloud Pak for Integration (CP4I) 2021.1, which includes APIC V10, also supports the Async API specification. AsyncAPI is an open source initiative that focuses on making Event-Driven Architectures (EDAs) as easy to work with as REST APIs.
 
-The AsyncAPI specification (currently at 2.0.0) establishes standards for events and EDAs, covering everything "from documentation to code generation, and  from discovery to event management" (asyncapi.com/docs). <br/>
+Cloud Pak for Integration (CP4I) 2021.1, which includes APIConnect V10, also supports the AsyncAPI specification. AsyncAPI is an open source initiative that focuses on making Event-Driven Architectures (EDAs) as easy to work with as REST APIs.
+
+The AsyncAPI specification (currently at 2.0.0) establishes standards for events and EDAs, covering everything "from documentation to code generation, and  from discovery to event management" [asyncapi.com/docs](https://asyncapi.com/docs). <br/>
+
 The goal is to enable the creation of better tooling in the message-driven space, better governance of asynchronous APIs, and standardization in documentation for asynchronous APIs. In short, Async API is to Message-driven architectures what OpenAPI is to REST APIs. While OpenAPI is the recommended practice for RESTful APIs, adopting AsyncAPI is the recommended practice for event-driven APIs.
 
 An AsyncAPI document is a file in either YAML or JSON format that defines and annotates the different components of an event-driven API. For example, AsyncAPI can formally describe how to connect to a Kafka cluster, the details of the Kafka topics (channels in AsyncAPI), and the type of data in messages. AsyncAPI includes both formal schema definitions and space for free-text descriptions (https://dalelane.co.uk/blog/?p=4219).
@@ -108,6 +112,7 @@ Here are the structural differences between OpenAPI and AsyncAPI:
 Source: https://www.asyncapi.com/docs/getting-started/coming-from-openapi
 
 A few things to note include:
+
 * AsyncAPI is compatible with OpenAPI schemas, which is quite useful since many times the information flowing in the events is very similar to the one the REST APIs have to handle in requests and responses.
 * The message payload in AsyncAPI does not have to be an AsyncAPI/OpenAPI schema; it can be any value such as an Apache Avro schema, which is considered to be one of the better choices for stream data, where data is modeled as streams (see <em>Why Avro for Kafka</em> below). 
 * The AsyncAPI server object is almost identical to its OpenAPI counterpart with the exception that <em>scheme</em> has been renamed to <em>protocol</em> and AsyncAPI introduces a new property called <em>protocolVersion</em>.
