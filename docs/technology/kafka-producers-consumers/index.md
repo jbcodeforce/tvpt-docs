@@ -216,7 +216,7 @@ As shown in the figure below, it is possible to get duplicates if the last messa
 
 In the opposite, if the last committed offset is after the last processed messages and there were multiple messages returned in the poll, then those messages may be lost.
 
-![](./images/Kafka-commit-offset-2.png)
+![](./images/kafka-commit-offset-2.png)
 
 It is possible to commit by calling API or by setting some properties at the consumer creation level to enable autocommit offset [enable.auto.commit](https://Kafka.apache.org/documentation/#consumerconfigs_enable.auto.commit).
 

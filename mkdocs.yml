@@ -4,9 +4,10 @@ nav:
   - Home: index.md
   - EDA Concepts: concepts/terms-and-definitions/index.md
   - Fit for purpose: concepts/fit-for-purpose/index.md
+  - Methodology: methodology
   - Design Patterns:
     - API management: patterns/api_mgt/index.md
-    - Event Sourcing: patterns/event-sourcing/
+    - Event Sourcing: patterns/event-sourcing/index.md
     - CQRS: patterns/cqrs/index.md
     - Outbox: patterns/transactional-outbox/index.md
     - SAGA: patterns/saga/index.md

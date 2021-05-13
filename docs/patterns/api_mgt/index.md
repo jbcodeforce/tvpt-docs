@@ -56,7 +56,7 @@ Here is how it works:
 <br/>
 For Travelport, a deployment across cloud providers could look like the diagram below, using API Connect in CP4I:
 
-![](./images/federated-api-mgt.png)
+![](./images/federated-API-mgt.png)
 
 On the left side (green boxes), the consumers of the API register to a Developer portal to get all the metadata about the API they want to consume. They register their applications as API subscribers. Their applications can run on the cloud or on-premise. 
 
