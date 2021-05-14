@@ -1,24 +1,24 @@
 # Fit for purpose
 
-In this note we want to list some of the criteria to consider and assess during an event-driven architecture establishment work and as part of a continuous application governance. This is not fully exhaustive, but give good foundations for analysis and study.
-Fit for purpose practices should be done under a bigger program about application development governance and data governance.
-We can look at least to the following major subjects:
+In this note we want to list some of the criteria to consider and assess during an event-driven architecture establishment work and as part of a continuous application governance. This is not fully exhaustive, but provides a good foundation for analysis and study.
+
+Fit for purpose practices should be done under a bigger program about application development governance and data governance. We can look at least to the following major subjects:
 
 ## Cloud native applications
 
 With the adoption of cloud native and microservice applications (12 factors app), the following needs to be addressed:
 
-* Responsiveness with elastic scaling and resilience to failure. Which leads to adopt the '[reactive](/advantages/reactive/) manifesto' and consider messaging as a way to communicate between apps. Elastic also may lead to multi cloud deployment practice.
-* Address data sharing using a push model to improve decoupling, and performance. Instead of having each service using REST end point to pull the data from other services, each service push the change to their main business entity to a event backbone. Each future service which needs those data, pull from the messaging system.
-* Adopting common pattern like [command query responsibility segregation](../../patterns/cqrs/) to help implementing complex queries, joining different business entities owned by different microservices, [event sourcing](../../patterns/event-sourcing/), [transactional outbox](../../patterns/transactional-outbox) and [SAGA](../../patterns/saga/).
-* Addressing data eventual consistency to propagate change to other components versus ACID transaction.
+* Responsiveness with elastic scaling and resilience to failure, which leads to adopting the '[reactive](/advantages/reactive/) manifesto' and consider messaging as a way to communicate between apps. Elastic may also lead to multi cloud deployment practices.
+* Address data sharing using a push model to improve decoupling, and performance. Instead of having each service use a REST endpoint to pull data from other services, each service can push the change through their main business entity to an event backbone, and future services needing that data can then pull it from the messaging system.
+* Adopting common patterns like [Command Query Responsibility Segregation (CQRS)](../../patterns/cqrs/) to help implement complex queries, joining different business entities owned by different microservices, [event sourcing](../../patterns/event-sourcing/), [transactional outbox](../../patterns/transactional-outbox) and [SAGA](../../patterns/saga/).
+* Addressing eventual data consistency to propagate change to other components versus ACID transactions.
 * Support always-on approach with the deployment to multiple data centers (at least three) being active/active and being able to propagate data in all data centers.
 
 So the net: **do we need to implement event-driven microservices because of those needs?**
 
 ## Modern data pipeline
 
-As new business applications need to react to events in real time, the adoption of [event backbone](/concepts/terms-and-definitions/#event-backbone) is really part of the IT toolbox. Some existing deployment consider this to be their new data hub, where all the data about the 'customer' is accessible. Therefore, it is natural to assess the data movement strategy and offload some of those ETL jobs running at night, as most of those works are done already inside of the applications generating those data, but not those data are visible inside the backbone.
+As new business applications need to react to events in real time, the adoption of an [event backbone](/concepts/terms-and-definitions/#event-backbone) is really part of the IT toolbox. Some existing deployments consider this to be their new data hub, where all the data about the 'customer' is accessible. Therefore, it is natural to assess the data movement strategy and offload some of those ETL jobs running at night, as most of those works are done already inside of the applications generating those data, but not those data are visible inside the backbone.
 
 We detailed the new architecture in [this modern data lake](introduction/reference-architecture/#modern-data-lake) discussion, so from a *fit for purpose* point of view, we need to assess what those ETL jobs were doing and how much of those data is now visible to other to consume.
 
