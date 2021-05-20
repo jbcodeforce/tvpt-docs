@@ -34,6 +34,11 @@ Some of the familiar pain points that indicate the need for a broader API Manage
 * The need to ensure consistent security rules
 * Integrating CI/CD pipelines with the API lifecycle
 
+### API Management for Travelport
+To determine whether IBM's API Management product, <em>API Connect</em>, can meet Travelport's requirements, Travelport presented several use cases to IBM regarding the product's support for API design and governance. The following table addresses those use cases, and highlights in green the ones we had time to demonstrate during our API Management demo:
+
+![](./images/travelportapimgmtdemo.jpg)
+
 ## Enterprise APIs across boundaries
 
 If you consider a typical API Management product, it includes a set of components as presented in the figure below that could be deployed on an on-premise Kubernetes-based platform or in several Cloud provider regions. APIs served by different applications or microservices can be deployed in multiple regions but still be managed by one central API Management server.
@@ -80,13 +85,11 @@ Gateway services, Developer Portal services, and Analytics services are scoped t
 The different API Management services run on OpenShift which can help ensure high availability of each of the components. 
 
 ### Open API
-
 Within the API Management system, the OpenAPI document can be created top-down using a Swagger-based UI or bottom up using Annotation in the Java JAXRS resource classes. Either way, the API can be uploaded to the API Management product.
 
 The important parts are to define the operations exposed and the request / response structure of the data model. 
 
 ### Support for Async API
-
 Cloud Pak for Integration (CP4I) 2021.1, which includes APIConnect V10, also provides some support for the AsyncAPI specification. 
 
 AsyncAPI is an open source initiative that focuses on making Event-Driven Architectures (EDAs) as easy to work with as REST APIs.
@@ -98,7 +101,6 @@ The goal is to enable the creation of better tooling in the message-driven space
 While OpenAPI is the recommended practice for RESTful APIs, adopting AsyncAPI is the recommended practice for event-driven APIs.
 
 #### AsyncAPI Documents
-
 An AsyncAPI document is a file in either YAML or JSON format that defines and annotates the different components of an event-driven API. For example, AsyncAPI can formally describe how to connect to a Kafka cluster, the details of the Kafka topics (channels in AsyncAPI), and the type of data in messages. AsyncAPI includes both formal schema definitions and space for free-text descriptions (https://dalelane.co.uk/blog/?p=4219).
 
 Here is what it looks like: 
@@ -124,7 +126,6 @@ Source: https://www.asyncapi.com/docs/getting-started/coming-from-openapi
 * AsyncAPI channel parameters are the equivalent of OpenAPI path parameters, except that AsyncAPI does not have the notion of <em>query</em> and <em>cookie</em>, and header parameters can be defined in the message object. 
 
 #### Describing Kafka with AsyncAPI
-
 It is also important to understand how to use AsyncAPI from the perspective of a Kafka user. The following section summarizes what is described in more detail in [this article](https://dalelane.co.uk/blog/?p=4219) written by Dale Lane.
 
 First, there are some minor differences in terminology between Kafka and AsyncAPI that you should note: 
@@ -133,7 +134,6 @@ First, there are some minor differences in terminology between Kafka and AsyncAP
 ![kafka vs asyncapi](./images/kafkavsasyncapi.jpg)
 
 #### The AsyncAPI Document
-
 Considering the structure in the diagram above, let's look at some of the parts of an AsyncAPI document:
 ##### Info
 The Info section has three parts which represent the minimum required information about the application: <em>title</em>, <em>version</em>, and <em>description</em> (optional), used as follows:
@@ -185,7 +185,6 @@ servers:
 The example above uses the ```kafka``` protocol for the different brokers, which is a popular protocol for streaming solutions, but the protocol can be any. For example, the most common protocols include: ```mqtt```, which is widely adopted by the Internet of Things and mobile apps, ```amqp```, which is popular for its reliable queueing, ```ws``` for WebSockets, frequently used in browsers, and ```http```, which is used in HTTP streaming APIs.
 
 > #### Difference Between the AMQP and MQTT Protocols
-
 > <b>AMQP</b> was mainly popularized by RabbitMQ. It provides reliable queuing, topic-based publish-and-subscribe messaging, flexible routing, transactions, and security. The main reasons to use AMQP are reliability and interoperability. AMQP exchanges route messages directly—in fanout form, by topic, and also based on headers.
 > 
 > <b>MQTT</b> The design principles and aims of MQTT are much more simple and focused than those of AMQP—it provides publish-and-subscribe messaging (no queues, in spite of the name) and was specifically designed for resource-constrained devices and low bandwidth, high latency networks such as dial up lines and satellite links. Basically, it can be used effectively in embedded systems.
@@ -201,7 +200,6 @@ So, as a best practice, avoid this workaround and stick to one cluster per Async
 > <b>NOTE</b>: As with OpenAPI, you can add additional attributes to the spec using the x- prefix, which identifies an entry as your own extension to the AsyncAPI specs.
 
 ##### Security
-
 If the Kafka cluster doesn’t have auth enabled, the protocol used should be ```kafka```. Otherwise, if client applications are required to provide credentials, the protocol should be ```kafka-secure```. 
 
 To identify the type of credentials, add a security section to the server object. The value you put there is the name of a securityScheme object you define in the components section.
@@ -271,7 +269,6 @@ channels:
 For each operation, you can provide a unique id, a short one-line text summary, and a more detailed description in plain text or markdown formatting.
 
 ##### Bindings
-
 AsyncAPI puts protocol-specific values in sections called <em>bindings</em>.
 
 The bindings sections allows you to specify the values that Kafka clients should use to perform the operation. The values you can describe here include the consumer group id and the client id.
@@ -320,7 +317,6 @@ channels:
 view raw
 ```
 ##### Messages
-
 A message is how information is exchanged via a channel between servers and applications. According to the AsyncAPI specifications, a message MUST contain a payload and MAY also contain headers. The headers MAY be subdivided into protocol-defined headers and header properties defined by the application which can act as supporting metadata. The payload contains the data, defined by the application, which MUST be serialized into a supported format (JSON, XML, Avro, binary, etc.). Because a message is a generic mechanism, it can support multiple interaction patterns such as event, command, request, or response.
 
 As with all the other levels of the spec, you can provide background and narrative in a description field for the message:
@@ -337,13 +333,11 @@ channels:
 ```
 
 ###Summary
-
 In short, the following diagram summarizes the sections described above:
 ![](./images/asyncapisummary.jpg)
 For more information, the official AsyncAPI specifications can be found [here](https://www.asyncapi.com/docs/specifications/2.0.0).
 
 ### Why Use Avro for Kafka?
-
 Apache Avro is "an open source data serialization system that helps with data exchange between systems, programming languages, and processing frameworks" (https://www.confluent.io/blog/avro-kafka-data/). Avro is a great fit for stream data because it has the following features:
 
 * Direct mapping to and from JSON, but typically much faster than JSON, with much smaller encodings
@@ -352,7 +346,6 @@ Apache Avro is "an open source data serialization system that helps with data ex
 * A rich, extensible schema language defined in pure JSON
 
 ### The Travelport API Management Demo
-
 Besides a new, event-driven approach to its API model, Travelport needs a way to securely provide self-service access to different versions of its APIs, to enable their developers to discover and easily use these APIs, and to be able to redirect API calls based on several criteria.
 
 IBM API Connect (APIC) is a complete and scalable API Management platform that allows them to do these things, in addition to exposing, managing, and monetizing APIs across clouds. API Connect is also available with other capabilities as an IBM Cloud Pak® solution.
