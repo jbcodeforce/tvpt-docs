@@ -31,6 +31,7 @@ We also created the following pipeline (labelled <em>ci-pipeline</em>) within th
 The idea is to build an application from source code using Maven and the OpenShift Source to Image (S2I) process. 
 
 The steps in the pipeline we created are as follows:
+
 * <b>git-status-pending</b> which tells Git that we are starting the build.
 * <b>clone-source-repo</b> which clones the repository
 * <b>maven-package</b> which does the Maven build.
@@ -58,22 +59,27 @@ In our case, a persistent volume claim called <em>pipeline-storage-claim</em> is
 ><b>Buildah</b> is a tool that facilitates building Open Container Initiative (OCI) container images. The Buildah package provides a command line tool that can be used to create a container from scratch or using an image as a starting point.
 
 ### When to use persistent storage: 
+
 * Your data must still be available, even if the container, the worker node, or the cluster is removed. You should use persistent storage in the following scenarios:
+
     * Stateful apps
     * Core business data
     * Data that must be available due to legal requirements, such as a defined retention period
     * Auditing
     * Data that must be accessed and shared across app instances. For example: 
+
        - <b>Access across pods</b>: When you use Kubernetes persistent volumes to access your storage, you can determine the number of pods that can mount the volume at the same time. Some storage solutions, such as block storage, can be accessed by one pod at a time only. With other storage solutions, you can share volume across multiple pods.
        - <b>Access across zones and regions</b>: You might require your data to be accessible across zones or regions. Some storage solutions, such as file and block storage, are data center-specific and cannot be shared across zones in a multizone cluster setup.
 
 ### Pipeline Listener
+
 Our pipeline listener, <em>el-ci-event-listener</em>, exposes the endpoints for triggering pipeline execution from a webhook:
 
 ![Pipeline Listener](./images/pipeline-listener-12.jpg)
 
 
 ### Tasks
+
 The fundamental resource of the Tekton process is the <em>task</em>, which contains at least one step to be executed and performs a useful function. Tasks are normally organized into an ordered execution set using a pipeline resource.
 
 <!-- Tasks execute steps in the order in which they are written, with each step completing before the next step starts. -->
@@ -84,6 +90,7 @@ These are the reusable tasks we have created for the Travelport demo:
 ![](./images/tvpttasks.jpg)
 
 ### Structure of a Pipeline
+
 A <em>pipelineRun</em> resource invokes the execution of a pipeline. This allows specific properties and resources to be used as inputs to the pipeline process, such that the steps within the tasks are configured for the requirements of the user or environment. Here is the breakdown of the parts that make up a pipeline run: 
 
 ![TektonRR](./images/tektonresourcerelationship-13.jpg)
@@ -91,9 +98,11 @@ A <em>pipelineRun</em> resource invokes the execution of a pipeline. This allows
 The <em>pipelineRun</em> invokes the pipeline, which contains tasks. Each task consists of a number of steps, each of which can contain elements such as command, script, volumeMounts, workingDir, parameters, resources, workspace, or image. 
 
 #### command
+
 The command element specifies the command to be executed, which can be a sequence of a command and arguments.
 
 #### script
+
 Alternatively, you can use a script which can be useful if a single step is required to perform a number of command line operations. 
 
 Below is an example from the Travelport demo that uses a script (for the mvn-settings task) and a command (for the mvn-goals task). These two tasks make up the maven-package step, responsible for the maven build:
@@ -175,6 +184,7 @@ steps:
 ```
 
 #### volumeMounts
+
 volumeMounts allow you to add storage to a step. Since each step runs in an isolated container, any data that is created by a step for use by another step must be stored appropriately. 
 If the data is accessed by a subsequent step within the same task then it is possible to use the `/workspace` directory to hold any created files and directories. 
 A further option for steps within the same task is to use an emptyDir storage mechanism which can be useful for separating out different data content for ease of use. If file stored data is to be accessed by a subsequent step that is in a different task then a Kubernetes persistent volume claim is required to be used. As explained below, this is what we do for the Travelport demo.
@@ -182,9 +192,11 @@ A further option for steps within the same task is to use an emptyDir storage me
 Note that volumes are defined in a section of the task outside the scope of any steps, and then each step that needs the volume will mount it. 
 
 #### workingDir
+
 The `workingDir` element refers to the path within the container that should be the current working directory when the command is executed.
 
 #### parameters
+
 As with volumeMounts, parameters are defined outside the scope of any step within a task and then they are referenced from within the step. Parameters in this case refers to any information in text form required by a step such as a path, a name of an object, a username etc.  The example below shows the parameters used in the Buildah task, which builds source into a container image and then pushes it to a container registry:
 ```yaml
 params:
@@ -232,6 +244,7 @@ params:
 ```
 
 #### resources
+
 A reference to the resource is declared within the task and then the steps use the resources in commands. A resource can be used as an output in a step within the task.
 
 In Tekton, there is no explicit Git pull command. Simply including a Git resource in a task definition will result in a Git pull action taking place, before any steps execute, which will pull the content of the Git repository to a location of `/workspace/<git-resource-name>`. In the example below the Git repository content is pulled to `/workspace/source`.
@@ -253,17 +266,20 @@ kind: Task
        - '-t'
        - $(resources.outputs.intermediate-image.url)
 ```
+
 Resources may reference either an image or a Git repository and the resource entity is defined in a separate YAML file. 
 Image resources may be defined as either input or output resources depending on whether an existing image is to be consumed by a step
  or whether the image is to be created by a step.
 
-#### workspace
+#### Workspace
+
 A workspace is similar to a volume in that it provides storage that can be shared across multiple tasks. A persistent volume claim 
 is required to be created first and then the intent to use the volume is declared within the pipeline and task before mapping the 
 workspace into an individual step such that it is mounted. Workspaces and volumes are similar in behavior but are defined in
  slightly different places.
 
 #### Image
+
 Since each Tekton step runs within its own image, the image must be referenced as shown in the example below:
 ```yaml
 steps :
@@ -305,10 +321,12 @@ Since OpenShift OAuth is enabled, if you are already logged in to OpenShift, you
 ![ArgoCDMain](./images/argocdmain.jpg)
 
 As you can see in the figure above, we have a few running applications for the Travelport MVP, including:
+
 * <b>tvpt-argocd</b> - <em>the root application which manages all the other apps</em>
 * <b>tvpt-preprod-infra</b>, <em>to manage post configuration for the cluster, such as logDNA, sealed secrets, etc.; in other words, a central place to manage the infrastructure configurations for an environment, in this case pre-prod.</em>
 * <b>tvpt-preprod-apps</b> 
 * <b>tvpt-prod-apps</b> 
+
 For demonstration purposes, we are assuming a pre-prod and prod environment. Both environments are in the same cluster, with only the applications, pre-prod and prod, isolated by project names (namespaces).
 
 If you click on an environment, for example, pre-prod, you will get by default a tree view of the applications within that environment, as shown below:
@@ -344,6 +362,7 @@ where you can see three instances of the application running, for handling addit
 This shows that you can have different configurations of the same application running in different environments.
 
 #### Repositories for Travelport Demo
+
 We created two repositiories for the Argo GitOps in the Travelport Demo:
 * <b>tvpt-app-config
 * tvpt-infra-config</b>
