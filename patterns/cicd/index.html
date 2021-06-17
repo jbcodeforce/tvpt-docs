@@ -1,0 +1,1401 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.2.1, mkdocs-material-7.1.8">
+    
+    
+      
+        <title>CICD for Travelport - Travelport Event-Driven Microservice practices</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ca7ac06f.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.f1a3b89f.min.css">
+        
+          
+          
+          <meta name="theme-color" content="">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>:root{--md-text-font-family:"Roboto";--md-code-font-family:"Roboto Mono"}</style>
+      
+    
+    
+    
+      <link rel="stylesheet" href="../../extra.css">
+    
+    
+      
+
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="blue-dark" data-md-color-accent="">
+  
+    
+    <script>function __prefix(e){return new URL("../..",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#cicd-practices" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../index.html" title="Travelport Event-Driven Microservice practices" class="md-header__button md-logo" aria-label="Travelport Event-Driven Microservice practices" data-md-component="logo">
+      
+  <img src="../../images/travelportlogo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Travelport Event-Driven Microservice practices
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              CICD for Travelport
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        
+<a href="https://github.com/jbcodeforce/tvpt-docs/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../index.html" title="Travelport Event-Driven Microservice practices" class="md-nav__button md-logo" aria-label="Travelport Event-Driven Microservice practices" data-md-component="logo">
+      
+  <img src="../../images/travelportlogo.png" alt="logo">
+
+    </a>
+    Travelport Event-Driven Microservice practices
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/jbcodeforce/tvpt-docs/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../index.html" class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concepts/terms-and-definitions/index.html" class="md-nav__link">
+        EDA Concepts
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concepts/fit-for-purpose/index.html" class="md-nav__link">
+        Fit for purpose
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../methodology" class="md-nav__link">
+        Methodology
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      <label class="md-nav__link" for="__nav_5">
+        Design Patterns
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Design Patterns" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Design Patterns
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api_mgt/index.html" class="md-nav__link">
+        API management
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../event-sourcing/index.html" class="md-nav__link">
+        Event Sourcing
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cqrs/index.html" class="md-nav__link">
+        CQRS
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../transactional-outbox/index.html" class="md-nav__link">
+        Outbox
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../saga/index.html" class="md-nav__link">
+        SAGA
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dlq/index.html" class="md-nav__link">
+        Dead letter queue
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" checked>
+      
+      <label class="md-nav__link" for="__nav_6">
+        Technology
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Technology" data-md-level="1">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          Technology
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          CICD for Travelport
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="index.html" class="md-nav__link md-nav__link--active">
+        CICD for Travelport
+      </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#travelport-mvp" class="md-nav__link">
+    Travelport MVP
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#continuous-delivery-practices" class="md-nav__link">
+    Continuous Delivery Practices
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#openshift-pipelines" class="md-nav__link">
+    OpenShift Pipelines
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cluster" class="md-nav__link">
+    Cluster
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pipelines-used-in-this-project" class="md-nav__link">
+    Pipelines Used in This Project
+  </a>
+  
+    <nav class="md-nav" aria-label="Pipelines Used in This Project">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#use-of-persistent-storage" class="md-nav__link">
+    Use of Persistent Storage
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#when-to-use-persistent-storage" class="md-nav__link">
+    When to use persistent storage:
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pipeline-listener" class="md-nav__link">
+    Pipeline Listener
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tasks" class="md-nav__link">
+    Tasks
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#structure-of-a-pipeline" class="md-nav__link">
+    Structure of a Pipeline
+  </a>
+  
+    <nav class="md-nav" aria-label="Structure of a Pipeline">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#command" class="md-nav__link">
+    command
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#script" class="md-nav__link">
+    script
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#volumemounts" class="md-nav__link">
+    volumeMounts
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#workingdir" class="md-nav__link">
+    workingDir
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parameters" class="md-nav__link">
+    parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resources" class="md-nav__link">
+    resources
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#workspace" class="md-nav__link">
+    Workspace
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#image" class="md-nav__link">
+    Image
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#developer-perspective" class="md-nav__link">
+    Developer Perspective
+  </a>
+  
+    <nav class="md-nav" aria-label="Developer Perspective">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#argo-cd" class="md-nav__link">
+    Argo CD
+  </a>
+  
+    <nav class="md-nav" aria-label="Argo CD">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#repositories-for-travelport-demo" class="md-nav__link">
+    Repositories for Travelport Demo
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#command-line-tools-to-download" class="md-nav__link">
+    Command Line Tools to Download
+  </a>
+  
+    <nav class="md-nav" aria-label="Command Line Tools to Download">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#openshift-command-line-interface-cli" class="md-nav__link">
+    OpenShift Command Line Interface (CLI)
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#source-to-image-s2i-capability" class="md-nav__link">
+    Source-to-Image (S2I) Capability
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#openshift-clients" class="md-nav__link">
+    OpenShift Clients
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#installing-the-tools" class="md-nav__link">
+    Installing the tools
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#license" class="md-nav__link">
+    License
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reference-information" class="md-nav__link">
+    Reference Information
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../technology/kafka-overview/index.html" class="md-nav__link">
+        Kafka Summary
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../technology/kafka-producers-consumers/index.html" class="md-nav__link">
+        Producer - Consumer
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../technology/faq/index.html" class="md-nav__link">
+        Kafka FAQ
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../technology/kafka-connect/index.html" class="md-nav__link">
+        Kafka Konnect
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../technology/spring/index.html" class="md-nav__link">
+        Spring cloud
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#travelport-mvp" class="md-nav__link">
+    Travelport MVP
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#continuous-delivery-practices" class="md-nav__link">
+    Continuous Delivery Practices
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#openshift-pipelines" class="md-nav__link">
+    OpenShift Pipelines
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cluster" class="md-nav__link">
+    Cluster
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pipelines-used-in-this-project" class="md-nav__link">
+    Pipelines Used in This Project
+  </a>
+  
+    <nav class="md-nav" aria-label="Pipelines Used in This Project">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#use-of-persistent-storage" class="md-nav__link">
+    Use of Persistent Storage
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#when-to-use-persistent-storage" class="md-nav__link">
+    When to use persistent storage:
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pipeline-listener" class="md-nav__link">
+    Pipeline Listener
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tasks" class="md-nav__link">
+    Tasks
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#structure-of-a-pipeline" class="md-nav__link">
+    Structure of a Pipeline
+  </a>
+  
+    <nav class="md-nav" aria-label="Structure of a Pipeline">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#command" class="md-nav__link">
+    command
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#script" class="md-nav__link">
+    script
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#volumemounts" class="md-nav__link">
+    volumeMounts
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#workingdir" class="md-nav__link">
+    workingDir
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parameters" class="md-nav__link">
+    parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resources" class="md-nav__link">
+    resources
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#workspace" class="md-nav__link">
+    Workspace
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#image" class="md-nav__link">
+    Image
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#developer-perspective" class="md-nav__link">
+    Developer Perspective
+  </a>
+  
+    <nav class="md-nav" aria-label="Developer Perspective">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#argo-cd" class="md-nav__link">
+    Argo CD
+  </a>
+  
+    <nav class="md-nav" aria-label="Argo CD">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#repositories-for-travelport-demo" class="md-nav__link">
+    Repositories for Travelport Demo
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#command-line-tools-to-download" class="md-nav__link">
+    Command Line Tools to Download
+  </a>
+  
+    <nav class="md-nav" aria-label="Command Line Tools to Download">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#openshift-command-line-interface-cli" class="md-nav__link">
+    OpenShift Command Line Interface (CLI)
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#source-to-image-s2i-capability" class="md-nav__link">
+    Source-to-Image (S2I) Capability
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#openshift-clients" class="md-nav__link">
+    OpenShift Clients
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#installing-the-tools" class="md-nav__link">
+    Installing the tools
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#license" class="md-nav__link">
+    License
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reference-information" class="md-nav__link">
+    Reference Information
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/jbcodeforce/tvpt-docs/edit/master/docs/patterns/cicd/index.md" title="Edit this page" class="md-content__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+                  </a>
+                
+                
+                <h1 id="cicd-practices">CI/CD Practices</h1>
+<h2 id="travelport-mvp">Travelport MVP</h2>
+<h2 id="continuous-delivery-practices">Continuous Delivery Practices</h2>
+<p>With IBM® Cloud Continuous Delivery, you can build, test, and deliver applications by using DevOps or DevSecOps practices and industry-leading tools. Continuous Delivery supports a wide variety of practices. There is no one-size-fits-all answer. The practices you employ can vary from one software delivery project to the next. The IBM® Cloud Garage Method is the IBM approach to rapidly deliver engaging applications. It combines continuous delivery with IBM Design Thinking, lean startup methodology, DevOps, and agile practices. 
+Those practices are mainly focused on cloud native, but can benefit any software development effort.</p>
+<h2 id="openshift-pipelines">OpenShift Pipelines</h2>
+<p>OpenShift Pipelines is a Continuous Integration / Continuous Delivery (CI/CD) solution based on the open source Tekton project. In the OpenShift platform, the Open Source Tekton project is known as <em>OpenShift Pipelines</em>, so both terms are often used interchangeably. </p>
+<p>The key objective of Tekton is to enable development teams to quickly create pipelines of activity from simple, repeatable steps. A unique characteristic of Tekton that differentiates it from previous CI/CD solutions is that Tekton steps execute within a container that is specifically created just for that task.</p>
+<p>Users can interact with OpenShift Pipelines using the web user interface, command line interface, and via a Visual Studio Code editor plugin. The command line access is a mixture of the OpenShift ‘oc’ command line utility 
+and the ‘tkn’ command line for specific Tekton commands. The <b>tkn</b> and <b>oc</b> command line utilities can be downloaded from the OpenShift console web user interface. To do this, simply press the white circle containing a black question mark near your name on the top right corner and then select Command Line Tools:</p>
+<p><img alt="" src="images/clitools.jpg" /></p>
+<h2 id="cluster">Cluster</h2>
+<p>For the Rail project demo, we created a cluster in the IBM Cloud called <em>tvpt-rail-dev</em>, as follows:</p>
+<p><img alt="Cluster" src="images/clusterview-0.jpg" /></p>
+<h2 id="pipelines-used-in-this-project">Pipelines Used in This Project</h2>
+<p>We also created the following pipeline (labelled <em>ci-pipeline</em>) within the namespace <em>tvpt-pipelines</em>:</p>
+<p><img alt="CI Pipeline View" src="images/ci-pipeline.png" /></p>
+<p>The idea is to build an application from source code using Maven and the OpenShift Source to Image (S2I) process. </p>
+<p>The steps in the pipeline we created are as follows:</p>
+<ul>
+<li><b>git-status-pending</b> which tells Git that we are starting the build.</li>
+<li><b>clone-source-repo</b> which clones the repository</li>
+<li><b>maven-package</b> which does the Maven build.</li>
+<li><b>image-build-and-push</b> which is a Docker image build and push operation</li>
+<li><b>git-kustomize-app</b> is a custom step that takes all the changes from the build (e.g. new image, tags, properties, config maps, sealed secrets, updates, etc.) and anything that needs to be pushed to the Argo repo for Argo to deploy.</li>
+<li><b>argo-sync-health-check</b> Once the pipeline pushes everything to the Argo repo in the previous step, this step deploys it to (syncs with) the cluster, and reports status back from Argo saying that everyting has been deployed and the health of the application is good.</li>
+<li><b>newman-integration-test</b> This step starts the integration tests using the Postman collection.</li>
+<li><b>git-status-complete </b>Finally, this completion task sends status back to Git saying that the build is completed. </li>
+</ul>
+<h3 id="use-of-persistent-storage">Use of Persistent Storage</h3>
+<p>We also added persistent storage for the pipeline, in our case called <em>pipeline-storage-claim</em>:</p>
+<p><img alt="Persistent Storage" src="images/persistentstorage-11.jpg" /></p>
+<p>Having persistent storage allows us to cache and manage state between tasks in the pipeline. For example, for its build, Maven needs all the repositories from the project dependencies. 
+Having persistent storage allows us to maintain a cache of those repositories so that we don't have to download them every time we build. </p>
+<!-- * From one step to another step in the pipeline. Each task is its own pod. A cloned step will do a git pull, but when moving to the next step, <em><b>you lose that???</b></em>, so this allows us to pass the workspace between the tasks. </em> -->
+
+<p>Since each step runs in an isolated container any data that is created by a step for use by another step must be stored appropriately. If the data is accessed by a subsequent step within the same task then it is possible to use the /workspace directory to hold any created files and directories. A further option for steps within the same task is to use an emptyDir storage mechanism which can be useful for separating different data content for ease of use. If file stored data is to be accessed by a subsequent step that is in a different task, then a Kubernetes persistent volume claim is required to be used.
+The mechanism for adding storage to a step is called a <em>volumeMount</em>, as described further below. </p>
+<p>In our case, a persistent volume claim called <em>pipeline-storage-claim</em> is mounted into the step at a specifc path. Other steps within the task and within other tasks of the pipeline can also mount this volume and reuse any data placed there by this step. Note that the path used is where the Buildah command expects to find a local image repository. As a result any steps that invoke a Buildah command will mount this volume at this location.</p>
+<blockquote>
+<p><b>Buildah</b> is a tool that facilitates building Open Container Initiative (OCI) container images. The Buildah package provides a command line tool that can be used to create a container from scratch or using an image as a starting point.</p>
+</blockquote>
+<h3 id="when-to-use-persistent-storage">When to use persistent storage:</h3>
+<ul>
+<li>
+<p>Your data must still be available, even if the container, the worker node, or the cluster is removed. You should use persistent storage in the following scenarios:</p>
+<ul>
+<li>Stateful apps</li>
+<li>Core business data</li>
+<li>Data that must be available due to legal requirements, such as a defined retention period</li>
+<li>Auditing</li>
+<li>
+<p>Data that must be accessed and shared across app instances. For example: </p>
+</li>
+<li>
+<p><b>Access across pods</b>: When you use Kubernetes persistent volumes to access your storage, you can determine the number of pods that can mount the volume at the same time. Some storage solutions, such as block storage, can be accessed by one pod at a time only. With other storage solutions, you can share volume across multiple pods.</p>
+</li>
+<li><b>Access across zones and regions</b>: You might require your data to be accessible across zones or regions. Some storage solutions, such as file and block storage, are data center-specific and cannot be shared across zones in a multizone cluster setup.</li>
+</ul>
+</li>
+</ul>
+<h3 id="pipeline-listener">Pipeline Listener</h3>
+<p>Our pipeline listener, <em>el-ci-event-listener</em>, exposes the endpoints for triggering pipeline execution from a webhook:</p>
+<p><img alt="Pipeline Listener" src="images/pipeline-listener-12.jpg" /></p>
+<h3 id="tasks">Tasks</h3>
+<p>The fundamental resource of the Tekton process is the <em>task</em>, which contains at least one step to be executed and performs a useful function. Tasks are normally organized into an ordered execution set using a pipeline resource.</p>
+<!-- Tasks execute steps in the order in which they are written, with each step completing before the next step starts. -->
+
+<p>Pipelines execute tasks in parallel unless a task is directed to run after the completion of another task. This facilitates parallel execution of build / test / deploy activities and is a useful characteristic that guides the user in the grouping of steps within tasks.</p>
+<p>These are the reusable tasks we have created for the Travelport demo:
+<img alt="" src="images/tvpttasks.jpg" /></p>
+<h3 id="structure-of-a-pipeline">Structure of a Pipeline</h3>
+<p>A <em>pipelineRun</em> resource invokes the execution of a pipeline. This allows specific properties and resources to be used as inputs to the pipeline process, such that the steps within the tasks are configured for the requirements of the user or environment. Here is the breakdown of the parts that make up a pipeline run: </p>
+<p><img alt="TektonRR" src="images/tektonresourcerelationship-13.jpg" /></p>
+<p>The <em>pipelineRun</em> invokes the pipeline, which contains tasks. Each task consists of a number of steps, each of which can contain elements such as command, script, volumeMounts, workingDir, parameters, resources, workspace, or image. </p>
+<h4 id="command">command</h4>
+<p>The command element specifies the command to be executed, which can be a sequence of a command and arguments.</p>
+<h4 id="script">script</h4>
+<p>Alternatively, you can use a script which can be useful if a single step is required to perform a number of command line operations. </p>
+<p>Below is an example from the Travelport demo that uses a script (for the mvn-settings task) and a command (for the mvn-goals task). These two tasks make up the maven-package step, responsible for the maven build:
+<div class="highlight"><pre><span></span><code><span class="nt">steps</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">image</span><span class="p">:</span> <span class="s">&#39;registry.access.redhat.com/ubi8/ubi-minimal:latest&#39;</span>
+      <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">mvn-settings</span>
+      <span class="nt">resources</span><span class="p">:</span> <span class="p p-Indicator">{}</span>
+      <span class="nt">script</span><span class="p">:</span> <span class="p p-Indicator">&gt;</span>
+        <span class="no">#!/usr/bin/env bash</span>
+
+        <span class="no">[[ -f $(workspaces.maven-settings.path)/settings.xml ]] &amp;&amp; \</span>
+
+        <span class="no">echo &#39;using existing $(workspaces.maven-settings.path)/settings.xml&#39; &amp;&amp;</span>
+        <span class="no">exit 0</span>
+
+        <span class="no">cat &gt; $(workspaces.maven-settings.path)/settings.xml &lt;&lt;EOF</span>
+
+        <span class="no">&lt;settings&gt;</span>
+          <span class="no">&lt;mirrors&gt;</span>
+            <span class="no">&lt;!-- The mirrors added here are generated from environment variables. Don&#39;t change. --&gt;</span>
+            <span class="no">&lt;!-- ### mirrors from ENV ### --&gt;</span>
+          <span class="no">&lt;/mirrors&gt;</span>
+          <span class="no">&lt;proxies&gt;</span>
+            <span class="no">&lt;!-- The proxies added here are generated from environment variables. Don&#39;t change. --&gt;</span>
+            <span class="no">&lt;!-- ### HTTP proxy from ENV ### --&gt;</span>
+          <span class="no">&lt;/proxies&gt;</span>
+        <span class="no">&lt;/settings&gt;</span>
+
+        <span class="no">EOF</span>
+
+
+        <span class="no">xml=&quot;&quot;</span>
+
+        <span class="no">if [ -n &quot;$(params.PROXY_HOST)&quot; -a -n &quot;$(params.PROXY_PORT)&quot; ]; then</span>
+          <span class="no">xml=&quot;&lt;proxy&gt;\</span>
+            <span class="no">&lt;id&gt;genproxy&lt;/id&gt;\</span>
+            <span class="no">&lt;active&gt;true&lt;/active&gt;\</span>
+            <span class="no">&lt;protocol&gt;$(params.PROXY_PROTOCOL)&lt;/protocol&gt;\</span>
+            <span class="no">&lt;host&gt;$(params.PROXY_HOST)&lt;/host&gt;\</span>
+            <span class="no">&lt;port&gt;$(params.PROXY_PORT)&lt;/port&gt;&quot;</span>
+          <span class="no">if [ -n &quot;$(params.PROXY_USER)&quot; -a -n &quot;$(params.PROXY_PASSWORD)&quot; ]; then</span>
+            <span class="no">xml=&quot;$xml\</span>
+                <span class="no">&lt;username&gt;$(params.PROXY_USER)&lt;/username&gt;\</span>
+                <span class="no">&lt;password&gt;$(params.PROXY_PASSWORD)&lt;/password&gt;&quot;</span>
+          <span class="no">fi</span>
+          <span class="no">if [ -n &quot;$(params.PROXY_NON_PROXY_HOSTS)&quot; ]; then</span>
+            <span class="no">xml=&quot;$xml\</span>
+                <span class="no">&lt;nonProxyHosts&gt;$(params.PROXY_NON_PROXY_HOSTS)&lt;/nonProxyHosts&gt;&quot;</span>
+          <span class="no">fi</span>
+          <span class="no">xml=&quot;$xml\</span>
+              <span class="no">&lt;/proxy&gt;&quot;</span>
+          <span class="no">sed -i &quot;s|&lt;!-- ### HTTP proxy from ENV ### --&gt;|$xml|&quot; $(workspaces.maven-settings.path)/settings.xml</span>
+        <span class="no">fi</span>
+
+
+        <span class="no">if [ -n &quot;$(params.MAVEN_MIRROR_URL)&quot; ]; then</span>
+          <span class="no">xml=&quot;    &lt;mirror&gt;\</span>
+            <span class="no">&lt;id&gt;mirror.default&lt;/id&gt;\</span>
+            <span class="no">&lt;url&gt;$(params.MAVEN_MIRROR_URL)&lt;/url&gt;\</span>
+            <span class="no">&lt;mirrorOf&gt;central&lt;/mirrorOf&gt;\</span>
+          <span class="no">&lt;/mirror&gt;&quot;</span>
+          <span class="no">sed -i &quot;s|&lt;!-- ### mirrors from ENV ### --&gt;|$xml|&quot; $(workspaces.maven-settings.path)/settings.xml</span>
+        <span class="no">fi</span>
+      <span class="nt">securityContext</span><span class="p">:</span>
+        <span class="nt">privileged</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+    <span class="p p-Indicator">-</span> <span class="nt">args</span><span class="p">:</span>
+        <span class="p p-Indicator">-</span> <span class="s">&#39;-s&#39;</span>
+        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">$(workspaces.maven-settings.path)/settings.xml</span>
+        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">$(params.GOALS)</span>
+      <span class="nt">command</span><span class="p">:</span>
+        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">/usr/bin/mvn</span>
+      <span class="nt">image</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">$(params.MAVEN_IMAGE)</span>
+      <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">mvn-goals</span>
+      <span class="nt">resources</span><span class="p">:</span> <span class="p p-Indicator">{}</span>
+      <span class="nt">securityContext</span><span class="p">:</span>
+        <span class="nt">privileged</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+      <span class="nt">workingDir</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">$(workspaces.source.path)/$(params.SUB_PATH)</span>
+</code></pre></div></p>
+<h4 id="volumemounts">volumeMounts</h4>
+<p>volumeMounts allow you to add storage to a step. Since each step runs in an isolated container, any data that is created by a step for use by another step must be stored appropriately. 
+If the data is accessed by a subsequent step within the same task then it is possible to use the <code>/workspace</code> directory to hold any created files and directories. 
+A further option for steps within the same task is to use an emptyDir storage mechanism which can be useful for separating out different data content for ease of use. If file stored data is to be accessed by a subsequent step that is in a different task then a Kubernetes persistent volume claim is required to be used. As explained below, this is what we do for the Travelport demo.</p>
+<p>Note that volumes are defined in a section of the task outside the scope of any steps, and then each step that needs the volume will mount it. </p>
+<h4 id="workingdir">workingDir</h4>
+<p>The <code>workingDir</code> element refers to the path within the container that should be the current working directory when the command is executed.</p>
+<h4 id="parameters">parameters</h4>
+<p>As with volumeMounts, parameters are defined outside the scope of any step within a task and then they are referenced from within the step. Parameters in this case refers to any information in text form required by a step such as a path, a name of an object, a username etc.  The example below shows the parameters used in the Buildah task, which builds source into a container image and then pushes it to a container registry:
+<div class="highlight"><pre><span></span><code><span class="nt">params</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">description</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Reference of the image buildah will produce.</span>
+      <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">IMAGE</span>
+      <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">string</span>
+    <span class="p p-Indicator">-</span> <span class="nt">default</span><span class="p">:</span> <span class="s">&#39;quay.io/buildah/stable:v1.17.0&#39;</span>
+      <span class="nt">description</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">The location of the buildah builder image.</span>
+      <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">BUILDER_IMAGE</span>
+      <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">string</span>
+    <span class="p p-Indicator">-</span> <span class="nt">default</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">overlay</span>
+      <span class="nt">description</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Set buildah storage driver</span>
+      <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">STORAGE_DRIVER</span>
+      <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">string</span>
+    <span class="p p-Indicator">-</span> <span class="nt">default</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">./Dockerfile</span>
+      <span class="nt">description</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Path to the Dockerfile to build.</span>
+      <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">DOCKERFILE</span>
+      <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">string</span>
+    <span class="p p-Indicator">-</span> <span class="nt">default</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">.</span>
+      <span class="nt">description</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Path to the directory to use as context.</span>
+      <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">CONTEXT</span>
+      <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">string</span>
+    <span class="p p-Indicator">-</span> <span class="nt">default</span><span class="p">:</span> <span class="s">&#39;true&#39;</span>
+      <span class="nt">description</span><span class="p">:</span> <span class="p p-Indicator">&gt;-</span>
+        <span class="no">Verify the TLS on the registry endpoint (for push/pull to a non-TLS</span>
+        <span class="no">registry)</span>
+      <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">TLSVERIFY</span>
+      <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">string</span>
+    <span class="p p-Indicator">-</span> <span class="nt">default</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">oci</span>
+      <span class="nt">description</span><span class="p">:</span> <span class="s">&#39;The</span><span class="nv"> </span><span class="s">format</span><span class="nv"> </span><span class="s">of</span><span class="nv"> </span><span class="s">the</span><span class="nv"> </span><span class="s">built</span><span class="nv"> </span><span class="s">container,</span><span class="nv"> </span><span class="s">oci</span><span class="nv"> </span><span class="s">or</span><span class="nv"> </span><span class="s">docker&#39;</span>
+      <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">FORMAT</span>
+      <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">string</span>
+    <span class="p p-Indicator">-</span> <span class="nt">default</span><span class="p">:</span> <span class="s">&#39;&#39;</span>
+      <span class="nt">description</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Extra parameters passed for the build command when building images.</span>
+      <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">BUILD_EXTRA_ARGS</span>
+      <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">string</span>
+    <span class="p p-Indicator">-</span> <span class="nt">default</span><span class="p">:</span> <span class="s">&#39;&#39;</span>
+      <span class="nt">description</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Extra parameters passed for the push command when pushing images.</span>
+      <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">PUSH_EXTRA_ARGS</span>
+      <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">string</span>
+    <span class="p p-Indicator">-</span> <span class="nt">default</span><span class="p">:</span> <span class="s">&#39;&#39;</span>
+      <span class="nt">description</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">subpath for build artifacts.</span>
+      <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">SUB_PATH</span>
+      <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">string</span>
+</code></pre></div></p>
+<h4 id="resources">resources</h4>
+<p>A reference to the resource is declared within the task and then the steps use the resources in commands. A resource can be used as an output in a step within the task.</p>
+<p>In Tekton, there is no explicit Git pull command. Simply including a Git resource in a task definition will result in a Git pull action taking place, before any steps execute, which will pull the content of the Git repository to a location of <code>/workspace/&lt;git-resource-name&gt;</code>. In the example below the Git repository content is pulled to <code>/workspace/source</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="nt">kind</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Task</span>
+ <span class="l l-Scalar l-Scalar-Plain">resources</span><span class="p p-Indicator">:</span>
+   <span class="nt">inputs</span><span class="p">:</span>
+     <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">source</span>
+       <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">git</span>
+   <span class="nt">outputs</span><span class="p">:</span>
+     <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">intermediate-image</span>
+       <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">image</span>
+<span class=" -Error"> </span><span class="nt">steps </span><span class="p">:</span>
+   <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">build</span>
+     <span class="nt">command</span><span class="p">:</span>
+       <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">buildah</span>
+       <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">bud</span>
+       <span class="p p-Indicator">-</span> <span class="s">&#39;-t&#39;</span>
+       <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">$(resources.outputs.intermediate-image.url)</span>
+</code></pre></div>
+<p>Resources may reference either an image or a Git repository and the resource entity is defined in a separate YAML file. 
+Image resources may be defined as either input or output resources depending on whether an existing image is to be consumed by a step
+ or whether the image is to be created by a step.</p>
+<h4 id="workspace">Workspace</h4>
+<p>A workspace is similar to a volume in that it provides storage that can be shared across multiple tasks. A persistent volume claim 
+is required to be created first and then the intent to use the volume is declared within the pipeline and task before mapping the 
+workspace into an individual step such that it is mounted. Workspaces and volumes are similar in behavior but are defined in
+ slightly different places.</p>
+<h4 id="image">Image</h4>
+<p>Since each Tekton step runs within its own image, the image must be referenced as shown in the example below:
+<div class="highlight"><pre><span></span><code><span class="nt">steps </span><span class="p">:</span>
+   <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">build</span>
+     <span class="nt">command</span><span class="p">:</span>
+       <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">buildah</span>
+       <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">bud</span>
+       <span class="p p-Indicator">-</span> <span class="s">&#39;-t&#39;</span>
+       <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">$(resources.outputs.intermediate-image.url)</span>
+     <span class="nt">image</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">registry.redhat.io/rhel8/buildah</span>
+</code></pre></div></p>
+<h2 id="developer-perspective">Developer Perspective</h2>
+<p>The OpenShift Console provides an Administrator and a Developer perspective. 
+With the correct user access, the Administrator perspective lets you manage workload storage, networking, cluster settings, and more.</p>
+<p>The Developer perspective lets you build applications and associated components and services, define how they work together, monitor their health, get application metrics, etc. over time.</p>
+<h3 id="argo-cd">Argo CD</h3>
+<p>To implement our GitOps workflow, we used Argo CD, the GitOps continuous delivery tool for Kubernetes. Argo CD is found in the OpenShift GitOps project. If you go to the Developer's Perspective, you can see a topology:</p>
+<p><img alt="ArgoCD" src="images/argocd.jpg" /></p>
+<blockquote>
+<p><b>OpenShift GitOps</b> is an OpenShift add-on which provides Argo CD and other tooling to enable teams to implement GitOps workflows for cluster configuration and application delivery. 
+OpenShift GitOps is available as an operator in the OperatorHub and can be installed with a simple one-click experience.</p>
+</blockquote>
+<p>Clicking the Argo Server node that contains the URL takes you to the Argo login page:</p>
+<p><img alt="ArgoCDServer" src="images/argocdserver.jpg" /></p>
+<p><img alt="" src="images/argologin.jpg" /></p>
+<p>Since OpenShift OAuth is enabled, if you are already logged in to OpenShift, you do not need to provide authentication. Clicking the <code>LOG IN VIA OPENSHIFT</code> button directly takes you to the ArgoCD main screen:</p>
+<p><img alt="ArgoCDMain" src="images/argocdmain.jpg" /></p>
+<p>As you can see in the figure above, we have a few running applications for the Travelport MVP, including:</p>
+<ul>
+<li><b>tvpt-argocd</b> - <em>the root application which manages all the other apps</em></li>
+<li><b>tvpt-preprod-infra</b>, <em>to manage post configuration for the cluster, such as logDNA, sealed secrets, etc.; in other words, a central place to manage the infrastructure configurations for an environment, in this case pre-prod.</em></li>
+<li><b>tvpt-preprod-apps</b> </li>
+<li><b>tvpt-prod-apps</b> </li>
+</ul>
+<p>For demonstration purposes, we are assuming a pre-prod and prod environment. Both environments are in the same cluster, with only the applications, pre-prod and prod, isolated by project names (namespaces).</p>
+<p>If you click on an environment, for example, pre-prod, you will get by default a tree view of the applications within that environment, as shown below:</p>
+<p><img alt="" src="images/argocdapps.jpg" /></p>
+<p>So, for example, as you can see above, we have <em>rail-shop-atomic</em> and <em>rail-shop-domain</em>, etc.</p>
+<p>If you click the network view, as shown below, you will see only the the running applications (the services and pods).</p>
+<p><img alt="" src="images/argonetworkview.jpg" /></p>
+<p>Finally, you also have a list view available:</p>
+<p><img alt="" src="images/argolistview.jpg" /></p>
+<p>Similarly, if you go to the production environment, you will see the production apps:</p>
+<p>In Tree view mode:</p>
+<p><img alt="" src="images/argoprodtree.jpg" /> </p>
+<p>Network view mode:</p>
+<p><img alt="" src="images/argoprodnet.jpg" /> </p>
+<p>where you can see three instances of the application running, for handling additional load.</p>
+<p>...and List view:</p>
+<p><img alt="" src="images/argoprodlist.jpg" /> </p>
+<p>This shows that you can have different configurations of the same application running in different environments.</p>
+<h4 id="repositories-for-travelport-demo">Repositories for Travelport Demo</h4>
+<p>We created two repositiories for the Argo GitOps in the Travelport Demo:
+* <b>tvpt-app-config
+* tvpt-infra-config</b></p>
+<p>This, of course, can be expanded further as necessary. As mentioned earlier, <em>tvpt-infra...</em> holds infrastructure configuration information. If you peek into the code, you will see the following:</p>
+<p><img alt="" src="images/repocode.jpg" /></p>
+<p>The <em>bootstrap</em> folder is about deploying Argo itself. Once you have Argo up and running, this folder will contain all of the applications, projects, etc. and all of the stuff you need to configure with argo.</p>
+<p>You also have the <em>infrastructure</em> folder:</p>
+<p><img alt="" src="images/infrafolder.jpg" /></p>
+<p>within the <em>base</em> folder you have <em>kubeseal</em>, for example, to enter secrets and credential information, <em>logDNA</em> for logDNA configuration, and <em>tekton</em> for managing the Tekton pipelines. </p>
+<p>The <em>overlays</em> folder looks like this:</p>
+<!-- If you want to deploy this somewhere else. The <em>overlays</em> folder. -->
+
+<p><img alt="" src="images/overlaysfolder.jpg" /></p>
+<h2 id="command-line-tools-to-download">Command Line Tools to Download</h2>
+<h3 id="openshift-command-line-interface-cli">OpenShift Command Line Interface (CLI)</h3>
+<p>The OpenShift CLI allows you to create applications and manage OpenShift projects from a terminal.</p>
+<p>The oc binary offers the same capabilities as the kubectl binary, but it is further extended to natively support OpenShift Container Platform features.</p>
+<p><em> More to be added here </em></p>
+<h2 id="source-to-image-s2i-capability">Source-to-Image (S2I) Capability</h2>
+<p>The Red Hat OpenShift ‘Source to Image’ (S2I) build process allows you to point OpenShift at a Git source repository and OpenShift will perform the following tasks:</p>
+<ul>
+<li>Examine the source code in the repository and identify the language used</li>
+<li>Select a builder image for the identified language from the OpenShift image repository</li>
+<li>Create an instance of the builder image from the image repository (green arrow on figure 1)</li>
+<li>Clone the source code in the builder image and build the application (the grey box in figure 1). The entire build process including pulling in any dependencies takes place within the builder image.</li>
+<li>When the build is complete push the builder image to the OpenShift image repository (the blue arrow on figure 1).</li>
+<li>Create an instance of the builder image, with the built application, and execute the container in a pod (the purple arrow in figure 1).</li>
+</ul>
+<h2 id="openshift-clients">OpenShift Clients</h2>
+<p>The OpenShift client <code>oc</code> simplifies working with Kubernetes and OpenShift
+clusters, offering a number of advantages over <code>kubectl</code> such as easy login,
+kube config file management, and access to developer tools. The <code>kubectl</code>
+binary is included alongside for when strict Kubernetes compliance is necessary.</p>
+<p>To learn more about OpenShift, visit <a href="https://docs.openshift.com">docs.openshift.com</a>
+and select the version of OpenShift you are using.</p>
+<h2 id="installing-the-tools">Installing the tools</h2>
+<p>After extracting this archive, move the <code>oc</code> and <code>kubectl</code> binaries
+to a location on your PATH such as <code>/usr/local/bin</code>. Then run:</p>
+<div class="highlight"><pre><span></span><code>    oc login <span class="o">[</span>API_URL<span class="o">]</span>
+</code></pre></div>
+<p>to start a session against an OpenShift cluster. After login, run <code>oc</code> and
+<code>oc help</code> to learn more about how to get started with OpenShift.</p>
+<h2 id="license">License</h2>
+<p>OpenShift is licensed under the Apache Public License 2.0. The source code for this program is <a href="https://github.com/openshift/origin">located on github</a>. &rarr;</p>
+<h2 id="reference-information">Reference Information</h2>
+<ul>
+<li><a href="https://www.openshift.com/blog">OpenShift Blog</a></li>
+<li><a href="https://docs.openshift.com/container-platform/4.6/welcome/index.html">OpenShift Documentation</a></li>
+</ul>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href="../dlq/index.html" class="md-footer__link md-footer__link--prev" aria-label="Previous: Dead letter queue" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Dead letter queue
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../../technology/kafka-overview/index.html" class="md-footer__link md-footer__link--next" aria-label="Next: Kafka Summary" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Kafka Summary
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+        
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../assets/javascripts/workers/search.b0710199.min.js", "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.76f349be.min.js"></script>
+      
+    
+  </body>
+</html>

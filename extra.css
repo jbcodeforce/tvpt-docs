@@ -1,0 +1,11 @@
+.section ul li {
+  margin-bottom: 10px;
+}
+
+.md-header__button.md-logo img,
+.md-header__button.md-logo svg {
+  display: block;
+  width: 7.5rem;
+  height: 1.7rem;
+  fill: currentColor;
+}

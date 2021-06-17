@@ -1,0 +1,1541 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Kafka Frequently Asked Questions from different sources and meetings we have done">
+      
+      
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.2.1, mkdocs-material-7.1.8">
+    
+    
+      
+        <title>Kafka Frequently Asked Questions - Travelport Event-Driven Microservice practices</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ca7ac06f.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.f1a3b89f.min.css">
+        
+          
+          
+          <meta name="theme-color" content="">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>:root{--md-text-font-family:"Roboto";--md-code-font-family:"Roboto Mono"}</style>
+      
+    
+    
+    
+      <link rel="stylesheet" href="../../extra.css">
+    
+    
+      
+
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="blue-dark" data-md-color-accent="">
+  
+    
+    <script>function __prefix(e){return new URL("../..",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#basic-questions" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../index.html" title="Travelport Event-Driven Microservice practices" class="md-header__button md-logo" aria-label="Travelport Event-Driven Microservice practices" data-md-component="logo">
+      
+  <img src="../../images/travelportlogo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Travelport Event-Driven Microservice practices
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Kafka Frequently Asked Questions
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        
+<a href="https://github.com/jbcodeforce/tvpt-docs/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../index.html" title="Travelport Event-Driven Microservice practices" class="md-nav__button md-logo" aria-label="Travelport Event-Driven Microservice practices" data-md-component="logo">
+      
+  <img src="../../images/travelportlogo.png" alt="logo">
+
+    </a>
+    Travelport Event-Driven Microservice practices
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/jbcodeforce/tvpt-docs/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../index.html" class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concepts/terms-and-definitions/index.html" class="md-nav__link">
+        EDA Concepts
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concepts/fit-for-purpose/index.html" class="md-nav__link">
+        Fit for purpose
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../methodology" class="md-nav__link">
+        Methodology
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      <label class="md-nav__link" for="__nav_5">
+        Design Patterns
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Design Patterns" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Design Patterns
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../patterns/api_mgt/index.html" class="md-nav__link">
+        API management
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../patterns/event-sourcing/index.html" class="md-nav__link">
+        Event Sourcing
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../patterns/cqrs/index.html" class="md-nav__link">
+        CQRS
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../patterns/transactional-outbox/index.html" class="md-nav__link">
+        Outbox
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../patterns/saga/index.html" class="md-nav__link">
+        SAGA
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../patterns/dlq/index.html" class="md-nav__link">
+        Dead letter queue
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" checked>
+      
+      <label class="md-nav__link" for="__nav_6">
+        Technology
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Technology" data-md-level="1">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          Technology
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../patterns/cicd/index.html" class="md-nav__link">
+        CICD for Travelport
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../kafka-overview/index.html" class="md-nav__link">
+        Kafka Summary
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../kafka-producers-consumers/index.html" class="md-nav__link">
+        Producer - Consumer
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Kafka FAQ
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="index.html" class="md-nav__link md-nav__link--active">
+        Kafka FAQ
+      </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#basic-questions" class="md-nav__link">
+    Basic questions
+  </a>
+  
+    <nav class="md-nav" aria-label="Basic questions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-is-kafka" class="md-nav__link">
+    What is Kafka?
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-are-the-major-components" class="md-nav__link">
+    What are the major components?
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#major-use-cases" class="md-nav__link">
+    Major use cases?
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-does-kafka-use-zookeeper" class="md-nav__link">
+    Why does Kafka use zookeeper?
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-is-a-replica" class="md-nav__link">
+    What is a replica?
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-are-a-leader-and-follower-in-kafka" class="md-nav__link">
+    What are a leader and follower in Kafka?
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-is-offset" class="md-nav__link">
+    What is Offset?
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-is-a-consumer-group" class="md-nav__link">
+    What is a consumer group?
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#support-to-multi-tenancy" class="md-nav__link">
+    Support to multi-tenancy?
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-client-access-kafka-cluster-metadata" class="md-nav__link">
+    How client access Kafka cluster metadata?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to-get-at-most-once-delivery" class="md-nav__link">
+    How to get at most once delivery?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to-support-exactly-once-delivery" class="md-nav__link">
+    How to support exactly once delivery?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-range-partition-assignment-strategy" class="md-nav__link">
+    What is range partition assignment strategy?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-sticky-assignor" class="md-nav__link">
+    What is sticky assignor?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to-get-an-homogeneous-distribution-of-message-to-partitions" class="md-nav__link">
+    How to get an homogeneous distribution of message to partitions?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to-ensure-efficient-join-between-two-topics" class="md-nav__link">
+    How to ensure efficient join between two topics?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-transaction-in-kafka" class="md-nav__link">
+    What is transaction in Kafka?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-the-high-watermark" class="md-nav__link">
+    What is the high watermark?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#retention-time-for-topic-what-does-it-mean" class="md-nav__link">
+    Retention time for topic what does it mean?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-are-the-topic-characteristics-i-need-to-define-during-requirements" class="md-nav__link">
+    What are the topic characteristics I need to define during requirements?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-are-the-impacts-of-having-not-enough-resource-for-kafka" class="md-nav__link">
+    What are the impacts of having not enough resource for Kafka?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-should-we-do-for-queue-full-exception-or-timeout-exception-on-producer" class="md-nav__link">
+    What should we do for queue full exception or timeout exception on producer?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to-send-large-messages" class="md-nav__link">
+    How to send large messages?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to-maximize-throughput" class="md-nav__link">
+    How to maximize throughput?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why-kafka-stream-applications-may-impact-cluster-performance" class="md-nav__link">
+    Why Kafka Stream applications may impact cluster performance?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-message-schema-version-is-propagated" class="md-nav__link">
+    How message schema version is propagated?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#consumers-do-not-see-message-in-topic-what-happens" class="md-nav__link">
+    Consumers do not see message in topic, what happens?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-compression-schema-used-is-known-by-the-consumer" class="md-nav__link">
+    How compression schema used is known by the consumer?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-does-out-of-synch-partition-mean-and-occur" class="md-nav__link">
+    What does out-of-synch partition mean and occur?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#security-in-kafka" class="md-nav__link">
+    Security in Kafka
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to-protect-data-at-rest" class="md-nav__link">
+    How to protect data at rest?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to-remove-personal-identifying-information" class="md-nav__link">
+    How to remove personal identifying information?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to-handle-variable-workload-with-kafka-connector-source-connector" class="md-nav__link">
+    How to handle variable workload with Kafka Connector source connector?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#competitors-to-kafka" class="md-nav__link">
+    Competitors to Kafka
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#differences-between-akka-and-kafka" class="md-nav__link">
+    Differences between Akka and Kafka?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#run-kafka-test-container-with-topologytestdriver" class="md-nav__link">
+    Run Kafka Test Container with TopologyTestDriver
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#event-streams-resource-requirements" class="md-nav__link">
+    Event streams resource requirements
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#security-setting" class="md-nav__link">
+    Security setting
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#verify-consumer-connection" class="md-nav__link">
+    Verify consumer connection
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#other-faqs" class="md-nav__link">
+    Other FAQs
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../kafka-connect/index.html" class="md-nav__link">
+        Kafka Konnect
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../spring/index.html" class="md-nav__link">
+        Spring cloud
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#basic-questions" class="md-nav__link">
+    Basic questions
+  </a>
+  
+    <nav class="md-nav" aria-label="Basic questions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-is-kafka" class="md-nav__link">
+    What is Kafka?
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-are-the-major-components" class="md-nav__link">
+    What are the major components?
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#major-use-cases" class="md-nav__link">
+    Major use cases?
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-does-kafka-use-zookeeper" class="md-nav__link">
+    Why does Kafka use zookeeper?
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-is-a-replica" class="md-nav__link">
+    What is a replica?
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-are-a-leader-and-follower-in-kafka" class="md-nav__link">
+    What are a leader and follower in Kafka?
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-is-offset" class="md-nav__link">
+    What is Offset?
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-is-a-consumer-group" class="md-nav__link">
+    What is a consumer group?
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#support-to-multi-tenancy" class="md-nav__link">
+    Support to multi-tenancy?
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-client-access-kafka-cluster-metadata" class="md-nav__link">
+    How client access Kafka cluster metadata?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to-get-at-most-once-delivery" class="md-nav__link">
+    How to get at most once delivery?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to-support-exactly-once-delivery" class="md-nav__link">
+    How to support exactly once delivery?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-range-partition-assignment-strategy" class="md-nav__link">
+    What is range partition assignment strategy?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-sticky-assignor" class="md-nav__link">
+    What is sticky assignor?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to-get-an-homogeneous-distribution-of-message-to-partitions" class="md-nav__link">
+    How to get an homogeneous distribution of message to partitions?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to-ensure-efficient-join-between-two-topics" class="md-nav__link">
+    How to ensure efficient join between two topics?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-transaction-in-kafka" class="md-nav__link">
+    What is transaction in Kafka?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-the-high-watermark" class="md-nav__link">
+    What is the high watermark?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#retention-time-for-topic-what-does-it-mean" class="md-nav__link">
+    Retention time for topic what does it mean?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-are-the-topic-characteristics-i-need-to-define-during-requirements" class="md-nav__link">
+    What are the topic characteristics I need to define during requirements?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-are-the-impacts-of-having-not-enough-resource-for-kafka" class="md-nav__link">
+    What are the impacts of having not enough resource for Kafka?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-should-we-do-for-queue-full-exception-or-timeout-exception-on-producer" class="md-nav__link">
+    What should we do for queue full exception or timeout exception on producer?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to-send-large-messages" class="md-nav__link">
+    How to send large messages?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to-maximize-throughput" class="md-nav__link">
+    How to maximize throughput?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why-kafka-stream-applications-may-impact-cluster-performance" class="md-nav__link">
+    Why Kafka Stream applications may impact cluster performance?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-message-schema-version-is-propagated" class="md-nav__link">
+    How message schema version is propagated?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#consumers-do-not-see-message-in-topic-what-happens" class="md-nav__link">
+    Consumers do not see message in topic, what happens?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-compression-schema-used-is-known-by-the-consumer" class="md-nav__link">
+    How compression schema used is known by the consumer?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-does-out-of-synch-partition-mean-and-occur" class="md-nav__link">
+    What does out-of-synch partition mean and occur?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#security-in-kafka" class="md-nav__link">
+    Security in Kafka
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to-protect-data-at-rest" class="md-nav__link">
+    How to protect data at rest?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to-remove-personal-identifying-information" class="md-nav__link">
+    How to remove personal identifying information?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to-handle-variable-workload-with-kafka-connector-source-connector" class="md-nav__link">
+    How to handle variable workload with Kafka Connector source connector?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#competitors-to-kafka" class="md-nav__link">
+    Competitors to Kafka
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#differences-between-akka-and-kafka" class="md-nav__link">
+    Differences between Akka and Kafka?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#run-kafka-test-container-with-topologytestdriver" class="md-nav__link">
+    Run Kafka Test Container with TopologyTestDriver
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#event-streams-resource-requirements" class="md-nav__link">
+    Event streams resource requirements
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#security-setting" class="md-nav__link">
+    Security setting
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#verify-consumer-connection" class="md-nav__link">
+    Verify consumer connection
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#other-faqs" class="md-nav__link">
+    Other FAQs
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/jbcodeforce/tvpt-docs/edit/master/docs/technology/faq/index.md" title="Edit this page" class="md-content__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+                  </a>
+                
+                
+                  <h1>Kafka FAQ</h1>
+                
+                <h2 id="basic-questions">Basic questions</h2>
+<h3 id="what-is-kafka">What is Kafka?</h3>
+<ul>
+<li>pub/sub middleware to share data between applications</li>
+<li>Open source, started in 2011 by Linkedin</li>
+<li>based on append log to persist immutable records ordered by arrival.</li>
+<li>support data partitioning, distributed brokers, horizontal scaling, low-latency and high throughput.</li>
+<li>producer has no knowledge of consumer</li>
+<li>records stay even after being consumed</li>
+<li>durability with replication to avoid loosing data for high availability</li>
+</ul>
+<h3 id="what-are-the-major-components">What are the major components?</h3>
+<ul>
+<li>Topic, consumer, producer, brokers</li>
+<li>Rich API to control the producer semantic, and consumer</li>
+<li>Consumer groups</li>
+<li>Kafka streams API to support data streaming with stateful operations and stream processing topology</li>
+<li>Kafka connect for source and sink connection to external systems</li>
+<li>Topic replication with Mirror Maker 2</li>
+</ul>
+<h3 id="major-use-cases">Major use cases?</h3>
+<ul>
+<li>Modern data pipeline with buffering to data lake</li>
+<li>Data hub, to continuously expose business entities to event-driven applications and microservices</li>
+<li>Real time analytics with aggregate computation, and complex event processing</li>
+<li>The communication layer for Event-driven, reactive microservice.</li>
+</ul>
+<h3 id="why-does-kafka-use-zookeeper">Why does Kafka use zookeeper?</h3>
+<p>Kafka as a distributed system using cluster, it needs to keep cluster states, sharing configuration like topic, assess which node is still alive within the cluster, support registering new node added to the cluster, being able to support dynamic restart. Zookeeper is an orchestrator for distributed system, it maintains Kafka cluster integrity, select broker leader... </p>
+<p>Zookeeper is also used to manage offset commit, and to the leader selection process.</p>
+<h3 id="what-is-a-replica">What is a replica?</h3>
+<p>A lit of nodes responsible to participate into the data replication process for a given partition. </p>
+<p>It is a critical feature to ensure durability, be able to continue to consume records, or to ensure a certain level of data loss safety is guaranteed when producing records.</p>
+<h3 id="what-are-a-leader-and-follower-in-kafka">What are a leader and follower in Kafka?</h3>
+<p>Topic has 1 to many partition, which are append logs. Every partition in Kafka has a server that plays the role of <strong>leader</strong>. When replication is set in a topic, follower brokers will pull data from the leader to ensure replication, up to the specified replication factor.</p>
+<p>If the leader fails, one of the followers needs to take over as the leader’s role. The leader election process involves zookeeper and assess which follower was the most in-synch with the leader.</p>
+<p>Leader is the end point for read and write operations on the partition. (Exception is the new feature to read from local follower).</p>
+<p>To get the list of In-synch Replication for a given topic the following tool can be used:</p>
+<div class="highlight"><pre><span></span><code>kafka-topics.sh --bootstrap-server :9092 --describe --topic &lt;topicname&gt;
+</code></pre></div>
+<h3 id="what-is-offset">What is Offset?</h3>
+<p>A unique identifier of records inside a partition. It is automatically created by the broker, and producer can get it from the broker response.</p>
+<p>Consumer uses it to commit its read. It means, in case of consumer restarts, it will read from the last committed offset.</p>
+<h3 id="what-is-a-consumer-group">What is a consumer group?</h3>
+<p>It groups consumers of one to many topics. Each partition is consumed by exactly one consumer within each subscribing consumer group.</p>
+<p>Consumer group is specified via the <code>group.id</code> consumer's property, and when consumers subscribe to topic(s).</p>
+<p>There is a protocol to manage consumers within a group so that partition can be reallocated when a consumer lefts the group. The <em>group leader</em> is responsible to do the partition assignment.</p>
+<p>When using the <a href="https://kafka.apache.org/documentation/#consumerconfigs_group.instance.id">group.instance.id</a> properties, consumer is treated as a static member, which means there will be no partition rebalance when consumer lefts a group for a short time period. When not set the group coordinator (a broker) will allocate ids to group members, and reallocation will occur. For Kafka Streams application it is recommended to use static membership.</p>
+<p>Brokers keep offsets until a <a href="https://kafka.apache.org/documentation/#brokerconfigs_offsets.retention.minutes">retention period</a> within which consumer group can lose all its consumers. After that period, offsets are discarded. The consumer group can be deleted manually, or automatically when the last committed offset for that group expires.</p>
+<p>When the group coordinator receives an OffsetCommitRequest, it appends the request to a special compacted Kafka topic named __consumer_offsets. Ack from the broker is done once all replicas on this hidden topics are successful.</p>
+<p>The tool <code>kafka-consumer-group.sh</code> helps getting details of consumer group:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Inside a Kafka broker container</span>
+bin/kafka-consumer-groups.sh --bootstrap-server kafka:9092 --describe --group order-group --members --verbose
+</code></pre></div>
+<h3 id="support-to-multi-tenancy">Support to multi-tenancy?</h3>
+<p>Multi-tenant means multiple different groups of application can produce and consumer messages isolated from other. So by constructs, topics and brokers are multi-tenant.
+Now the control will be at the access control level policy, the use of service account, and naming convention on the topic name.
+Consumer and producer authenticate themselves using dedicated service account users, with SCRAM user or Mutual TLS user. Each topic can have security policy to control read, write, creation operations.</p>
+<h2 id="how-client-access-kafka-cluster-metadata">How client access Kafka cluster metadata?</h2>
+<p>Provide a list of Kafka brokers, minimum two, so the client API will get the metadata once connected to one of the broker.</p>
+<h2 id="how-to-get-at-most-once-delivery">How to get at most once delivery?</h2>
+<p>Set producer acknowledge level (acks) property to 0 or 1.</p>
+<h2 id="how-to-support-exactly-once-delivery">How to support exactly once delivery?</h2>
+<p>The goal is to address that if a producer sends a message twice the system will send only one message to the consumer, and once the consumer commits the read offset, it will not receive the message again even if it restarts.</p>
+<p>See the section in the producer implementation considerations <a href="https://ibm-cloud-architecture.github.io/refarch-eda/technology/kafka-producers-consumers/#how-to-support-exactly-once-delivery">note</a>.</p>
+<p>The consumer needs to always read from its last committed offset.</p>
+<p>Also it is important to note that the Kafka Stream API supports exactly once semantics with the config: <code>processing.guarantee=exactly_once</code>. Each task within a read-process-write flow may fail so this setting is important to be sure the right answer is delivered, even in case of task failure, and the process is executed exactly once.</p>
+<p>Exactly-once delivery for other destination systems generally requires cooperation with such systems which may be possible by using the offset processing.</p>
+<h2 id="what-is-range-partition-assignment-strategy">What is range partition assignment strategy?</h2>
+<p>There are multiple partition assignment strategy for a consumer, part of a consumer group , to get its partition to fetch data from. Members of the consumer group subscribe to the topics they are interested in and forward their subscriptions to a Kafka broker serving as the group coordinator. The coordinator selects one member to perform the group assignment and propagates the subscriptions of all members to it. Then assign(Cluster, GroupSubscription) is called to perform the assignment and the results are forwarded back to each respective members.</p>
+<p>Range assignor works on a per-topic basis: it lays out the available partitions in numeric order and the consumers in lexicographic order, and assign partition to each consumer so partition with the same id will be in the same consumer: topic-1-part-0 and topic-2-part-0 will be processed by consumer-0</p>
+<h2 id="what-is-sticky-assignor">What is sticky assignor?</h2>
+<p>The CooperativeStickyAssignor helps supporting incremental cooperative rebalancing to the clients' group protocol, which allows consumers to keep all of their assigned partitions during a rebalance and at the end revoke only those which must be migrated to another consumer for overall cluster balance.</p>
+<p>The goal is to reduce unnecessary downtime due to unnecessary partition migration, by leveraging the sticky assignor which link consumer to partition id. See <a href="https://cwiki.apache.org/confluence/display/KAFKA/KIP-429%3A+Kafka+Consumer+Incremental+Rebalance+Protocol">KIP 429 for details.</a> </p>
+<h2 id="how-to-get-an-homogeneous-distribution-of-message-to-partitions">How to get an homogeneous distribution of message to partitions?</h2>
+<p>Design the message key and hash coding for even distributed. Or implement a customer partitioner by implementing the <a href="https://kafka.apache.org/24/javadoc/?org/apache/kafka/clients/producer/Partitioner.html">Partitioner</a> interface. </p>
+<h2 id="how-to-ensure-efficient-join-between-two-topics">How to ensure efficient join between two topics?</h2>
+<p>Need to use co-partitioning, which means having the same key in both topic, the same number of partitions and the same producer partitioner, which most likely should be the default one that uses the following formula: <em>partition = hash(key) % numPartitions</em>.</p>
+<h2 id="what-is-transaction-in-kafka">What is transaction in Kafka?</h2>
+<p>Producer can use transaction begin, commit and rollback API while publishing events to a multi partition topic. This is done by setting a unique transactionId as part of its configuration (with idempotence and min  inflight record set to 1).  Either all messages are successfully written or none of them are.</p>
+<p>There are some producer exception to consider to abort the transaction: any KafkaException for sure, but also OutOfSequenceTx which may happen when the PID is greater than the last one seen by the producer.</p>
+<p>See explanations <a href="https://ibm-cloud-architecture.github.io/refarch-eda/technology/kafka-producers-consumers/#how-to-support-exactly-once-delivery">here</a>.</p>
+<p>And the <a href="https://cwiki.apache.org/confluence/display/KAFKA/KIP-98+-+Exactly+Once+Delivery+and+Transactional+Messaging">KIP 98</a></p>
+<h2 id="what-is-the-high-watermark">What is the high watermark?</h2>
+<p>The high watermark offset is the offset of the last message that was successfully copied to all of the log’s replicas. A consumer can only read up to the high watermark offset to prevent reading un-replicated messages.</p>
+<h2 id="retention-time-for-topic-what-does-it-mean">Retention time for topic what does it mean?</h2>
+<p>The message sent to a cluster is kept for a max period of time or until a max size is reached. Those topic properties are: <code>retention.ms</code> and <code>retention.bytes</code>. Messages stay in the log even if they are consumed. The oldest messages are marked for deletion or compaction depending of the cleanup policy (delete or compact) set to <code>cleanup.policy</code> topic's parameter.</p>
+<p>See the Kafka documentation on <a href="https://kafka.apache.org/documentation/#topicconfigs">topic configuration parameters</a>.</p>
+<p>Here is a command to create a topic with specific retention properties:</p>
+<div class="highlight"><pre><span></span><code>bin/kafka-configs --zookeeper XX.XX.XX.XX:2181 --entity-type topics --entity-name orders --alter --add-config  retention.ms<span class="o">=</span><span class="m">55000</span> --add-config  retention.byte<span class="o">=</span><span class="m">100000</span>
+</code></pre></div>
+<p>But there is also the <code>offsets.retention.minutes</code> property, set at the cluster level to control when the offset information will be deleted. It is defaulted to 1 day, but the max possible value is 7 days. This is to avoid keeping too much information in the broker memory and avoid to miss data when consumers do not run continuously. So consumers need to commit their offset. If the consumer settings define: <code>auto.offset.reset=earliest</code>, the consumer will reprocess all the events each time it restarts, (or skips to the latest if set to <code>latest</code>). When using <code>latest</code>, if the consumers are offline for more than the offsets retention time window, they will lose events.</p>
+<h2 id="what-are-the-topic-characteristics-i-need-to-define-during-requirements">What are the topic characteristics I need to define during requirements?</h2>
+<p>This is a requirement gathering related question, to understand what need to be done for configuration topic configuration but also consumer and producer configuration, as well as retention strategy.</p>
+<ul>
+<li>Number of brokers in the cluster</li>
+<li>retention time and size</li>
+<li>Need for HA, set replicas to number of broker or at least the value of 3, with in-synch replica to 2</li>
+<li>Type of data to transport to assess message size</li>
+<li>Plan to use schema management to control change to the payload definition</li>
+<li>volume per day with peak and average</li>
+<li>Need to do geo replication to other Kafka cluster</li>
+<li>Network filesystem used on the target Kubernetes cluster and current storage class</li>
+</ul>
+<h2 id="what-are-the-impacts-of-having-not-enough-resource-for-kafka">What are the impacts of having not enough resource for Kafka?</h2>
+<p>The table in this <a href="https://ibm.github.io/event-streams/installing/prerequisites/#helm-resource-requirements">Event Streams product documentation</a> illustrates the resource requirements for a getting started cluster. When resources start to be at stress, then Kafka communication to ZooKeeper and/or other Kafka brokers can suffer resulting in out-of-sync partitions and container restarts perpetuating the issue. Resource constraints is one of the first things we consider when diagnosing ES issues.</p>
+<h2 id="what-should-we-do-for-queue-full-exception-or-timeout-exception-on-producer">What should we do for queue full exception or timeout exception on producer?</h2>
+<p>The brokers are running behind, so we need to add more brokers and redistribute partitions.</p>
+<h2 id="how-to-send-large-messages">How to send large messages?</h2>
+<p>We can set some properties at the broker, topic, consumer and producer level:</p>
+<ul>
+<li>Broker: consider the <a href="https://kafka.apache.org/documentation/#brokerconfigs_message.max.bytes">message.max.bytes</a> and <a href="https://kafka.apache.org/documentation/#brokerconfigs_replica.fetch.max.bytes">replica.fetch.max.bytes</a></li>
+<li>Consumer: <a href="https://kafka.apache.org/documentation/#consumerconfigs_max.partition.fetch.bytes">max.partition.fetch.bytes</a>. Records are fetched in batches by the consumer, so this properties gives the max amount of data per partition the server will return. Default 1 Megabyte</li>
+</ul>
+<h2 id="how-to-maximize-throughput">How to maximize throughput?</h2>
+<p>For producer if you want to maximize throughput over low latency, set <a href="https://kafka.apache.org/documentation/#producerconfigs_batch.size">batch.size</a> and <a href="https://kafka.apache.org/documentation/#producerconfigs_linger.ms">linger.ms</a> to higher value. Linger delay producer, it will wait for up to the given delay to allow other records to be sent so that the sends can be batched together.</p>
+<h2 id="why-kafka-stream-applications-may-impact-cluster-performance">Why Kafka Stream applications may impact cluster performance?</h2>
+<ul>
+<li>They may use internal hidden topics to persist their states for Ktable and GlobalKTable.</li>
+<li>Process input and output topics</li>
+</ul>
+<h2 id="how-message-schema-version-is-propagated">How message schema version is propagated?</h2>
+<p>The record includes a byte with the version number from the schema registry.</p>
+<h2 id="consumers-do-not-see-message-in-topic-what-happens">Consumers do not see message in topic, what happens?</h2>
+<p>The brokers may have an issue on this partition. If a broker, part of the ISR list fails, then new leader election may delay the broker commit from a producer.</p>
+<p>The consumer has a communication issue, or fails, so the consumer group rebalance is underway.</p>
+<h2 id="how-compression-schema-used-is-known-by-the-consumer">How compression schema used is known by the consumer?</h2>
+<p>The record header includes such metadata. So it is possible to have different schema per record.</p>
+<h2 id="what-does-out-of-synch-partition-mean-and-occur">What does out-of-synch partition mean and occur?</h2>
+<p>With partition leader and replication to the followers, the number of in-synch replicas is at least the number of expected replicas. For example for a replicas = 3 the in-synch is set to 2, and it represents the minimum number of replicas that must acknowledge a write for the write to be considered successful. The record is considered “committed” when all ISRs for a partition wrote to their log. Only committed records are readable from consumer.</p>
+<p>So out-of-synch will happen if the followers are not able to send their acknowledge to the replica leader as quickly as expected.</p>
+<h2 id="security-in-kafka">Security in Kafka</h2>
+<ul>
+<li>Encrypt data in transit between producer and Kafka brokers</li>
+<li>Client authentication</li>
+<li>Client authorization</li>
+</ul>
+<h2 id="how-to-protect-data-at-rest">How to protect data at rest?</h2>
+<ul>
+<li>Use encrypted file system for each brokers</li>
+<li>Encrypt data at the producer level, using some API, and then decode at the consumer level. The data in the appeld log will be encrypted.</li>
+</ul>
+<h2 id="how-to-remove-personal-identifying-information">How to remove personal identifying information?</h2>
+<p>From the source connector, it is possible to add processing class to process the records before publishing them to Kafka topic, so that any Kafka Streams apps will not see PII.</p>
+<h2 id="how-to-handle-variable-workload-with-kafka-connector-source-connector">How to handle variable workload with Kafka Connector source connector?</h2>
+<p>Increase and decrease the number of Kafka connect workers based upon current application load.</p>
+<h2 id="competitors-to-kafka">Competitors to Kafka</h2>
+<ul>
+<li><a href="">NATS</a></li>
+<li><a href="https://vectorized.io/">Redpanda</a> a Modern streaming platform for mission critical workloads, and is compatible with Kafka API. It is a cluster of brokers without any zookeepers. It also leverage the SSD technology to improve I/O operations.</li>
+<li><a href="https://jbcodeforce.github.io/architecture/aws/#kinesis">AWS Kinesis</a><ul>
+<li>Cloud service, managed by AWS staff, paid as you go, proportional to the shard (like partition) used.</li>
+<li>24h to 7 days persistence</li>
+<li>Number of shards are adaptable with throughput.</li>
+<li>Uses the concept of Kinesis data streams, which uses shards: data records are composed of a sequence number, a partition key and a data blob.</li>
+<li>restrictions on message size (1 MB) and consumption rate of messages (5 reads /s, &lt; 2MB per shard, 1000 write /s)</li>
+<li>Server side encryption using master key managed by AWS KMS</li>
+</ul>
+</li>
+<li>GCP Pub/sub</li>
+<li>Solace</li>
+<li>Active MQ:<ul>
+<li>Java based messaging server to be the JMS reference implementation, so it supports transactional messaging. </li>
+<li>various messaging protocols including AMQP, STOMP, and MQTT</li>
+<li>It maintains the delivery state of every message resulting in lower throughput.</li>
+<li>Can apply JMS message selector to consumer specific message</li>
+<li>Point to point or pub/sub, but servers push messages to consumer/subscribers</li>
+<li>Performance of both queue and topic degrades as the number of consumers rises</li>
+</ul>
+</li>
+<li>Rabbit MQ:<ul>
+<li>Support queues, with messages removed once consumed</li>
+<li>Add the concept of Exchange to route message to queues</li>
+<li>Limited throughput, but can send large message</li>
+<li>Support JMS, AMQP protocols, and participation to transaction</li>
+<li>Smart broker / dumb consumer model that focuses on consistently delivering messages to consumers.</li>
+</ul>
+</li>
+</ul>
+<h2 id="differences-between-akka-and-kafka">Differences between Akka and Kafka?</h2>
+<p><a href="https://akka.io/">Akka</a> is a open source toolkit for Scala or Java to simplify multithreading programming and makes application more reactive by adopting an asynchronous mechanism to access to io: database or HTTP request. To support asynchronous communication between 'actors', it uses messaging, internal to the JVM. 
+Kafka is part of the architecture, while Akka is an implementation choice for one of the component of the business application deployed inside the architecture.</p>
+<p><a href="https://vertx.io/">vert.x</a> is another open source implementation of such internal messaging mechanism but supporting more language:  Java, Groovy, Ruby, JavaScript, Ceylon, Scala, and Kotlin.</p>
+<h2 id="run-kafka-test-container-with-topologytestdriver">Run Kafka Test Container with TopologyTestDriver</h2>
+<p>Topology Test Driver is used without kafka, so there is no real need to use test container. </p>
+<h2 id="event-streams-resource-requirements">Event streams resource requirements</h2>
+<p>See the <a href="https://ibm.github.io/event-streams/installing/prerequisites/#helm-resource-requirements">detailed tables</a> in the product documentation.</p>
+<h2 id="security-setting">Security setting</h2>
+<p>On Kubernetes, Kafka can be configured with external and internal URLs. With Strimzi internal URLs are using TLS or Plain authentication, then TLS for encryption. </p>
+<p>If no authentication property is specified then the listener does not authenticate clients which connect through that listener. The listener will accept all connections without authentication.</p>
+<ul>
+<li>Mutual TLS authentication for internal communication looks like:</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">tls</span>
+    <span class="l l-Scalar l-Scalar-Plain">port</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">9093</span>
+    <span class="l l-Scalar l-Scalar-Plain">type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">internal</span>
+    <span class="l l-Scalar l-Scalar-Plain">tls</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+    <span class="l l-Scalar l-Scalar-Plain">authentication</span><span class="p p-Indicator">:</span>
+      <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">tls</span>
+</code></pre></div>
+<p>To connect any app (producer, consumer) we need a TLS user like:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">piVersion</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">kafka.strimzi.io/v1beta1</span>
+<span class="nt">kind</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">KafkaUser</span>
+<span class="nt">metadata</span><span class="p">:</span>
+  <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">tls-user</span>
+  <span class="nt">labels</span><span class="p">:</span>
+    <span class="nt">strimzi.io/cluster</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">vaccine-kafka</span>
+<span class="nt">spec</span><span class="p">:</span>
+  <span class="nt">authentication</span><span class="p">:</span>
+    <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">tls</span>
+</code></pre></div>
+<p>Then the following configurations need to be done for each app. For example in Quarkus app, we need to specify where to find the client certificate (for each Kafka TLS user a secret is created with the certificate (ca.crt) and a user password)</p>
+<div class="highlight"><pre><span></span><code>oc describe secret tls-user
+<span class="nv">Data</span>
+<span class="o">====</span>
+ca.crt:         <span class="m">1164</span> bytes
+user.crt:       <span class="m">1009</span> bytes
+user.key:       <span class="m">1704</span> bytes
+user.p12:       <span class="m">2374</span> bytes
+user.password:  <span class="m">12</span> bytes
+</code></pre></div>
+<p>For Java client we need the following security settings, to specify from which secret to get the keystore password and certificate. The certificate will be mounted to <code>/deployments/certs/user</code>. </p>
+<div class="highlight"><pre><span></span><code>%prod.kafka.security.protocol<span class="o">=</span>SSL
+%prod.kafka.ssl.keystore.location<span class="o">=</span>/deployments/certs/user/user.p12
+%prod.kafka.ssl.keystore.type<span class="o">=</span>PKCS12
+quarkus.openshift.env.mapping.KAFKA_SSL_KEYSTORE_PASSWORD.from-secret<span class="o">=</span><span class="si">${</span><span class="nv">KAFKA_USER</span><span class="p">:</span><span class="nv">tls</span><span class="p">-user</span><span class="si">}</span>
+quarkus.openshift.env.mapping.KAFKA_SSL_KEYSTORE_PASSWORD.with-key<span class="o">=</span>user.password
+quarkus.openshift.mounts.user-cert.path<span class="o">=</span>/deployments/certs/user
+quarkus.openshift.secret-volumes.user-cert.secret-name<span class="o">=</span><span class="si">${</span><span class="nv">KAFKA_USER</span><span class="p">:</span><span class="nv">tls</span><span class="p">-user</span><span class="si">}</span>
+<span class="c1"># To validate server side certificate we will mount it too with the following declaration</span>
+quarkus.openshift.env.mapping.KAFKA_SSL_TRUSTSTORE_PASSWORD.from-secret<span class="o">=</span><span class="si">${</span><span class="nv">KAFKA_CA_CERT_NAME</span><span class="p">:</span><span class="nv">kafka</span><span class="p">-cluster-ca-cert</span><span class="si">}</span>
+quarkus.openshift.env.mapping.KAFKA_SSL_TRUSTSTORE_PASSWORD.with-key<span class="o">=</span>ca.password
+quarkus.openshift.mounts.kafka-cert.path<span class="o">=</span>/deployments/certs/server
+quarkus.openshift.secret-volumes.kafka-cert.secret-name<span class="o">=</span><span class="si">${</span><span class="nv">KAFKA_CA_CERT_NAME</span><span class="p">:</span><span class="nv">kafka</span><span class="p">-cluster-ca-cert</span><span class="si">}</span>
+</code></pre></div>
+<p>For the server side certificate, it will be in a truststore, which is mounted to  <code>/deployments/certs/server</code> and from a secret (this secret is created at the cluster level).</p>
+<p>Also because we also use TLS for encryption we need:</p>
+<div class="highlight"><pre><span></span><code>%prod.kafka.ssl.protocol=TLSv1.2
+</code></pre></div>
+<p>Mutual TLS authentication is always used for the communication between Kafka brokers and ZooKeeper pods. For mutual, or two-way, authentication, both the server and the client present certificates.</p>
+<ul>
+<li>
+<p>SCRAM: (Salted Challenge Response Authentication Mechanism) is an authentication protocol that can establish mutual authentication using passwords. Strimzi can configure Kafka to use SASL (Simple Authentication and Security Layer) SCRAM-SHA-512 to provide authentication on both unencrypted and encrypted client connections.</p>
+<ul>
+<li>The listener declaration:
+<div class="highlight"><pre><span></span><code><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">external</span>
+<span class="nt">port</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">9094</span>
+<span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">route</span>
+<span class="nt">tls</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="nt">authentication</span><span class="p">:</span>
+  <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">scram-sha-512</span>
+</code></pre></div></li>
+<li>Need a scram-user:</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">kafka.strimzi.io/v1beta1</span>
+<span class="nt">kind</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">KafkaUser</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">scram-user</span>
+<span class="nt">labels</span><span class="p">:</span>
+    <span class="nt">strimzi.io/cluster</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">vaccine-kafka</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="nt">authentication</span><span class="p">:</span>
+    <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">scram-sha-512</span>
+</code></pre></div>
+</li>
+</ul>
+<p>Then the app properties need:</p>
+<div class="highlight"><pre><span></span><code>security.protocol<span class="o">=</span>SASL_SSL
+%prod.quarkus.openshift.env.mapping.KAFKA_SSL_TRUSTSTORE_PASSWORD.from-secret<span class="o">=</span><span class="si">${</span><span class="nv">KAFKA_CA_CERT_NAME</span><span class="p">:</span><span class="nv">kafka</span><span class="p">-cluster-ca-cert</span><span class="si">}</span>
+%prod.quarkus.openshift.env.mapping.KAFKA_SSL_TRUSTSTORE_PASSWORD.with-key<span class="o">=</span>ca.password
+%prod.quarkus.openshift.env.mapping.KAFKA_SCRAM_PWD.from-secret<span class="o">=</span><span class="si">${</span><span class="nv">KAFKA_USER</span><span class="p">:</span><span class="nv">scram</span><span class="p">-user</span><span class="si">}</span>
+%prod.quarkus.openshift.env.mapping.KAFKA_SCRAM_PWD.with-key<span class="o">=</span>password
+%prod.quarkus.openshift.mounts.kafka-cert.path<span class="o">=</span>/deployments/certs/server
+%prod.quarkus.openshift.secret-volumes.kafka-cert.secret-name<span class="o">=</span><span class="si">${</span><span class="nv">KAFKA_CA_CERT_NAME</span><span class="p">:</span><span class="nv">kafka</span><span class="p">-cluster-ca-cert</span><span class="si">}</span>
+</code></pre></div>
+<h2 id="verify-consumer-connection">Verify consumer connection</h2>
+<p>Here is an example of TLS authentication for Event streams</p>
+<div class="highlight"><pre><span></span><code>ConsumerConfig values: 
+    bootstrap.servers = [eda-dev-kafka-bootstrap.eventstreams.svc:9093]
+    check.crcs = true
+    client.dns.lookup = default
+    client.id = cold-chain-agent-c2c11228-d876-4db2-a16a-ea7826e358d2-StreamThread-1-restore-consumer
+    client.rack = 
+    connections.max.idle.ms = 540000
+    default.api.timeout.ms = 60000
+    enable.auto.commit = false
+    exclude.internal.topics = true
+    fetch.max.bytes = 52428800
+    fetch.max.wait.ms = 500
+    fetch.min.bytes = 1
+    group.id = null
+    group.instance.id = null
+    heartbeat.interval.ms = 3000
+    interceptor.classes = []
+    internal.leave.group.on.close = false
+    isolation.level = read_uncommitted
+    key.deserializer = class org.apache.kafka.common.serialization.ByteArrayDeserializer
+    sasl.client.callback.handler.class = null
+    sasl.jaas.config = null
+    sasl.kerberos.kinit.cmd = /usr/bin/kinit
+    sasl.kerberos.min.time.before.relogin = 60000
+    sasl.kerberos.service.name = null
+    sasl.kerberos.ticket.renew.jitter = 0.05
+    sasl.kerberos.ticket.renew.window.factor = 0.8
+    sasl.login.callback.handler.class = null
+    sasl.login.class = null
+    sasl.login.refresh.buffer.seconds = 300
+    sasl.login.refresh.min.period.seconds = 60
+    sasl.login.refresh.window.factor = 0.8
+    sasl.login.refresh.window.jitter = 0.05
+    sasl.mechanism = GSSAPI
+    security.protocol = SSL
+    security.providers = null
+    send.buffer.bytes = 131072
+    session.timeout.ms = 10000
+    ssl.cipher.suites = null
+    ssl.enabled.protocols = [TLSv1.2]
+    ssl.endpoint.identification.algorithm = https
+    ssl.key.password = null
+    ssl.keymanager.algorithm = SunX509
+    ssl.keystore.location = /deployments/certs/user/user.p12
+    ssl.keystore.password = [hidden]
+    ssl.keystore.type = PKCS12
+    ssl.protocol = TLSv1.2
+    ssl.provider = null
+    ssl.secure.random.implementation = null
+    ssl.trustmanager.algorithm = PKIX
+    ssl.truststore.location = /deployments/certs/server/ca.p12
+    ssl.truststore.password = [hidden]
+    ssl.truststore.type = PKCS12
+    value.deserializer = class org.apache.kafka.common.serialization.ByteArrayDeserializer
+</code></pre></div>
+<h2 id="other-faqs">Other FAQs</h2>
+<ul>
+<li>
+<p><a href="https://cloud.ibm.com/docs/services/EventStreams?topic=eventstreams-faqs">IBM Event streams on Cloud FAQ</a> </p>
+</li>
+<li>
+<p><a href="https://cwiki.apache.org/confluence/display/KAFKA/FAQ#FAQ-HowareKafkabrokersdependonZookeeper?">FAQ from Confluent</a></p>
+</li>
+</ul>
+                
+                  
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href="../kafka-producers-consumers/index.html" class="md-footer__link md-footer__link--prev" aria-label="Previous: Producer - Consumer" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Producer - Consumer
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../kafka-connect/index.html" class="md-footer__link md-footer__link--next" aria-label="Next: Kafka Konnect" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Kafka Konnect
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+        
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../assets/javascripts/workers/search.b0710199.min.js", "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.76f349be.min.js"></script>
+      
+    
+  </body>
+</html>

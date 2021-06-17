@@ -1,0 +1,940 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.2.1, mkdocs-material-7.1.8">
+    
+    
+      
+        <title>Spring cloud - Travelport Event-Driven Microservice practices</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ca7ac06f.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.f1a3b89f.min.css">
+        
+          
+          
+          <meta name="theme-color" content="">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>:root{--md-text-font-family:"Roboto";--md-code-font-family:"Roboto Mono"}</style>
+      
+    
+    
+    
+      <link rel="stylesheet" href="../../extra.css">
+    
+    
+      
+
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="blue-dark" data-md-color-accent="">
+  
+    
+    <script>function __prefix(e){return new URL("../..",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#spring-cloud-and-spring-cloud-stream" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../index.html" title="Travelport Event-Driven Microservice practices" class="md-header__button md-logo" aria-label="Travelport Event-Driven Microservice practices" data-md-component="logo">
+      
+  <img src="../../images/travelportlogo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Travelport Event-Driven Microservice practices
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Spring cloud
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        
+<a href="https://github.com/jbcodeforce/tvpt-docs/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../index.html" title="Travelport Event-Driven Microservice practices" class="md-nav__button md-logo" aria-label="Travelport Event-Driven Microservice practices" data-md-component="logo">
+      
+  <img src="../../images/travelportlogo.png" alt="logo">
+
+    </a>
+    Travelport Event-Driven Microservice practices
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/jbcodeforce/tvpt-docs/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../index.html" class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concepts/terms-and-definitions/index.html" class="md-nav__link">
+        EDA Concepts
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concepts/fit-for-purpose/index.html" class="md-nav__link">
+        Fit for purpose
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../methodology" class="md-nav__link">
+        Methodology
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      <label class="md-nav__link" for="__nav_5">
+        Design Patterns
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Design Patterns" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Design Patterns
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../patterns/api_mgt/index.html" class="md-nav__link">
+        API management
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../patterns/event-sourcing/index.html" class="md-nav__link">
+        Event Sourcing
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../patterns/cqrs/index.html" class="md-nav__link">
+        CQRS
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../patterns/transactional-outbox/index.html" class="md-nav__link">
+        Outbox
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../patterns/saga/index.html" class="md-nav__link">
+        SAGA
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../patterns/dlq/index.html" class="md-nav__link">
+        Dead letter queue
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" checked>
+      
+      <label class="md-nav__link" for="__nav_6">
+        Technology
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Technology" data-md-level="1">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          Technology
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../patterns/cicd/index.html" class="md-nav__link">
+        CICD for Travelport
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../kafka-overview/index.html" class="md-nav__link">
+        Kafka Summary
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../kafka-producers-consumers/index.html" class="md-nav__link">
+        Producer - Consumer
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../faq/index.html" class="md-nav__link">
+        Kafka FAQ
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../kafka-connect/index.html" class="md-nav__link">
+        Kafka Konnect
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Spring cloud
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="index.html" class="md-nav__link md-nav__link--active">
+        Spring cloud
+      </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#spring-cloud" class="md-nav__link">
+    Spring Cloud
+  </a>
+  
+    <nav class="md-nav" aria-label="Spring Cloud">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#getting-started" class="md-nav__link">
+    Getting started
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#spring-cloud-config" class="md-nav__link">
+    Spring Cloud config
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#spring-cloud-stream" class="md-nav__link">
+    Spring Cloud Stream
+  </a>
+  
+    <nav class="md-nav" aria-label="Spring Cloud Stream">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-of-kafka-binding" class="md-nav__link">
+    Example of Kafka binding
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#consuming-message" class="md-nav__link">
+    Consuming message
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kafka-spring-cloud-stream-app-basic" class="md-nav__link">
+    Kafka spring cloud stream app basic
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#avro-serialization" class="md-nav__link">
+    Avro serialization
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#spring-cloud" class="md-nav__link">
+    Spring Cloud
+  </a>
+  
+    <nav class="md-nav" aria-label="Spring Cloud">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#getting-started" class="md-nav__link">
+    Getting started
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#spring-cloud-config" class="md-nav__link">
+    Spring Cloud config
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#spring-cloud-stream" class="md-nav__link">
+    Spring Cloud Stream
+  </a>
+  
+    <nav class="md-nav" aria-label="Spring Cloud Stream">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-of-kafka-binding" class="md-nav__link">
+    Example of Kafka binding
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#consuming-message" class="md-nav__link">
+    Consuming message
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kafka-spring-cloud-stream-app-basic" class="md-nav__link">
+    Kafka spring cloud stream app basic
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#avro-serialization" class="md-nav__link">
+    Avro serialization
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/jbcodeforce/tvpt-docs/edit/master/docs/technology/spring/index.md" title="Edit this page" class="md-content__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+                  </a>
+                
+                
+                <h1 id="spring-cloud-and-spring-cloud-stream">Spring Cloud and Spring Cloud Stream</h1>
+<p><strong>Audience</strong>: Developers</p>
+<h2 id="spring-cloud">Spring Cloud</h2>
+<p><a href="https://spring.io/projects/spring-cloud">Spring Cloud</a> is based on Spring boot programming model but focusing on cloud native deployment and distributed computing. As other spring boot app it includes jetty or tomcat, health checks, metrics... It supports the following patterns:</p>
+<ul>
+<li>Distributed/versioned <a href="https://spring.io/projects/spring-cloud-config">configuration</a>: externalize config in distributed system with config server.</li>
+<li>Service registration and discovery: uses Netflix Eureka, Apache Zookeeper or Consul to keep service information. </li>
+<li>Routing: supports HTTP (Open Feign or  Netflix Ribbon for load balancing) and messaging (RabbitMQ and Kafka)</li>
+<li>Service-to-service calls: Sptring Cloud Gateway and Netflix Zuul is used</li>
+<li>Load balancing</li>
+<li>Circuit Breakers: based on Netflix Hystrix: if the request fails for n time, the circuit open.   </li>
+<li>Global locks</li>
+<li>Leadership election and cluster state</li>
+<li>Distributed messaging</li>
+</ul>
+<p>It also supports pipelines for ci/cd and contract testing for interface validation. </p>
+<h3 id="getting-started">Getting started</h3>
+<p>Use <a href="https://start.spring.io/">start.spring.io</a> to create the application starting code using Kafka, Actuator, Cloud Stream or add the Spring Cloud BOM to your maven <code>pom.xml</code> file. See <a href="https://spring.io/projects/spring-cloud">the Adding Spring Cloud To An Existing Spring Boot Application section.</a></p>
+<p>As most of the microservices expose REST resource, we may need to add the starter web:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-web<span class="nt">&lt;/artifactId&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+</code></pre></div>
+<p>We also need to install the <a href="https://cloud.spring.io/spring-cloud-cli/">Spring Cloud CLI</a>.</p>
+<p>Then add the Spring cloud starter as dependency. When using config server, we need to add the config client. </p>
+<div class="highlight"><pre><span></span><code><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>org.springframework.cloud<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>spring-cloud-conflig-client<span class="nt">&lt;/artifactId&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+</code></pre></div>
+<p>For centralized tracing uses, starter-sleuth, and zipkin.</p>
+<div class="highlight"><pre><span></span><code><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>org.springframework.cloud<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>spring-cloud-starter-sleuth<span class="nt">&lt;/artifactId&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+<span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>org.springframework.cloud<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>spring-cloud-starter-zipkin<span class="nt">&lt;/artifactId&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+</code></pre></div>
+<p>For service discovery add netflix-eureka-client.</p>
+<div class="highlight"><pre><span></span><code><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>org.springframework.cloud<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>spring-cloud-starter-eureka<span class="nt">&lt;/artifactId&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+</code></pre></div>
+<p>Using the Spring Cloud CLI we can get the service registry, config server, central tracing started in one command:</p>
+<div class="highlight"><pre><span></span><code>spring cloud eureka configserver zipkin
+</code></pre></div>
+<h3 id="spring-cloud-config">Spring Cloud config</h3>
+<p>Use the concept of Config Server you have a central place to manage external properties for applications across all environments.  As an application moves through the deployment pipeline from dev to test and into production you can manage the configuration between those environments and be certain that applications have everything they need to run when they migrate. </p>
+<div class="highlight"><pre><span></span><code>  <span class="nd">@Value</span><span class="p">(</span><span class="s">&quot;${config.in.topic}&quot;</span><span class="p">)</span>
+  <span class="n">String</span> <span class="n">topicName</span> <span class="o">=</span> <span class="s">&quot;orders&quot;</span><span class="p">;</span>
+</code></pre></div>
+<p>The value of the <code>config.in.topic</code> comes from local configuration or remote config server. The config server will serve content from a git. See <a href="https://github.com/spring-cloud-samples/configserver">this sample</a> for such server.</p>
+<h2 id="spring-cloud-stream">Spring Cloud Stream</h2>
+<p><a href="https://spring.io/projects/spring-cloud-stream">Spring Cloud Stream</a> is a framework for building highly scalable event-driven microservices connected with shared messaging systems. It unifies lots of popular messaging platforms behind one easy to use API including RabbitMQ, Apache Kafka, Amazon Kinesis, Google PubSub, Solace PubSub+, Azure Event Hubs, and Apache RocketMQ. </p>
+<p>Spring Cloud Stream is an abstraction that uses the following important concepts to supporet middleware encapsulation: <strong>destination binders</strong> (integration with messaging systems like Kafka or RabbitMQ), <strong>destination bindings</strong> (bridge code to external systems) and <strong>message</strong> (canonical data model to communicate between producer and consumer). </p>
+<p>As other Spring boot application, it uses extrernal properties to manage most of the configuration of the binders and binding.</p>
+<p><a href="https://spring.io/projects/spring-cloud-stream-applications">Spring Cloud Stream Applications</a> are standalone executable applications that communicate over messaging middleware such as Apache Kafka and RabbitMQ. The app is using uber-jars to get the minimal required library and code The following diagram illustrates those concepts for a Spring cloud app:</p>
+<p><img alt="" src="images/spring-stream-app.png" /></p>
+<p><strong>Attention</strong> Spring Cloud Stream is not Kafka Streams or Kafka API, it is similar but it represents another abstraction. From a Kafka developer's point of view, it does not seem relevant, as why not using Kafka API and Kafka Streams API, but this is a way to encapsulate any middleware supporting pub/sub and queueing. It may be more comparable to Microprofile reactive messaging specifications and APIs, but not compatible with it. For example binding can be compared to channel of the microprofile reactive messaging constructs.</p>
+<p>So the development decision will be around middleware abstraction and the way to simplify going from one middleware to another. Now with Kafka, because of its long retention time, it means we can have any type of consumers to read the messages at any time. Those consumers may use Kafka API (Python app or nodejs apps), in this case using the Kafka API within the Spring boot application is a better approach, as the way the abstraction is used may not be fully compatible to any Kafka consumer types.</p>
+<p>With Kafka based application the best practice is also to define the message structure, using Avro or Protbuf, and use schema registry to ensure compatibility management between applications. To support that Spring Cloud Stream support using native (to the middleware) serialization, which in the case of Kafka could be any serdes APIs or avro API. We will cover that <a href="#avro-serialization">in later section</a>.</p>
+<h3 id="example-of-kafka-binding">Example of Kafka binding</h3>
+<p>The <a href="https://github.com/ibm-cloud-architecture/eda-quickstarts/tree/main/spring-cloud-stream">order service spring cloud template</a> is a simple example of order service that exposes CRUD operations on the Order entity via a controller. Instead of writing to a database, this service immediately generates a message to Kafka and then the repository class consumes the message to get the data to write to the database. This is a simple way to implement 'transaction' by using the Append log of Kafka partition as a transaction log.</p>
+<p><img alt="" src="images/spring-orderms-app.png" /></p>
+<p>The way to generate code from a POST or an internal processing is to use <a href="https://github.com/spring-cloud/spring-cloud-stream/blob/master/spring-cloud-stream/src/main/java/org/springframework/cloud/stream/function/StreamBridge.java">StreamBridge</a>, which exposes a send function to send the record.</p>
+<div class="highlight"><pre><span></span><code>    <span class="nd">@Autowired</span>
+    <span class="kd">private</span> <span class="n">StreamBridge</span> <span class="n">streamBridge</span><span class="p">;</span>
+
+    <span class="kd">public</span> <span class="n">Order</span> <span class="nf">processANewOrder</span><span class="p">(</span><span class="n">Order</span> <span class="n">order</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">order</span><span class="p">.</span><span class="na">status</span> <span class="o">=</span> <span class="n">OrderStatus</span><span class="p">.</span><span class="na">OPEN</span><span class="p">;</span>
+        <span class="n">order</span><span class="p">.</span><span class="na">orderID</span> <span class="o">=</span> <span class="n">UUID</span><span class="p">.</span><span class="na">randomUUID</span><span class="p">().</span><span class="na">toString</span><span class="p">();</span>
+        <span class="n">order</span><span class="p">.</span><span class="na">creationDate</span> <span class="o">=</span> <span class="n">LocalDate</span><span class="p">.</span><span class="na">now</span><span class="p">();</span>
+        <span class="n">streamBridge</span><span class="p">.</span><span class="na">send</span><span class="p">(</span><span class="n">BINDING_NAME</span><span class="p">,</span> <span class="n">order</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">order</span><span class="p">;</span>
+    <span class="p">}</span>
+</code></pre></div>
+<p>As a good practice is to send a Kafka Record with a Key, which is specialy needed when sending messages to a multi partition topic: The messages with the same key will always go to the same partition. If the partition key is not present, messages will be partitioned in round-robin fashion. Spring Cloud Stream is little bit confusing as it created two concepts for partitioning: the partitionKey and the message key. The partition key is the way to support the same mechanism as Kafka is doing but for other middleware. So for Kafka we do not need to use partitionKey, but then it is important to use the message key construct. As Kafka is evolving on the partition allocation, it is recommended to do not interfere with Kafka mechanims and use the following approach:</p>
+<ul>
+<li>
+<p>Provide the message key as a SpEL expression property for example in the header: </p>
+<div class="highlight"><pre><span></span><code><span class="na">spring.cloud.stream.bindings.&lt;binding-name&gt;.producer.message-key-expression</span><span class="o">:</span> <span class="s">headers[&#39;messageKey&#39;]</span>
+</code></pre></div>
+</li>
+<li>
+<p>Then in your application, when publishing the message, add a header called <code>kafka_messagekey</code> with the value set from the attribute to use as key. Spring Cloud Stream will use the value for this header to assign it to the Kafka record Key:</p>
+<div class="highlight"><pre><span></span><code> <span class="n">Message</span><span class="o">&lt;</span><span class="n">Order</span><span class="o">&gt;</span> <span class="n">toSend</span> <span class="o">=</span> <span class="n">MessageBuilder</span><span class="p">.</span><span class="na">withPayload</span><span class="p">(</span><span class="n">order</span><span class="p">)</span>
+        <span class="p">.</span><span class="na">setHeader</span><span class="p">(</span><span class="n">KafkaHeaders</span><span class="p">.</span><span class="na">MESSAGE_KEY</span><span class="p">,</span> <span class="n">order</span><span class="p">.</span><span class="na">customerID</span><span class="p">.</span><span class="na">getBytes</span><span class="p">())</span>
+        <span class="p">.</span><span class="na">setHeader</span><span class="p">(</span><span class="n">MessageHeaders</span><span class="p">.</span><span class="na">CONTENT_TYPE</span><span class="p">,</span> <span class="n">MimeTypeUtils</span><span class="p">.</span><span class="na">APPLICATION_JSON</span><span class="p">).</span><span class="na">build</span><span class="p">();</span>
+    <span class="n">streamBridge</span><span class="p">.</span><span class="na">send</span><span class="p">(</span><span class="n">BINDING_NAME</span><span class="p">,</span> <span class="n">toSend</span><span class="p">);</span>
+</code></pre></div>
+</li>
+</ul>
+<p>You can also build composite key with a special java bean class for that and use instance of this class as key.</p>
+<div class="codehilite"><pre><span></span><code><span class="err">```</span><span class="n">java</span>
+ <span class="n">CustomerCompanyKey</span> <span class="n">cck</span> <span class="o">=</span> <span class="n">new</span> <span class="n">CustomerCompanyKey</span><span class="p">(</span><span class="n">order</span><span class="o">.</span><span class="n">customerID</span><span class="p">,</span><span class="n">customer</span><span class="o">.</span><span class="n">company</span><span class="p">);</span>
+ <span class="n">Message</span><span class="o">&lt;</span><span class="n">Order</span><span class="o">&gt;</span> <span class="n">toSend</span> <span class="o">=</span> <span class="n">MessageBuilder</span><span class="o">.</span><span class="n">withPayload</span><span class="p">(</span><span class="n">order</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">setHeader</span><span class="p">(</span><span class="n">KafkaHeaders</span><span class="o">.</span><span class="n">MESSAGE_KEY</span><span class="p">,</span> <span class="n">cck</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">setHeader</span><span class="p">(</span><span class="n">MessageHeaders</span><span class="o">.</span><span class="n">CONTENT_TYPE</span><span class="p">,</span> <span class="n">MimeTypeUtils</span><span class="o">.</span><span class="n">APPLICATION_JSON</span><span class="p">)</span><span class="o">.</span><span class="n">build</span><span class="p">();</span>
+    <span class="n">streamBridge</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">BINDING_NAME</span><span class="p">,</span> <span class="n">toSend</span><span class="p">);</span>
+<span class="err">```</span>
+</code></pre></div>
+
+<p>The following screen shot illustrates that all records with the same "customerID" are in the same partition:</p>
+<p><img alt="" src="images/orders-topic.png" /></p>
+<p>If you want to use the partition key as an alternate way to do partition allocation using Spring Cloud Stream strategy then use a partitionKey:</p>
+<div class="highlight"><pre><span></span><code><span class="na">spring.cloud.stream.bindings.&lt;binding-name&gt;.producer.partition-key-expression</span><span class="o">:</span> <span class="s">headers[&#39;partitionKey&#39;]</span>
+</code></pre></div>
+<p>and then in the code:</p>
+<div class="highlight"><pre><span></span><code><span class="n">Message</span><span class="o">&lt;</span><span class="n">Order</span><span class="o">&gt;</span> <span class="n">toSend</span> <span class="o">=</span> <span class="n">MessageBuilder</span><span class="p">.</span><span class="na">withPayload</span><span class="p">(</span><span class="n">order</span><span class="p">)</span>
+            <span class="p">.</span><span class="na">setHeader</span><span class="p">(</span><span class="s">&quot;partitionKey&quot;</span><span class="p">,</span> <span class="n">order</span><span class="p">.</span><span class="na">customerID</span><span class="p">.</span><span class="na">getBytes</span><span class="p">())</span>
+            <span class="p">.</span><span class="na">setHeader</span><span class="p">(</span><span class="n">MessageHeaders</span><span class="p">.</span><span class="na">CONTENT_TYPE</span><span class="p">,</span> <span class="n">MimeTypeUtils</span><span class="p">.</span><span class="na">APPLICATION_JSON</span><span class="p">).</span><span class="na">build</span><span class="p">();</span>
+        <span class="n">streamBridge</span><span class="p">.</span><span class="na">send</span><span class="p">(</span><span class="n">BINDING_NAME</span><span class="p">,</span> <span class="n">toSend</span><span class="p">);</span>
+</code></pre></div>
+<h3 id="consuming-message">Consuming message</h3>
+<p>With the last release of Spring Cloud Stream, consumers are single beans of type <code>Function</code>, <code>Consumer</code> or <code>Supplier</code>. Here is an example of consumer only.</p>
+<div class="highlight"><pre><span></span><code>    <span class="nd">@Bean</span>
+    <span class="kd">public</span> <span class="n">Consumer</span><span class="o">&lt;</span><span class="n">Message</span><span class="o">&lt;</span><span class="n">Order</span><span class="o">&gt;&gt;</span> <span class="nf">consumeOrderEvent</span><span class="p">(){</span>
+        <span class="k">return</span> <span class="n">msg</span> <span class="o">-&gt;</span> <span class="n">saveOrder</span><span class="p">(</span><span class="n">msg</span><span class="p">.</span><span class="na">getPayload</span><span class="p">());</span>
+    <span class="p">}</span>
+</code></pre></div>
+<p>For thew binding configuration the name of the method gives the name of the binding:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">spring.cloud.stream</span><span class="p">:</span>
+  <span class="nt">bindings</span><span class="p">:</span>
+    <span class="nt">consumeOrderEvent-in-0</span><span class="p">:</span>
+      <span class="nt">destination</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">orders</span>
+      <span class="nt">contentType</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">application/json</span>
+      <span class="nt">group</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">orderms-grp</span>
+      <span class="nt">useNativeDecoding</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+  <span class="nt">kafka</span><span class="p">:</span>
+    <span class="nt">bindings</span><span class="p">:</span>
+      <span class="nt">consumeOrderEvent-in-0</span><span class="p">:</span>
+        <span class="nt">consumer</span><span class="p">:</span>
+          <span class="nt">ackMode</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">MANUAL</span>
+          <span class="nt">configuration</span><span class="p">:</span>
+            <span class="nt">value.deserializer</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ibm.eda.demo.infrastructure.events.OrderDeserializer</span>
+</code></pre></div>
+<p>The deserialization is declared in a specific class:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">package</span> <span class="nn">ibm.eda.demo.infrastructure.events</span><span class="p">;</span>
+
+<span class="kn">import</span> <span class="nn">org.springframework.kafka.support.serializer.JsonDeserializer</span><span class="p">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">OrderDeserializer</span> <span class="kd">extends</span> <span class="n">JsonDeserializer</span><span class="o">&lt;</span><span class="n">Order</span><span class="o">&gt;</span> <span class="p">{</span>
+
+<span class="p">}</span>
+</code></pre></div>
+<p>In this example above as the goal is to save to the database, we should not auto commit the offset reading. So the following settings are needed on the consumer side:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">spring.cloud.stream.kafka</span><span class="p">:</span>
+    <span class="nt">bindings</span><span class="p">:</span>
+      <span class="nt">consumeOrderEvent-in-0</span><span class="p">:</span>
+        <span class="nt">consumer</span><span class="p">:</span>
+          <span class="nt">autoCommitOffset</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+          <span class="nt">startOffset</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">latest</span>
+          <span class="nt">ackMode</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">MANUAL</span>
+</code></pre></div>
+<p>And the consumer code is now looking at the acknowledge header property if present or not and perform manual acknowledge once the save operation is successful.</p>
+<div class="highlight"><pre><span></span><code> <span class="nd">@Bean</span>
+    <span class="kd">public</span> <span class="n">Consumer</span><span class="o">&lt;</span><span class="n">Message</span><span class="o">&lt;</span><span class="n">Order</span><span class="o">&gt;&gt;</span> <span class="nf">consumeOrderEvent</span><span class="p">(){</span>
+        <span class="k">return</span> <span class="n">msg</span> <span class="o">-&gt;</span> <span class="p">{</span>
+            <span class="n">Acknowledgment</span> <span class="n">acknowledgment</span> <span class="o">=</span> <span class="n">msg</span><span class="p">.</span><span class="na">getHeaders</span><span class="p">().</span><span class="na">get</span><span class="p">(</span><span class="n">KafkaHeaders</span><span class="p">.</span><span class="na">ACKNOWLEDGMENT</span><span class="p">,</span> <span class="n">Acknowledgment</span><span class="p">.</span><span class="na">class</span><span class="p">);</span>
+            <span class="n">saveOrder</span><span class="p">(</span><span class="n">msg</span><span class="p">.</span><span class="na">getPayload</span><span class="p">());</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">acknowledgment</span> <span class="o">!=</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">acknowledgment</span><span class="p">.</span><span class="na">acknowledge</span><span class="p">();</span>
+            <span class="p">}</span>
+        <span class="p">};</span>
+</code></pre></div>
+<h3 id="kafka-spring-cloud-stream-app-basic">Kafka spring cloud stream app basic</h3>
+<p>The approach to develop such application includes the following steps:</p>
+<ul>
+<li>A spring boot application, with REST spring web starter</li>
+<li>Define a resource and a controller for the REST API.</li>
+<li>Define inbound and/or outbound binding to communicate to underlying middleware</li>
+<li>Add method to process incoming message, taking into account the underlying middleware and serialization. For example with Kafka, most of the consumers may not auto commit the read offset but control the commit by using manual commit. </li>
+<li>Add logic to produce message using middleware </li>
+</ul>
+<p>To add a consumer from a Kafka topic for example, we can add a function that will process the message, and declare it as a Bean. </p>
+<p><div class="highlight"><pre><span></span><code> <span class="nd">@Bean</span>
+    <span class="kd">public</span> <span class="n">Consumer</span><span class="o">&lt;</span><span class="n">Message</span><span class="o">&lt;</span><span class="n">CloudEvent</span><span class="o">&gt;&gt;</span> <span class="nf">consumeCloudEventEvent</span><span class="p">(){</span>
+        <span class="k">return</span> <span class="n">msg</span> <span class="o">-&gt;</span> <span class="p">{</span>
+            <span class="n">Acknowledgment</span> <span class="n">acknowledgment</span> <span class="o">=</span> <span class="n">msg</span><span class="p">.</span><span class="na">getHeaders</span><span class="p">().</span><span class="na">get</span><span class="p">(</span><span class="n">KafkaHeaders</span><span class="p">.</span><span class="na">ACKNOWLEDGMENT</span><span class="p">,</span> <span class="n">Acknowledgment</span><span class="p">.</span><span class="na">class</span><span class="p">);</span>
+            <span class="n">saveOrder</span><span class="p">((</span><span class="n">Order</span><span class="p">)</span><span class="n">msg</span><span class="p">.</span><span class="na">getPayload</span><span class="p">().</span><span class="na">getData</span><span class="p">());</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">acknowledgment</span> <span class="o">!=</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;Acknowledgment provided&quot;</span><span class="p">);</span>
+                <span class="n">acknowledgment</span><span class="p">.</span><span class="na">acknowledge</span><span class="p">();</span>
+            <span class="p">}</span>
+        <span class="p">};</span>
+    <span class="p">}</span>
+</code></pre></div>
+This previous code is also illustrating manual offset commit.</p>
+<p>Then we add configuration to link to the binders queue or topic:</p>
+<div class="highlight"><pre><span></span><code>    <span class="nt">consumeOrderEvent-in-0</span><span class="p">:</span>
+        <span class="nt">consumer</span><span class="p">:</span>
+          <span class="nt">autoCommitOffset</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+          <span class="nt">startOffset</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">latest</span>
+          <span class="nt">ackMode</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">MANUAL</span>
+          <span class="nt">configuration</span><span class="p">:</span>
+            <span class="nt">value.deserializer</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ibm.eda.demo.infrastructure.events.CloudEventDeserializer</span>
+</code></pre></div>
+<h3 id="avro-serialization">Avro serialization</h3>
+<div class="highlight"><pre><span></span><code><span class="nt">producer</span><span class="p">:</span>
+        <span class="nt">useNativeEncoding</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+</code></pre></div>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href="../kafka-connect/index.html" class="md-footer__link md-footer__link--prev" aria-label="Previous: Kafka Konnect" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Kafka Konnect
+            </div>
+          </div>
+        </a>
+      
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+        
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../assets/javascripts/workers/search.b0710199.min.js", "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.76f349be.min.js"></script>
+      
+    
+  </body>
+</html>
